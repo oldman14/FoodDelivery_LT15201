@@ -1,6 +1,8 @@
 package com.example.fooddelivery_lt152011.LoginScreen;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 import com.example.fooddelivery_lt152011.MainActivity;
@@ -50,6 +54,9 @@ public class VerifyOTPActivity extends AppCompatActivity {
         input4 = findViewById(R.id.inputCode4);
         input5 = findViewById(R.id.inputCode5);
         input6 = findViewById(R.id.inputCode6);
+        requestSMSPermission();
+        new OTPReceiver().setText(input1,input2,input3,input4,input5,input6);
+
         dao = new UserDAO(this);
         dbHelper = new DbHelper(this);
         setupOTPInputs();
@@ -212,5 +219,19 @@ public class VerifyOTPActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void requestSMSPermission()
+    {
+        String permission = Manifest.permission.RECEIVE_SMS;
+
+        int grant = ContextCompat.checkSelfPermission(this, permission);
+        if (grant != PackageManager.PERMISSION_GRANTED)
+        {
+            String[] permission_list = new String[1];
+            permission_list[0] = permission;
+
+            ActivityCompat.requestPermissions(this, permission_list,1);
+        }
     }
 }
