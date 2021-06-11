@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigation);
-        loadFragment(new HomeFragment());
+        loadFragment(new ProductFragment());
     }
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigation
             = new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
     tools:context=".ProductScreen.ProductFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarProduct"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Product" />
+        android:layout_height="50dp"/>
+    <LinearLayout
+        android:id="@+id/middle_product_fragment"
+        android:layout_below="@+id/toolbarProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="5dp"
+        >
 
-</FrameLayout>
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spin_product"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".70"
+            android:background="@android:color/transparent"
+           />
+        <androidx.appcompat.widget.SearchView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".15"
+
+            />
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".15"/>
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/middle_product_fragment"
+        android:id="@+id/rec_product_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>
