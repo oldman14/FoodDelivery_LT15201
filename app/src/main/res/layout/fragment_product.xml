@@ -3,13 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="50dp"
-    tools:context=".ProductScreen.ProductFragment">
+    android:layout_marginBottom="60dp"
+    android:background="@color/background"
+    tools:context=".productScreen.ProductFragment">
     <androidx.appcompat.widget.Toolbar
+        android:background="@color/white"
         android:id="@+id/toolbarProduct"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
     <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="8dp"
         android:id="@+id/middle_product_fragment"
         android:layout_below="@+id/toolbarProduct"
         android:layout_width="match_parent"
@@ -19,24 +24,30 @@
         >
 
         <androidx.appcompat.widget.AppCompatSpinner
+            android:layout_gravity="center_vertical"
             android:id="@+id/spin_product"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight=".70"
             android:background="@android:color/transparent"
            />
         <androidx.appcompat.widget.SearchView
+            android:gravity="center"
+            android:layout_marginHorizontal="3dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".15"
-
+            android:background="@drawable/boder"
             />
         <ImageButton
+            android:background="@drawable/boder"
+            android:src="@drawable/ic_favorite_24"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight=".15"/>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginHorizontal="8dp"
         android:layout_below="@id/middle_product_fragment"
         android:id="@+id/rec_product_fragment"
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.ProductScreen;
+package com.example.fooddelivery_lt152011.productScreen;
 
 public class Product {
     public int ProductID;

@@ -1,10 +1,9 @@
-package com.example.fooddelivery_lt152011.ProductScreen;
+package com.example.fooddelivery_lt152011.productScreen;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,10 +17,12 @@ import java.util.List;
 public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHolder>{
     private List<TypeProduct> typeProducts;
     private Context context;
+    private OneItemClick oneItemClick;
 
-    public RecTypeAdapter(List<TypeProduct> typeProducts, Context context) {
+    public RecTypeAdapter(List<TypeProduct> typeProducts, Context context, OneItemClick oneItemClick) {
         this.typeProducts = typeProducts;
         this.context = context;
+        this.oneItemClick = oneItemClick;
     }
 
     @NonNull
@@ -44,7 +45,7 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
         );
         layoutManager.setInitialPrefetchItemCount(typeProduct.getProducts().size());
 
-        RecProductAdapter recProductAdapter = new RecProductAdapter(context, typeProduct.getProducts());
+        RecProductAdapter recProductAdapter = new RecProductAdapter(context, typeProduct.getProducts(),  oneItemClick);
         holder.recProduct.setLayoutManager(layoutManager);
         holder.recProduct.setAdapter(recProductAdapter);
 

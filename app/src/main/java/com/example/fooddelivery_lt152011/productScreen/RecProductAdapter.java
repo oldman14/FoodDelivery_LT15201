@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.ProductScreen;
+package com.example.fooddelivery_lt152011.productScreen;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,10 +17,11 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
 
     public Context context;
     public List<Product> productList;
-
-    public RecProductAdapter(Context context, List<Product> productList) {
+    private OneItemClick oneItemClick;
+    public RecProductAdapter(Context context, List<Product> productList,OneItemClick oneItemClick) {
         this.context = context;
         this.productList = productList;
+        this.oneItemClick = oneItemClick;
     }
 
 
@@ -37,7 +38,12 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         holder.tv_proName.setText(product.getProductName());
         holder.tv_proNote.setText(product.getProductNote());
         holder.tv_proPrice.setText(String.valueOf( product.getProductPrice()));
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                oneItemClick.onItemClick(product);
+            }
+        });
     }
 
     @Override
@@ -45,7 +51,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         return productList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder  {
         TextView tv_proName, tv_proNote, tv_proPrice;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -53,5 +59,8 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
             tv_proNote = (TextView) itemView.findViewById(R.id.tv_proNote);
             tv_proPrice = (TextView) itemView.findViewById(R.id.tv_proPice);
         }
+
+
     }
+
 }

@@ -2,8 +2,11 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/secondary_font">
+    android:background="@drawable/boder"
+    >
     <TextView
+
+        android:gravity="center_vertical"
         android:id="@+id/tv_pro_selected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,7 +15,6 @@
         android:layout_toStartOf="@id/img_pro_selected"
         android:textColor="@color/black"
         android:padding="10dp"
-
     />
     <ImageView
         android:id="@+id/img_pro_selected"

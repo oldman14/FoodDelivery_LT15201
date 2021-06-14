@@ -6,22 +6,19 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="#f3f3f3"
-        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/background"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="12dp"
-            >
+            android:orientation="vertical">
             <TextView
+                android:fontFamily="@font/utm_avobold"
                 android:id="@+id/tv_title_typepro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title name"
-                android:textSize="18dp"
+                android:textSize="20dp"
                 android:padding="12dp"
                 android:textColor="@color/black"/>
             <androidx.recyclerview.widget.RecyclerView

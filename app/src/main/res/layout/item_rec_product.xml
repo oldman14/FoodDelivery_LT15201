@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_margin="5dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="8dp"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <ImageView
+                android:src="@drawable/cafe_den"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
                 android:layout_width="80dp"
@@ -23,31 +25,33 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <TextView
+                    android:fontFamily="@font/utm_avobold"
                     android:id="@+id/tv_proName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Product name"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:fontFamily="@font/utm_avo"
                     android:id="@+id/tv_proNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Cà phê hòa tan rang xoay thơm ngon các"
                     android:textColor="@color/black"
-                    android:textSize="13dp"
+                    android:textSize="12dp"
+                    android:layout_marginBottom="2dp"
                     app:layout_constraintTop_toBottomOf="@+id/tv_proName" />
 
                 <TextView
                     android:id="@+id/tv_proPice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="25000"
+                    android:text="25000đ"
                     android:textColor="@color/orange_primary"
                     android:textSize="18dp"
                     app:layout_constraintBottom_toBottomOf="parent" />
@@ -55,4 +59,3 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-</LinearLayout>
