@@ -1,5 +1,17 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+
+import com.example.fooddelivery_lt152011.R;
+import com.squareup.picasso.Picasso;
+
+import static android.media.audiofx.AcousticEchoCanceler.isAvailable;
+import static com.example.fooddelivery_lt152011.BR.product;
+
 public class Product {
     public int ProductID;
     public String ProductName;
@@ -16,7 +28,34 @@ public class Product {
         ProductNote = productNote;
         TypeID = typeID;
     }
+    @BindingAdapter({"productImage"})
+    public static void loadImage(ImageView imageView, String productImage){
+        Picasso.get().load(productImage).into(imageView);
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.getProductPrice(), getProductPrice()) == 0 &&
+                getProductID()==(product.getProductID()) &&
+                getProductImage().equals(product.getProductImage()) &&
+                getProductImage().equals(product.getProductImage());
+    }
+
+    public static DiffUtil.ItemCallback<Product> itemCallback = new DiffUtil.ItemCallback<Product>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+            return oldItem.getProductID()==(newItem.getProductID());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
     public int getProductID() {
         return ProductID;
     }

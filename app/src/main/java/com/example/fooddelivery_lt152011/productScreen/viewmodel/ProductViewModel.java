@@ -1,14 +1,18 @@
 package com.example.fooddelivery_lt152011.productScreen.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fooddelivery_lt152011.productScreen.CartItem;
 import com.example.fooddelivery_lt152011.productScreen.Product;
 import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
+import com.example.fooddelivery_lt152011.productScreen.repositories.CartRepo;
+import com.example.fooddelivery_lt152011.productScreen.repositories.ProductRepository;
 import com.example.fooddelivery_lt152011.productScreen.repositories.TypeProRes;
 
 import java.util.List;
@@ -20,13 +24,17 @@ public class ProductViewModel extends AndroidViewModel {
     private MutableLiveData<Product> mutableProduct = new MutableLiveData<>();
 
     TypeProRes typeProRes = new TypeProRes();
+    CartRepo cartItemRepo = new CartRepo();
 
+    ProductRepository productRepository = new ProductRepository();
     public ProductViewModel(@NonNull Application application) {
         super(application);
     }
 
+
+
     public LiveData<List<TypeProduct>> getProducts() {
-        return typeProRes.getProducts();
+        return productRepository.getProducts();
     }
     public LiveData<Product> getProduct(){
         return mutableProduct;
@@ -42,4 +50,33 @@ public class ProductViewModel extends AndroidViewModel {
     public void setTypeProduct(MutableLiveData<List<TypeProduct>> typeProduct) {
         this.typeProduct = typeProduct;
     }
+    //cart
+
+    public LiveData<List<CartItem>> getCart() {
+        return cartItemRepo.getCart();
+    }
+
+    public boolean addItemToCart(Product product) {
+        Log.d("TAG", "addItemToCart: ");
+        return cartItemRepo.addItemToCart(product);
+    }
+
+    public void removeItemFromCart(CartItem cartItem) {
+        cartItemRepo.removeItemFromCart(cartItem);
+    }
+
+    public void changeQuantity(CartItem cartItem, int quantity) {
+        cartItemRepo.changeQuantity(cartItem, quantity);
+    }
+
+    public LiveData<Double> getTotalPrice() {
+        return cartItemRepo.getTotalPrice();
+    }
+
+    public void resetCart() {
+        cartItemRepo.initCart();
+    }
+
+
+
 }

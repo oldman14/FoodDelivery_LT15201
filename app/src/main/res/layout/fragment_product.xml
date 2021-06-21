@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:bind="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="product"
+            type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel" />
+        <variable
+            name="name"
+            type="String" />
+
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="60dp"
     android:background="@color/background"
     tools:context=".productScreen.ProductFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.appcompat.widget.Toolbar
         android:background="@color/white"
         android:id="@+id/toolbarProduct"
@@ -14,6 +30,7 @@
     <LinearLayout
         android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:paddingHorizontal="8dp"
         android:id="@+id/middle_product_fragment"
         android:layout_below="@+id/toolbarProduct"
@@ -26,6 +43,7 @@
         <androidx.appcompat.widget.AppCompatSpinner
             android:layout_gravity="center_vertical"
             android:id="@+id/spin_product"
+            android:spinnerMode="dialog"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".70"
@@ -52,4 +70,11 @@
         android:id="@+id/rec_product_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-</RelativeLayout>
+    </RelativeLayout>
+
+    <include layout="@layout/bottom_sheet"
+        bind:product="@{product}"
+            />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

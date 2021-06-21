@@ -44,11 +44,9 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
                 false
         );
         layoutManager.setInitialPrefetchItemCount(typeProduct.getProducts().size());
-
         RecProductAdapter recProductAdapter = new RecProductAdapter(context, typeProduct.getProducts(),  oneItemClick);
         holder.recProduct.setLayoutManager(layoutManager);
         holder.recProduct.setAdapter(recProductAdapter);
-
     }
 
     @Override

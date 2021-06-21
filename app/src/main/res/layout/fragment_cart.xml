@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f7"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:orientation="vertical"
+        tools:context=".views.CartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
+            android:background="@color/white"
+            >
+            <androidx.cardview.widget.CardView
+                app:cardElevation="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Giao đến"
+                    android:textSize="24dp"
+                    android:fontFamily="@font/utm_avobold"
+                    android:textColor="@color/black"
+                    />
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="90 Cao Thắng"
+                android:textSize="20dp"
+                android:fontFamily="@font/utm_avobold"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="90 Cao Thắng, Phường 3, Quận 3, Thành Phố Hồ Chí Minh"
+                android:textSize="18dp"
+                android:fontFamily="@font/utm_avobold"
+                android:textColor="@color/secondary_font"
+                />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/cart_row"
+            tools:itemCount="2"
+            />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <androidx.cardview.widget.CardView
+            app:cardElevation="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/orderTotalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:text="Tổng cộng: 26"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+                <Button
+                    android:id="@+id/placeOrderButton"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:text="Place Order"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+</ScrollView>

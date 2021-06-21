@@ -12,13 +12,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <ImageView
-                android:src="@drawable/cafe_den"
+            <androidx.cardview.widget.CardView
                 android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                />
+                android:layout_width="79dp"
+                android:layout_height="79dp"
+                app:cardCornerRadius="5dp"
+                >
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:id="@+id/img_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/cafe_den" />
+            </androidx.cardview.widget.CardView>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:gravity="center_vertical"
                 android:layout_margin="5dp"
@@ -44,6 +53,7 @@
                     android:text="Cà phê hòa tan rang xoay thơm ngon các"
                     android:textColor="@color/black"
                     android:textSize="12dp"
+                    android:lines="2"
                     android:layout_marginBottom="2dp"
                     app:layout_constraintTop_toBottomOf="@+id/tv_proName" />
 
