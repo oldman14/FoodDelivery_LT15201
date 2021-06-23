@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.productScreen;
+package com.example.fooddelivery_lt152011.ProductScreen;
 
 import android.widget.ImageView;
 
@@ -6,11 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.example.fooddelivery_lt152011.R;
 import com.squareup.picasso.Picasso;
-
-import static android.media.audiofx.AcousticEchoCanceler.isAvailable;
-import static com.example.fooddelivery_lt152011.BR.product;
 
 public class Product {
     public int ProductID;

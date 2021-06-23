@@ -1,10 +1,10 @@
-package com.example.fooddelivery_lt152011.productScreen.repositories;
+package com.example.fooddelivery_lt152011.ProductScreen.repositories;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fooddelivery_lt152011.productScreen.Product;
-import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
+import com.example.fooddelivery_lt152011.ProductScreen.Product;
+import com.example.fooddelivery_lt152011.ProductScreen.TypeProduct;
 
 import java.util.ArrayList;
 import java.util.List;

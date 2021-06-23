@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+        <variable
+            name="cartItem"
+            type="com.example.fooddelivery_lt152011.ProductScreen.CartItem" />
+        <variable
+            name="product"
+            type="com.example.fooddelivery_lt152011.ProductScreen.viewmodel.ProductViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/bottom_sheet_cart_layout"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:background="@drawable/boder_cart"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/cart_bottom_sheet_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            >
+            <TextView
+                android:id="@+id/quantityCartItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                />
+            <TextView
+                android:id="@+id/priceCartBottomSheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+       <TextView
+           android:layout_alignEnd="@id/cart_bottom_sheet_left"
+           android:layout_centerVertical="true"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:background="@drawable/boder"
+           android:paddingHorizontal="10dp"
+           android:text="Gio hang"
+           android:textSize="18dp"
+           android:paddingVertical="5dp"
+           android:textColor="@color/orange_dark"/>
+    </RelativeLayout>
+</layout>
+

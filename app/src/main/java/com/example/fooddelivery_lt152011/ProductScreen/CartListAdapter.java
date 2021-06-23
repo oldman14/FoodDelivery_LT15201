@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.productScreen;
+package com.example.fooddelivery_lt152011.ProductScreen;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +55,7 @@ public class CartListAdapter extends ListAdapter<CartItem, CartListAdapter.CartV
                     if (quantity == getItem(getAdapterPosition()).getQuantity()) {
                         return;
                     }
-                    cartInterface.changeQuantity(getItem(getAdapterPosition()), quantity);
+                         cartInterface.changeQuantity(getItem(getAdapterPosition()), quantity);
                 }
 
                 @Override

@@ -1,30 +1,14 @@
-package com.example.fooddelivery_lt152011.productScreen;
+package com.example.fooddelivery_lt152011.ProductScreen;
 
-import java.util.List;
-
-public class TypeProduct {
+public class ListTypeProduct {
     public int TypeID;
     public String TypeName;
     public String TypeNote;
-    public List<Product> products;
 
-    public TypeProduct(int typeID, String typeName) {
+    public ListTypeProduct(int typeID, String typeName, String typeNote) {
         TypeID = typeID;
         TypeName = typeName;
-    }
-
-    public TypeProduct(int typeID, String typeName, List<Product> products) {
-        TypeID = typeID;
-        TypeName = typeName;
-        this.products = products;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
+        TypeNote = typeNote;
     }
 
     public int getTypeID() {

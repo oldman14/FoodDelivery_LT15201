@@ -1,9 +1,10 @@
-package com.example.fooddelivery_lt152011.productScreen;
+package com.example.fooddelivery_lt152011.ProductScreen;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +15,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 
+import com.example.fooddelivery_lt152011.R;
+import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentCartBinding;
-import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
+import com.example.fooddelivery_lt152011.ProductScreen.viewmodel.ProductViewModel;
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
     private static final String TAG = "CartFragment";
     ProductViewModel productViewModel;
     FragmentCartBinding fragmentCartBinding;
+    BottomsheetCartItemBinding bottomsheetCartItemBinding;
 //    NavController navController;
 
     public CartFragment() {
@@ -45,7 +49,7 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
         final CartListAdapter cartListAdapter = new CartListAdapter(this);
         fragmentCartBinding.cartRecyclerView.setAdapter(cartListAdapter);
         fragmentCartBinding.cartRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
-
+        RelativeLayout bottomsheetLayout = view.findViewById(R.id.bottom_sheet_cart_layout);
         productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
             @Override

@@ -5,13 +5,13 @@
     <data>
         <variable
             name="product"
-            type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel" />
+            type="com.example.fooddelivery_lt152011.ProductScreen.viewmodel.ProductViewModel" />
     </data>
 
 
     <RelativeLayout
         android:id="@+id/bottomSheet_detailproduct"
-        tools:context=".productScreen.ProductDetailFragment"
+        tools:context=".ProductScreen.ProductDetailFragment"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
@@ -96,6 +96,7 @@
                 android:layout_below="@id/left_layout_nameProduct">
 
                 <TextView
+                    android:id="@+id/detail_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/chitiet_mon" />

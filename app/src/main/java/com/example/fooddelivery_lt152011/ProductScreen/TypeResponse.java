@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.productScreen;
+package com.example.fooddelivery_lt152011.ProductScreen;
 
 import java.util.List;
 

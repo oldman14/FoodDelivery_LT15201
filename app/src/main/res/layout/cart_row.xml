@@ -6,7 +6,7 @@
     <data>
         <variable
             name="cartItem"
-            type="com.example.fooddelivery_lt152011.productScreen.CartItem" />
+            type="com.example.fooddelivery_lt152011.ProductScreen.CartItem" />
 
     </data>
 

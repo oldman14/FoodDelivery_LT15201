@@ -3,11 +3,13 @@
     <data>
         <variable
             name="product"
-            type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel" />
+            type="com.example.fooddelivery_lt152011.ProductScreen.viewmodel.ProductViewModel" />
         <variable
             name="name"
             type="String" />
-
+        <variable
+            name="cartItem"
+            type="com.example.fooddelivery_lt152011.ProductScreen.CartItem" />
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -18,7 +20,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="60dp"
     android:background="@color/background"
-    tools:context=".productScreen.ProductFragment">
+    tools:context=".ProductScreen.ProductFragment">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -71,10 +73,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/tv_test"/>
     <include layout="@layout/bottom_sheet"
         bind:product="@{product}"
             />
-
+    <include
+        layout="@layout/bottomsheet_cart_item"
+        bind:product="@{product}"
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

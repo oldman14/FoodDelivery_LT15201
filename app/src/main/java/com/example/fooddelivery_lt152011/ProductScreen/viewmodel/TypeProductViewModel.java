@@ -1,10 +1,10 @@
-package com.example.fooddelivery_lt152011.productScreen.viewmodel;
+package com.example.fooddelivery_lt152011.ProductScreen.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.fooddelivery_lt152011.productScreen.TypeResponse;
-import com.example.fooddelivery_lt152011.productScreen.repositories.ProductRepository;
+import com.example.fooddelivery_lt152011.ProductScreen.TypeResponse;
+import com.example.fooddelivery_lt152011.ProductScreen.repositories.ProductRepository;
 
 public class TypeProductViewModel extends ViewModel {
     private ProductRepository productRepository;

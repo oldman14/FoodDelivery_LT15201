@@ -10,8 +10,7 @@ import android.view.MenuItem;
 
 import com.example.fooddelivery_lt152011.AccountScreen.AccountFragment;
 import com.example.fooddelivery_lt152011.HomeScreen.HomeFragment;
-import com.example.fooddelivery_lt152011.productScreen.CartFragment;
-import com.example.fooddelivery_lt152011.productScreen.ProductFragment;
+import com.example.fooddelivery_lt152011.ProductScreen.ProductFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             switch (item.getItemId()){
                 case R.id.navigation_home:
-                    fragment = new CartFragment();
+                    fragment = new HomeFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_product:

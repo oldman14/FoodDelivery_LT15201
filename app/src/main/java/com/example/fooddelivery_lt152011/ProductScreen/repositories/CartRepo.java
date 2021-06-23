@@ -1,20 +1,20 @@
-package com.example.fooddelivery_lt152011.productScreen.repositories;
+    package com.example.fooddelivery_lt152011.ProductScreen.repositories;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fooddelivery_lt152011.productScreen.CartItem;
-import com.example.fooddelivery_lt152011.productScreen.Product;
+import com.example.fooddelivery_lt152011.ProductScreen.CartItem;
+import com.example.fooddelivery_lt152011.ProductScreen.Product;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartRepo {
+public class  CartRepo {
 
     private MutableLiveData<List<CartItem>> mutableCart = new MutableLiveData<>();
     private MutableLiveData<Double> mutableTotalPrice = new MutableLiveData<>();
-
+    private MutableLiveData<Integer> mutableTotalQantity = new MutableLiveData<>();
     public LiveData<List<CartItem>> getCart() {
         if (mutableCart.getValue() == null) {
             initCart();
@@ -79,13 +79,21 @@ public class CartRepo {
     private void calculateCartTotal() {
         if (mutableCart.getValue() == null) return;
         double total = 0.0;
+        int quantity = 0;
         List<CartItem> cartItemList = mutableCart.getValue();
         for (CartItem cartItem: cartItemList) {
             total += cartItem.getProduct().getProductPrice() * cartItem.getQuantity();
+            quantity += cartItem.getQuantity();
         }
         mutableTotalPrice.setValue(total);
+        mutableTotalQantity.setValue(quantity);
     }
-
+    public LiveData<Integer> getCartQuantity(){
+        if (mutableTotalQantity.getValue() == null) {
+            mutableTotalQantity.setValue(0);
+        }
+        return mutableTotalQantity;
+    }
     public LiveData<Double> getTotalPrice() {
         if (mutableTotalPrice.getValue() == null) {
             mutableTotalPrice.setValue(0.0);

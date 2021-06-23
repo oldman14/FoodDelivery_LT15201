@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.productScreen.viewmodel;
+package com.example.fooddelivery_lt152011.ProductScreen.viewmodel;
 
 import android.app.Application;
 import android.util.Log;
@@ -8,12 +8,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fooddelivery_lt152011.productScreen.CartItem;
-import com.example.fooddelivery_lt152011.productScreen.Product;
-import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
-import com.example.fooddelivery_lt152011.productScreen.repositories.CartRepo;
-import com.example.fooddelivery_lt152011.productScreen.repositories.ProductRepository;
-import com.example.fooddelivery_lt152011.productScreen.repositories.TypeProRes;
+import com.example.fooddelivery_lt152011.ProductScreen.CartItem;
+import com.example.fooddelivery_lt152011.ProductScreen.Product;
+import com.example.fooddelivery_lt152011.ProductScreen.TypeProduct;
+import com.example.fooddelivery_lt152011.ProductScreen.repositories.CartRepo;
+import com.example.fooddelivery_lt152011.ProductScreen.repositories.ProductRepository;
+import com.example.fooddelivery_lt152011.ProductScreen.repositories.TypeProRes;
 
 import java.util.List;
 
@@ -68,11 +68,12 @@ public class ProductViewModel extends AndroidViewModel {
     public void changeQuantity(CartItem cartItem, int quantity) {
         cartItemRepo.changeQuantity(cartItem, quantity);
     }
-
     public LiveData<Double> getTotalPrice() {
         return cartItemRepo.getTotalPrice();
     }
-
+    public LiveData<Integer> getCartQuantity(){
+        return cartItemRepo.getCartQuantity();
+    }
     public void resetCart() {
         cartItemRepo.initCart();
     }
