@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.ProductScreen;
+package com.example.fooddelivery_lt152011.productScreen;
 
 import android.content.Context;
 import android.view.LayoutInflater;

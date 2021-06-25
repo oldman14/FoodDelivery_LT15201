@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.ProductScreen.repositories;
+package com.example.fooddelivery_lt152011.productScreen.repositories;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -6,11 +6,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
 import com.example.fooddelivery_lt152011.networking.Service.ProductService;
 import com.example.fooddelivery_lt152011.networking.Service.TypeProductService;
-import com.example.fooddelivery_lt152011.ProductScreen.ListTypeProduct;
-import com.example.fooddelivery_lt152011.ProductScreen.Product;
-import com.example.fooddelivery_lt152011.ProductScreen.ProductReponse;
-import com.example.fooddelivery_lt152011.ProductScreen.TypeProduct;
-import com.example.fooddelivery_lt152011.ProductScreen.TypeResponse;
+import com.example.fooddelivery_lt152011.productScreen.ListTypeProduct;
+import com.example.fooddelivery_lt152011.productScreen.Product;
+import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
+import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
+import com.example.fooddelivery_lt152011.productScreen.TypeResponse;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.ProductScreen;
+package com.example.fooddelivery_lt152011.productScreen;
 
 import android.widget.Spinner;
 
@@ -24,6 +24,7 @@ public class CartItem {
     }
 
     public int getQuantity() {
+        
         return quantity;
     }
 

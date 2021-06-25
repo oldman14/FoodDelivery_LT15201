@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.ProductScreen;
+package com.example.fooddelivery_lt152011.productScreen;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import com.example.fooddelivery_lt152011.R;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentCartBinding;
-import com.example.fooddelivery_lt152011.ProductScreen.viewmodel.ProductViewModel;
+import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 
 import java.util.List;
 

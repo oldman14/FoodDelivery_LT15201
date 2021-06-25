@@ -5,13 +5,13 @@
     <data>
         <variable
             name="product"
-            type="com.example.fooddelivery_lt152011.ProductScreen.viewmodel.ProductViewModel" />
+            type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel" />
     </data>
 
 
     <RelativeLayout
         android:id="@+id/bottomSheet_detailproduct"
-        tools:context=".ProductScreen.ProductDetailFragment"
+        tools:context=".productScreen.ProductDetailFragment"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
@@ -175,17 +175,22 @@
                 android:orientation="horizontal"
                 >
                 <ImageButton
+                    android:onClick="@{()->product.minusQuantity()}"
+                    android:id="@+id/btn_minus_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_minus24"/>
                 <TextView
+                    android:text="@{product.quantityItem.toString()}"
+                    android:id="@+id/tv_quantity_detail_product"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
                     android:textSize="25dp"
                     android:paddingHorizontal="20dp"
                     android:layout_gravity="center_vertical"/>
                 <ImageButton
+                    android:onClick="@{()->product.plusQuantity()}"
+                    android:id="@+id/btn_plus_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_add_24"/>

@@ -7,10 +7,10 @@
     <data>
         <variable
             name="cartItem"
-            type="com.example.fooddelivery_lt152011.ProductScreen.CartItem" />
+            type="com.example.fooddelivery_lt152011.productScreen.CartItem" />
         <variable
             name="product"
-            type="com.example.fooddelivery_lt152011.ProductScreen.viewmodel.ProductViewModel" />
+            type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel" />
     </data>
 
     <RelativeLayout

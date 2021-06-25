@@ -1,10 +1,10 @@
-    package com.example.fooddelivery_lt152011.ProductScreen.repositories;
+    package com.example.fooddelivery_lt152011.productScreen.repositories;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.fooddelivery_lt152011.ProductScreen.CartItem;
-import com.example.fooddelivery_lt152011.ProductScreen.Product;
+import com.example.fooddelivery_lt152011.productScreen.CartItem;
+import com.example.fooddelivery_lt152011.productScreen.Product;
 
 
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ public class  CartRepo {
     private MutableLiveData<List<CartItem>> mutableCart = new MutableLiveData<>();
     private MutableLiveData<Double> mutableTotalPrice = new MutableLiveData<>();
     private MutableLiveData<Integer> mutableTotalQantity = new MutableLiveData<>();
+    private MutableLiveData<Integer> mutableQuantity = new MutableLiveData<>();
     public LiveData<List<CartItem>> getCart() {
         if (mutableCart.getValue() == null) {
             initCart();
