@@ -5,8 +5,9 @@
             name="product"
             type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel" />
         <variable
-            name="name"
-            type="String" />
+            name="isLoading"
+            type="Boolean" />
+        <import type="android.view.View"/>
         <variable
             name="cartItem"
             type="com.example.fooddelivery_lt152011.productScreen.CartItem" />
@@ -21,9 +22,18 @@
     android:layout_marginBottom="60dp"
     android:background="@color/background"
     tools:context=".productScreen.ProductFragment">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progress="25"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="@{isLoading? View.GONE : View.VISIBLE}"
+            />
     <androidx.appcompat.widget.Toolbar
         android:background="@color/white"
         android:id="@+id/toolbarProduct"

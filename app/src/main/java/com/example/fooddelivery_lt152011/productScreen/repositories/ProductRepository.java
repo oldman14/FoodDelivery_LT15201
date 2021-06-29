@@ -1,5 +1,7 @@
 package com.example.fooddelivery_lt152011.productScreen.repositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -21,6 +23,7 @@ public class ProductRepository {
     HttpAdapter httpAdapter;
     public MutableLiveData<ProductReponse> product = new MutableLiveData<>();
     public MutableLiveData<TypeResponse> typeProduct = new MutableLiveData<>();
+    public MutableLiveData<List<ListTypeProduct>> listTypeProduct;
     private MutableLiveData<List<TypeProduct>> typeProductRes;
 
     public ProductRepository() {
@@ -35,6 +38,24 @@ public class ProductRepository {
             getListProduct();
         }
         return typeProductRes;
+    }
+    public LiveData<List<ListTypeProduct>> getTypeProducts(){
+        if (listTypeProduct==null){
+            listTypeProduct = new MutableLiveData<>();
+            getListTypeProduct();
+        }
+        return listTypeProduct;
+    }
+    public void getListTypeProduct(){
+        TypeResponse typeResponses = typeProductService.getListTypeProduct();
+//        List<ListTypeProduct> typeProductList = new ArrayList<>();
+        List<ListTypeProduct> typeProductList = typeResponses.getTypeProduct();
+        Log.d("TAG", "getListTypeProduct: "+typeProductList.get(1).getTypeName());
+//
+//        for (int i = 0; i < typeResponses.getTypeProduct().size(); i++) {
+//            typeProductList.add(typeResponses.getTypeProduct().get(i));
+//        }
+        listTypeProduct.setValue(typeProductList);
     }
     public void getListProduct(){
         List<TypeProduct> productType = new ArrayList<>();
@@ -64,7 +85,6 @@ public class ProductRepository {
         return product;
     }
     public LiveData<TypeResponse> getTypeProductResponsitory() {
-        MutableLiveData<TypeResponse> typeProduct = new MutableLiveData<>();
         if (typeProductService.getListTypeProduct()!=null){
             typeProduct.setValue(typeProductService.getListTypeProduct());
         } else {

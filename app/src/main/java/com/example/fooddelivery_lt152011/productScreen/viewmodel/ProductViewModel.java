@@ -1,7 +1,6 @@
 package com.example.fooddelivery_lt152011.productScreen.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fooddelivery_lt152011.productScreen.CartItem;
+import com.example.fooddelivery_lt152011.productScreen.ListTypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.Product;
 import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.repositories.CartRepo;
@@ -23,7 +23,7 @@ public class ProductViewModel extends AndroidViewModel {
     public int quantity = 0;
     public MutableLiveData<Integer> totalQuantity = new MutableLiveData<>();
     public MutableLiveData<Integer> quantityItem = new MutableLiveData<>();
-
+    public MutableLiveData<Boolean> favourite = new MutableLiveData<>();
     private MutableLiveData<Product> mutableProduct = new MutableLiveData<>();
 
     TypeProRes typeProRes = new TypeProRes();
@@ -33,8 +33,21 @@ public class ProductViewModel extends AndroidViewModel {
     public ProductViewModel(@NonNull Application application) {
         super(application);
         quantityItem.setValue(0);
+        favourite.setValue(false);
     }
 
+    public LiveData<Boolean> getFavoite(){
+        if (favourite==null){
+            favourite = new MutableLiveData<>();
+        }
+        return favourite;
+    }
+
+    public void changFavourite(){
+        if (favourite.getValue()==true){
+            favourite.setValue(false);
+        } else favourite.setValue(true);
+    }
     public LiveData<Integer> getQuantityItem(){
         if (quantityItem==null){
             quantityItem = new MutableLiveData<>();
@@ -56,8 +69,8 @@ public class ProductViewModel extends AndroidViewModel {
     }
 
 
-    public MutableLiveData<List<TypeProduct>> getTypeProduct() {
-        return typeProduct;
+    public LiveData<List<ListTypeProduct>> getTypeProduct() {
+        return productRepository.getTypeProducts();
     }
 
     public void setTypeProduct(MutableLiveData<List<TypeProduct>> typeProduct) {
@@ -69,9 +82,8 @@ public class ProductViewModel extends AndroidViewModel {
         return cartItemRepo.getCart();
     }
 
-    public boolean addItemToCart(Product product) {
-        Log.d("TAG", "addItemToCart: ");
-        return cartItemRepo.addItemToCart(product);
+    public boolean addItemToCart(Product product, int quantity) {
+        return cartItemRepo.addItemToCart(product, quantity);
     }
 
     public void removeItemFromCart(CartItem cartItem) {

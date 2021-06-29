@@ -1,5 +1,7 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devs.readmoreoption.ReadMoreOption;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentProductBinding;
@@ -51,6 +54,9 @@ public class ProductFragment extends Fragment implements OneItemClick {
     public FragmentProductBinding fragmentProductBinding;
     private BottomsheetCartItemBinding bottomsheetCartItemBinding;
     public ImageButton btn_minus, btn_plus;
+    public ReadMoreOption readMoreOption;
+    public BottomSheetDialog bottomSheetDialog;
+    public LinearLayoutManager linearLayoutManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,10 +70,11 @@ public class ProductFragment extends Fragment implements OneItemClick {
             public void onChanged(List<TypeProduct> typeProducts) {
                 RecyclerView recyclerView = view.findViewById(R.id.rec_product_fragment);
                 recTypeAdapter = new RecTypeAdapter(typeProducts, getContext(), ProductFragment.this::onItemClick);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                linearLayoutManager = new LinearLayoutManager(getContext());
                 linearLayoutManager.scrollToPosition(1);
                 recyclerView.setAdapter(recTypeAdapter);
                 recyclerView.setLayoutManager(linearLayoutManager);
+
             }
         });
         mViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
@@ -97,7 +104,25 @@ public class ProductFragment extends Fragment implements OneItemClick {
                 tv_quantityCart.setText(integer.toString()+" món trong giỏ hàng");
             }
         });
+        mViewModel.getTypeProduct().observe(getViewLifecycleOwner(), new Observer<List<ListTypeProduct>>() {
+            @Override
+            public void onChanged(List<ListTypeProduct> listTypeProducts) {
+                typeProAdapter = new TypeProAdapter(getContext(), R.layout.item_typeproduct, listTypeProducts);
+                spinner = view.findViewById(R.id.spin_product);
+                spinner.setAdapter(typeProAdapter);
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        linearLayoutManager.scrollToPosition(position);
+                    }
 
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            }
+        });
         TypeProductViewModel typeProductViewModel = new ViewModelProvider(requireActivity()).get(TypeProductViewModel.class);
         typeProductViewModel.getTypeProductReponse().observe(getViewLifecycleOwner(), new Observer<TypeResponse>() {
             @Override
@@ -144,25 +169,25 @@ public class ProductFragment extends Fragment implements OneItemClick {
                 .commit();
             }
         });
+        //read more text view
+        readMoreOption = new ReadMoreOption.Builder(getContext())
+                .textLength(3, ReadMoreOption.TYPE_LINE) // OR
+                //.textLength(300, ReadMoreOption.TYPE_CHARACTER)
+                .moreLabel("Xem thêm")
+                .lessLabel("Rút gọn")
+                .moreLabelColor(R.color.placeholder_color)
+                .lessLabelColor(R.color.orange_light)
+                .labelUnderLine(true)
+                .expandAnimation(true)
+                .build();
         //here data must be an instance of the class MarsDataProvider
 //        fragmentProductBinding = FragmentProductBinding.inflate(inflater, container, false);
-        typeProAdapter = new TypeProAdapter(getContext(),R.layout.item_typeproduct, getAllTypeProduct());
+
+
 //        bottomsheetLayout = view.findViewById(R.id.bottomSheet_detailproduct);
 //        bottomSheetBehavior = bottomSheetBehavior.from(bottomsheetLayout);
         //viewmodel
-        spinner = view.findViewById(R.id.spin_product);
-        spinner.setAdapter(typeProAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         return view;
     }
@@ -174,25 +199,50 @@ public class ProductFragment extends Fragment implements OneItemClick {
         productType.add(new TypeProduct(3, "Bánh xu cà na"));
         return productType;
     }
+    public class ProductHandleClick {
+        Context context;
 
-
+        public ProductHandleClick(Context context) {
+            this.context = context;
+        }
+        public void addItemProduct(Product product,  int quantity){
+            mViewModel.addItemToCart(product, quantity);
+            linearLayoutManager.scrollToPosition(0);
+            bottomSheetDialog.dismiss();
+        }
+    }
     @Override
     public void onItemClick(Product product) {
         mViewModel.setProduct(product);
         fragmentProductBinding.setProduct(mViewModel);
         bottomSheetBinding.setProduct(mViewModel);
+        ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
+        bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
         btn_minus = view.findViewById(R.id.btn_minus_quantity);
         btn_plus = view.findViewById(R.id.btn_plus_quantity);
         tv_quantityItem = view.findViewById(R.id.tv_quantity_detail_product);
-        mViewModel.setQuantityItem(0);
+        TextView detail_product = view.findViewById(R.id.detail_product);
+        readMoreOption.addReadMoreTo(detail_product, product.ProductNote);
+        mViewModel.setQuantityItem(1);
+        ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
+        mViewModel.getFavoite().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean==true){
+                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_24);
+                } else {
+                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_border_24);
+                }
+            }
+        });
         mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                Log.d("TAG", "onChanged: "+integer);
                 tv_quantityItem.setText(integer.toString());
             }
         });
+
         btn_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +255,7 @@ public class ProductFragment extends Fragment implements OneItemClick {
                 mViewModel.plusQuantity();
             }
         });
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog = new BottomSheetDialog(getContext());
         if (view.getParent()!=null){
             ((ViewGroup)view.getParent()).removeView(view);
         }
@@ -213,7 +263,7 @@ public class ProductFragment extends Fragment implements OneItemClick {
         bottomSheetDialog.show();
 
 //        bottomSheetDialog.setCancelable(false);
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
+        bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
 //        bottomSheetBehavior.setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
 //        bottomSheetBehavior.setPeekHeight(0);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -227,6 +277,7 @@ public class ProductFragment extends Fragment implements OneItemClick {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
+
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
 

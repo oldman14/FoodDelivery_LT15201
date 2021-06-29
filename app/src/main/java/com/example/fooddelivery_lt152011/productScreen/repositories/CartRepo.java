@@ -1,5 +1,7 @@
     package com.example.fooddelivery_lt152011.productScreen.repositories;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,19 +30,20 @@ public class  CartRepo {
         calculateCartTotal();
     }
 
-    public boolean addItemToCart(Product product) {
+    public boolean addItemToCart(Product product, int quantity) {
+        Log.d("TAG", "addItemToCart: "+quantity);
         if (mutableCart.getValue() == null) {
             initCart();
         }
         List<CartItem> cartItemList = new ArrayList<>(mutableCart.getValue());
         for (CartItem cartItem: cartItemList) {
             if (cartItem.getProduct().getProductID()==(product.getProductID())) {
-                if (cartItem.getQuantity() == 5) {
+                if (cartItem.getQuantity() == 10) {
                     return false;
                 }
 
                 int index = cartItemList.indexOf(cartItem);
-                cartItem.setQuantity(cartItem.getQuantity() + 1);
+                cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 cartItemList.set(index, cartItem);
 
                 mutableCart.setValue(cartItemList);
@@ -48,7 +51,7 @@ public class  CartRepo {
                 return true;
             }
         }
-        CartItem cartItem = new CartItem(product, 1);
+        CartItem cartItem = new CartItem(product, quantity);
         cartItemList.add(cartItem);
         mutableCart.setValue(cartItemList);
         calculateCartTotal();

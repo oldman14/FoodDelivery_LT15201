@@ -1,6 +1,7 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,8 @@ import com.example.fooddelivery_lt152011.R;
 
 import java.util.List;
 
-public class TypeProAdapter extends ArrayAdapter<TypeProduct> {
-    public TypeProAdapter(@NonNull Context context, int resource, @NonNull List<TypeProduct> objects) {
+public class TypeProAdapter extends ArrayAdapter<ListTypeProduct> {
+    public TypeProAdapter(@NonNull Context context, int resource, @NonNull List<ListTypeProduct> objects) {
         super(context, resource, objects);
     }
 
@@ -24,7 +25,8 @@ public class TypeProAdapter extends ArrayAdapter<TypeProduct> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pro_selected, parent, false);
         TextView tv_typeproduct = (TextView) convertView.findViewById(R.id.tv_pro_selected);
-        TypeProduct typeProduct = this.getItem(position);
+        ListTypeProduct typeProduct = this.getItem(position);
+        Log.d("TAG", "getView: "+typeProduct);
         if (typeProduct!=null) {
             tv_typeproduct.setText(typeProduct.getTypeName());
         }
@@ -36,7 +38,7 @@ public class TypeProAdapter extends ArrayAdapter<TypeProduct> {
 
         convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_typeproduct, parent, false);
         TextView tv_typeproduct = (TextView) convertView.findViewById(R.id.tv_typeproduct);
-        TypeProduct typeProduct = this.getItem(position);
+        ListTypeProduct typeProduct = this.getItem(position);
         if (typeProduct!=null) {
             tv_typeproduct.setText(typeProduct.getTypeName());
         }
