@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -36,10 +37,12 @@ import com.example.fooddelivery_lt152011.productScreen.viewmodel.TypeProductView
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductFragment extends Fragment implements OneItemClick {
+public class ProductFragment extends Fragment implements OneItemClick, TypeBottomSheetApdapter.TypeBotSheetInterface {
     public Spinner spinner;
     public TypeProAdapter typeProAdapter;
     public RecTypeAdapter recTypeAdapter;
@@ -57,6 +60,11 @@ public class ProductFragment extends Fragment implements OneItemClick {
     public ReadMoreOption readMoreOption;
     public BottomSheetDialog bottomSheetDialog;
     public LinearLayoutManager linearLayoutManager;
+    private List<ListTypeProduct> listTypeProduct;
+    private ImageView imgFavorite;
+    private TextView typeSelect;
+    public BottomSheetDialog bottomSheetDialogType;
+    public TypeBottomSheetApdapter.TypeBotSheetInterface typeBotSheetInterface;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,15 +76,26 @@ public class ProductFragment extends Fragment implements OneItemClick {
         mViewModel.getProducts().observe(getViewLifecycleOwner(), new Observer<List<TypeProduct>>() {
             @Override
             public void onChanged(List<TypeProduct> typeProducts) {
+                fragmentProductBinding.setIsLoading(false);
                 RecyclerView recyclerView = view.findViewById(R.id.rec_product_fragment);
                 recTypeAdapter = new RecTypeAdapter(typeProducts, getContext(), ProductFragment.this::onItemClick);
                 linearLayoutManager = new LinearLayoutManager(getContext());
-                linearLayoutManager.scrollToPosition(1);
+                linearLayoutManager.scrollToPosition(0);
+                recyclerView.computeHorizontalScrollOffset();
+                fragmentProductBinding.setIsLoading(true);
                 recyclerView.setAdapter(recTypeAdapter);
                 recyclerView.setLayoutManager(linearLayoutManager);
-
+                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull @NotNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                        int position = linearLayoutManager.findFirstVisibleItemPosition();
+                        typeSelect.setText(listTypeProduct.get(position).getTypeName());
+                    }
+                });
             }
         });
+
         mViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
             @Override
             public void onChanged(List<CartItem> cartItems) {
@@ -84,7 +103,6 @@ public class ProductFragment extends Fragment implements OneItemClick {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
                 BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomsheetLayout);
                 if (cartItems.size()!=0){
-                    Log.d("TAG", "onChanged: "+cartItems.size());
                     if (bottomSheetBehavior.getState()!=BottomSheetBehavior.STATE_EXPANDED){
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
@@ -94,7 +112,6 @@ public class ProductFragment extends Fragment implements OneItemClick {
         mViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                Log.d("TAG", "onChanged: "+aDouble);
                 tv_price.setText(aDouble.toString()+"đ");
             }
         });
@@ -107,35 +124,35 @@ public class ProductFragment extends Fragment implements OneItemClick {
         mViewModel.getTypeProduct().observe(getViewLifecycleOwner(), new Observer<List<ListTypeProduct>>() {
             @Override
             public void onChanged(List<ListTypeProduct> listTypeProducts) {
+                listTypeProduct = listTypeProducts;
                 typeProAdapter = new TypeProAdapter(getContext(), R.layout.item_typeproduct, listTypeProducts);
-                spinner = view.findViewById(R.id.spin_product);
-                spinner.setAdapter(typeProAdapter);
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                typeSelect.setText(listTypeProducts.get(0).getTypeName());
+                typeSelect.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        linearLayoutManager.scrollToPosition(position);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
+                    public void onClick(View v) {
+                        ShowBottomSheetType();
                     }
                 });
+//                spinner = view.findViewById(R.id.spin_product);
+//                spinner.setAdapter(typeProAdapter);
+//                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+////                        linearLayoutManager.scrollToPosition(position);
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> parent) {
+//
+//                    }
+//                });
+
             }
         });
-        TypeProductViewModel typeProductViewModel = new ViewModelProvider(requireActivity()).get(TypeProductViewModel.class);
-        typeProductViewModel.getTypeProductReponse().observe(getViewLifecycleOwner(), new Observer<TypeResponse>() {
+        imgFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(TypeResponse typeResponse) {
-                Log.d("TAG", "TypeProduct: "+typeResponse.getTypeProduct());
-            }
-        });
-        ProductListViewModel productListViewModel = new ViewModelProvider(requireActivity()).get(ProductListViewModel.class);
-        productListViewModel.getProductReponse().observe(getViewLifecycleOwner(), new Observer<ProductReponse>() {
-            @Override
-            public void onChanged(ProductReponse productReponse) {
-                Toast.makeText(getContext(), "viewmodel", Toast.LENGTH_SHORT).show();
-                Log.d("TAG", "onViewMOdel: "+productReponse.getProduct().get(0));
+            public void onClick(View v) {
+                ShowBottomSheetType();
             }
         });
 
@@ -151,14 +168,12 @@ public class ProductFragment extends Fragment implements OneItemClick {
         bottomSheetBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_sheet, container, false);
         bottomsheetCartItemBinding = DataBindingUtil.inflate(inflater, R.layout.bottomsheet_cart_item,container, false);
         View view = fragmentProductBinding.getRoot();
+        imgFavorite = view.findViewById(R.id.btn_favorite_productfragment);
         bottomsheetLayoutItem = view.findViewById(R.id.bottomSheet_detailproduct);
-//        btn_minus = view.findViewById(R.id.btn_minus_quantity);
-//        btn_plus =  view.findViewById(R.id.btn_plus_quantity);
-//        tv_quantityItem = view.findViewById(R.id.tv_quantity_detail_product);
         bottomsheetLayout = view.findViewById(R.id.bottom_sheet_cart_layout);
         tv_price = bottomsheetLayout.findViewById(R.id.priceCartBottomSheet);
         tv_quantityCart = view.findViewById(R.id.quantityCartItem);
-
+        typeSelect  = view.findViewById(R.id.tv_pro_selected);
         bottomsheetLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,25 +195,28 @@ public class ProductFragment extends Fragment implements OneItemClick {
                 .labelUnderLine(true)
                 .expandAnimation(true)
                 .build();
-        //here data must be an instance of the class MarsDataProvider
-//        fragmentProductBinding = FragmentProductBinding.inflate(inflater, container, false);
-
-
-//        bottomsheetLayout = view.findViewById(R.id.bottomSheet_detailproduct);
-//        bottomSheetBehavior = bottomSheetBehavior.from(bottomsheetLayout);
-        //viewmodel
-
-
         return view;
     }
-    private List<TypeProduct> getAllTypeProduct() {
-        List<TypeProduct> productType = new ArrayList<>();
-        productType.add(new TypeProduct(0, "Cà phê"));
-        productType.add(new TypeProduct(1, "Đá xoay vòng tròn"));
-        productType.add(new TypeProduct(2, "Nước ép hoa đậu biếc"));
-        productType.add(new TypeProduct(3, "Bánh xu cà na"));
-        return productType;
+    public void ShowBottomSheetType(){
+        bottomSheetDialogType = new BottomSheetDialog(getContext());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_type,null);
+        bottomSheetDialogType.setContentView(view);
+        RecyclerView recyclerView = view.findViewById(R.id.rec_bottomSheet_type);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        TypeBottomSheetApdapter typeBottomSheetApdapter  = new TypeBottomSheetApdapter(listTypeProduct, ProductFragment.this::itemClick, linearLayoutManager);
+        recyclerView.setAdapter(typeBottomSheetApdapter);
+        bottomSheetDialogType.show();
     }
+
+    @Override
+    public void itemClick(View v,int position) {
+
+        typeSelect.setText(listTypeProduct.get(position).getTypeName());
+        linearLayoutManager.scrollToPositionWithOffset(position, 10);
+        bottomSheetDialogType.dismiss();
+    }
+
     public class ProductHandleClick {
         Context context;
 
@@ -207,7 +225,6 @@ public class ProductFragment extends Fragment implements OneItemClick {
         }
         public void addItemProduct(Product product,  int quantity){
             mViewModel.addItemToCart(product, quantity);
-            linearLayoutManager.scrollToPosition(0);
             bottomSheetDialog.dismiss();
         }
     }
@@ -261,29 +278,19 @@ public class ProductFragment extends Fragment implements OneItemClick {
         }
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();
-
-//        bottomSheetDialog.setCancelable(false);
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
-//        bottomSheetBehavior.setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
-//        bottomSheetBehavior.setPeekHeight(0);
+
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull @org.jetbrains.annotations.NotNull View bottomSheet, int newState) {
 
             }
-
             @Override
             public void onSlide(@NonNull @org.jetbrains.annotations.NotNull View bottomSheet, float slideOffset) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-
     }
-    public void updateQuantity(){
-        tv_quantityItem.setText(mViewModel.quantity);
-    }
-
 }

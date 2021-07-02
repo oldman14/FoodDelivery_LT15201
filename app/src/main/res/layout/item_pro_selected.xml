@@ -5,7 +5,6 @@
     android:background="@drawable/boder"
     >
     <TextView
-
         android:gravity="center_vertical"
         android:id="@+id/tv_pro_selected"
         android:layout_width="match_parent"

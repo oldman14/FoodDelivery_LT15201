@@ -1,6 +1,7 @@
 package com.example.fooddelivery_lt152011.productScreen.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -25,6 +26,18 @@ public class ProductViewModel extends AndroidViewModel {
     public MutableLiveData<Integer> quantityItem = new MutableLiveData<>();
     public MutableLiveData<Boolean> favourite = new MutableLiveData<>();
     private MutableLiveData<Product> mutableProduct = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isConnect = new MutableLiveData<>();
+
+    public LiveData<Boolean> getIsConnect() {
+        if (isConnect==null){
+            isConnect = new MutableLiveData<>();
+        }
+        return isConnect;
+    }
+
+    public void setIsConnect(boolean aboolean) {
+        isConnect.setValue(aboolean);
+    }
 
     TypeProRes typeProRes = new TypeProRes();
     CartRepo cartItemRepo = new CartRepo();

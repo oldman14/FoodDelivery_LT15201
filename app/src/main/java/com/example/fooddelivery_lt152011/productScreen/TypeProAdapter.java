@@ -24,7 +24,7 @@ public class TypeProAdapter extends ArrayAdapter<ListTypeProduct> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pro_selected, parent, false);
-        TextView tv_typeproduct = (TextView) convertView.findViewById(R.id.tv_pro_selected);
+        TextView tv_typeproduct =  convertView.findViewById(R.id.tv_pro_selected);
         ListTypeProduct typeProduct = this.getItem(position);
         Log.d("TAG", "getView: "+typeProduct);
         if (typeProduct!=null) {
