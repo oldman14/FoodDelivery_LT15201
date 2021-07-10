@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="product"
+            type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel"
+
+            />
+        <variable
+            name="name"
+            type="String" />
+        <variable
+            name="cartItem"
+            type="com.example.fooddelivery_lt152011.productScreen.CartItem" />
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="60dp"
+    tools:context=".productScreen.ProductFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.appcompat.widget.Toolbar
+        android:background="@color/white"
+        android:id="@+id/toolbarProduct"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingHorizontal="8dp"
+        android:id="@+id/middle_product_fragment"
+        android:layout_below="@+id/toolbarProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="5dp"
+        >
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:layout_gravity="center_vertical"
+            android:id="@+id/spin_product"
+            android:spinnerMode="dialog"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".70"
+            android:background="@android:color/transparent"
+           />
+        <androidx.appcompat.widget.SearchView
+            android:gravity="center"
+            android:layout_marginHorizontal="3dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".15"
+            />
+        <ImageButton
+            android:src="@drawable/ic_favorite_24"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".15"/>
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginHorizontal="8dp"
+        android:layout_below="@id/middle_product_fragment"
+        android:id="@+id/rec_product_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/tv_test"/>
+    <include layout="@layout/bottom_sheet"
+        bind:product="@{product}"
+            />
+    <include
+        layout="@layout/bottomsheet_cart_item"
+        bind:product="@{product}"
+        />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
