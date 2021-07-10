@@ -1,4 +1,4 @@
-package com.example.fooddelivery_lt152011.productScreen.repositories;
+    package com.example.fooddelivery_lt152011.productScreen.repositories;
 
 import android.util.Log;
 
@@ -11,6 +11,7 @@ import com.example.fooddelivery_lt152011.networking.Service.TypeProductService;
 import com.example.fooddelivery_lt152011.productScreen.ListTypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.Product;
 import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
+import com.example.fooddelivery_lt152011.productScreen.SizeResponse;
 import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.TypeResponse;
 
@@ -47,49 +48,40 @@ public class ProductRepository {
         return listTypeProduct;
     }
     public void getListTypeProduct(){
-        TypeResponse typeResponses = typeProductService.getListTypeProduct();
-//        List<ListTypeProduct> typeProductList = new ArrayList<>();
-        List<ListTypeProduct> typeProductList = typeResponses.getTypeProduct();
-        Log.d("TAG", "getListTypeProduct: "+typeProductList.get(1).getTypeName());
-//
-//        for (int i = 0; i < typeResponses.getTypeProduct().size(); i++) {
-//            typeProductList.add(typeResponses.getTypeProduct().get(i));
-//        }
-        listTypeProduct.setValue(typeProductList);
+        try{
+            TypeResponse typeResponses = typeProductService.getListTypeProduct();
+            List<ListTypeProduct> typeProductList = typeResponses.getTypeProduct();
+            listTypeProduct.setValue(typeProductList);
+        } catch (Exception e){
+            Log.d("TAG", "getListTypeProduct: "+e.getMessage());
+        }
+
+
     }
     public void getListProduct(){
-        List<TypeProduct> productType = new ArrayList<>();
-        ProductReponse productReponses = productService.getListProduct();
-        TypeResponse typeResponses = typeProductService.getListTypeProduct();
-        List<Product> productList = productReponses.getProduct();
-        List<ListTypeProduct> typeProductList = typeResponses.getTypeProduct();
-        for (int i = 0; i < typeResponses.getTypeProduct().size(); i++) {
-            List<Product> productListTypeProduct = new ArrayList<>();
-            for (int j = 0; j < productReponses.getProduct().size(); j++) {
-                if (typeProductList.get(i).getTypeID()==productList.get(j).TypeID){
-                    productListTypeProduct.add(productList.get(j));
+        try {
+            List<TypeProduct> productType = new ArrayList<>();
+            ProductReponse productReponses = productService.getListProduct();
+            TypeResponse typeResponses = typeProductService.getListTypeProduct();
+            List<Product> productList = productReponses.getProduct();
+            List<ListTypeProduct> typeProductList = typeResponses.getTypeProduct();
+            for (int i = 0; i < typeResponses.getTypeProduct().size(); i++) {
+                List<Product> productListTypeProduct = new ArrayList<>();
+                for (int j = 0; j < productReponses.getProduct().size(); j++) {
+                    if (typeProductList.get(i).getTypeID()==productList.get(j).TypeID){
+                        productListTypeProduct.add(productList.get(j));
+                    }
                 }
+                if (productListTypeProduct.size()>0){
+                    productType.add(new TypeProduct(typeProductList.get(i).getTypeID(), typeProductList.get(i).getTypeName(), productListTypeProduct));
+                }
+                typeProductRes.setValue(productType);
             }
-            if (productListTypeProduct.size()>0){
-                productType.add(new TypeProduct(typeProductList.get(i).getTypeID(), typeProductList.get(i).getTypeName(), productListTypeProduct));
-            }
-            typeProductRes.setValue(productType);
+        }catch (Exception e){
+            Log.d("TAG", "getListProduct: "+e);
         }
     }
-    public LiveData<ProductReponse> getProductRepository() {
-        if (productService.getListProduct()!=null) {
-            product.setValue(productService.getListProduct());
-        } else {
-            product.setValue(null);
-        }
-        return product;
-    }
-    public LiveData<TypeResponse> getTypeProductResponsitory() {
-        if (typeProductService.getListTypeProduct()!=null){
-            typeProduct.setValue(typeProductService.getListTypeProduct());
-        } else {
-            typeProduct.setValue(null);
-        }
-        return typeProduct;
+    public void getListSize(){
+
     }
 }

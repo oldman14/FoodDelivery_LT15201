@@ -147,8 +147,7 @@ public class HttpInvocationHandler implements InvocationHandler {
             stringBuilder.append(line);
             list.add(line);
         }
-        Log.d("aaa", stringBuilder.toString());
-        Log.d("zxc", String.valueOf(method.getReturnType()));
+
 
         return gson.fromJson(stringBuilder.toString(), method.getReturnType());
 

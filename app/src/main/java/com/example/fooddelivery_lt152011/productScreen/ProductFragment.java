@@ -1,7 +1,6 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,14 +12,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,16 +30,13 @@ import com.devs.readmoreoption.ReadMoreOption;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentProductBinding;
-import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductListViewModel;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.example.fooddelivery_lt152011.R;
-import com.example.fooddelivery_lt152011.productScreen.viewmodel.TypeProductViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class ProductFragment extends Fragment implements OneItemClick, TypeBottomSheetApdapter.TypeBotSheetInterface {
@@ -64,6 +61,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     private ImageView imgFavorite;
     private TextView typeSelect;
     public BottomSheetDialog bottomSheetDialogType;
+    public RadioGroup radioGroup;
     public TypeBottomSheetApdapter.TypeBotSheetInterface typeBotSheetInterface;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,23 +74,27 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         mViewModel.getProducts().observe(getViewLifecycleOwner(), new Observer<List<TypeProduct>>() {
             @Override
             public void onChanged(List<TypeProduct> typeProducts) {
-                fragmentProductBinding.setIsLoading(false);
                 RecyclerView recyclerView = view.findViewById(R.id.rec_product_fragment);
-                recTypeAdapter = new RecTypeAdapter(typeProducts, getContext(), ProductFragment.this::onItemClick);
-                linearLayoutManager = new LinearLayoutManager(getContext());
-                linearLayoutManager.scrollToPosition(0);
-                recyclerView.computeHorizontalScrollOffset();
-                fragmentProductBinding.setIsLoading(true);
-                recyclerView.setAdapter(recTypeAdapter);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(@NonNull @NotNull RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                        int position = linearLayoutManager.findFirstVisibleItemPosition();
-                        typeSelect.setText(listTypeProduct.get(position).getTypeName());
-                    }
-                });
+                if (typeProducts!=null){
+                    fragmentProductBinding.setIsLoading(false);
+                    recTypeAdapter = new RecTypeAdapter(typeProducts, getContext(), ProductFragment.this::onItemClick);
+                    linearLayoutManager = new LinearLayoutManager(getContext());
+                    linearLayoutManager.scrollToPosition(0);
+                    recyclerView.computeHorizontalScrollOffset();
+                    fragmentProductBinding.setIsLoading(true);
+                    recyclerView.setAdapter(recTypeAdapter);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull @NotNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                            int position = linearLayoutManager.findFirstVisibleItemPosition();
+                            typeSelect.setText(listTypeProduct.get(position).getTypeName());
+                        }
+                    });
+                } else {
+                    recyclerView.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -112,7 +114,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         mViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                tv_price.setText(aDouble.toString()+"đ");
+                tv_price.setText(new DecimalFormat("##,###đ").format(aDouble));
             }
         });
         mViewModel.getCartQuantity().observe(getViewLifecycleOwner(), new Observer<Integer>() {
@@ -133,19 +135,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                         ShowBottomSheetType();
                     }
                 });
-//                spinner = view.findViewById(R.id.spin_product);
-//                spinner.setAdapter(typeProAdapter);
-//                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-////                        linearLayoutManager.scrollToPosition(position);
-//                    }
-//
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> parent) {
-//
-//                    }
-//                });
+
 
             }
         });
@@ -219,13 +209,16 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
 
     public class ProductHandleClick {
         Context context;
-
         public ProductHandleClick(Context context) {
             this.context = context;
         }
-        public void addItemProduct(Product product,  int quantity){
-            mViewModel.addItemToCart(product, quantity);
+        public void addItemProduct(Product product,  int quantity, int sizeID ){
+            Toast.makeText(context, sizeID+"", Toast.LENGTH_SHORT).show();
+            mViewModel.addItemToCart(product, quantity, sizeID);
             bottomSheetDialog.dismiss();
+        }
+        public String convertString(int price){
+            return new DecimalFormat("##,###đ").format(price);
         }
     }
     @Override
@@ -236,6 +229,30 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
         bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
+        radioGroup = view.findViewById(R.id.radioGroupSize);
+        mViewModel.setSize(product.getSizes().get(0));
+        RadioButton radioButton = view.findViewById(R.id.btn_radio_size_nho);
+        radioButton.setChecked(true);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.btn_radio_size_nho:
+                        mViewModel.setSize(product.getSizes().get(0));
+                        break;
+                    case R.id.btn_radio_size_lon:
+                        mViewModel.setSize(product.getSizes().get(1));
+                        break;
+                }
+            }
+        });
+        mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
+            @Override
+            public void onChanged(Size size) {
+                int quantity = mViewModel.getQuantityItem().getValue();
+                mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
+            }
+        });
         btn_minus = view.findViewById(R.id.btn_minus_quantity);
         btn_plus = view.findViewById(R.id.btn_plus_quantity);
         tv_quantityItem = view.findViewById(R.id.tv_quantity_detail_product);
@@ -253,13 +270,22 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 }
             }
         });
+
         mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 tv_quantityItem.setText(integer.toString());
+                mViewModel.setPriceProduct((integer * product.getProductPrice())+mViewModel.getSize().getValue().getSizePrice());
             }
         });
-
+        Button btn_chonMon = view.findViewById(R.id.btn_chonMon);
+        mViewModel.getPriceProduct().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                String s = new DecimalFormat("##,###đ").format(integer);
+                btn_chonMon.setText("Chọn món - "+s);
+            }
+        });
         btn_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,14 +309,12 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull @org.jetbrains.annotations.NotNull View bottomSheet, int newState) {
-
             }
             @Override
             public void onSlide(@NonNull @org.jetbrains.annotations.NotNull View bottomSheet, float slideOffset) {
 //                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
-
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }

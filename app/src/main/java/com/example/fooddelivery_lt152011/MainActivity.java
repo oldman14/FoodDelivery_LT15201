@@ -32,6 +32,8 @@ import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewMode
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.net.InetAddress;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
    public static final String BroadcastStrngforAction="checkinternet";
@@ -63,10 +65,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new Timer().scheduleAtFixedRate(new TimerTask(){
+            @Override
+            public void run(){
+//                Log.i("tag", "A Kiss every 5 seconds");
+            }
+        },0,5000);
         BottomNavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigation);
         productViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
-        loadFragment(new HomeFragment());
+        loadFragment(new ProductFragment());
         intentFilter = new IntentFilter();
         intentFilter.addAction(BroadcastStrngforAction);
         Intent serviceIntent = new Intent(this, MyConnect.class);

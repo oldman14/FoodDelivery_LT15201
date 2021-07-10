@@ -20,6 +20,7 @@ import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentCartBinding;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class CartFragment extends Fragment implements CartListAdapter.CartInterface {
@@ -62,7 +63,8 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
         productViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                fragmentCartBinding.orderTotalTextView.setText("Tổng cộng: " + aDouble.toString()+"đ");
+                String price = new DecimalFormat("##,###đ").format(aDouble);
+                fragmentCartBinding.orderTotalTextView.setText("Tổng cộng: " + price);
             }
         });
 

@@ -1,6 +1,7 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
         );
         layoutManager.setInitialPrefetchItemCount(typeProduct.getProducts().size());
         RecProductAdapter recProductAdapter = new RecProductAdapter(context, typeProduct.getProducts(),  oneItemClick);
+        Log.d("TAG", "onBindViewHolder: "+typeProduct.getProducts().size());
         holder.recProduct.setLayoutManager(layoutManager);
         holder.recProduct.setAdapter(recProductAdapter);
     }

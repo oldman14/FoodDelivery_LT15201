@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="25000đ"
+                    android:text="@{handleClick.convertString(product.product.ProductPrice)}"
                     android:textColor="@color/black"
                     android:textSize="18dp" />
             </LinearLayout>
@@ -150,6 +150,7 @@
                 android:layout_height="wrap_content"
                 >
                 <RadioGroup
+                    android:id="@+id/radioGroupSize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
@@ -159,7 +160,7 @@
                         android:id="@+id/btn_radio_size_nho"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nhỏ"
+                        android:text="@{product.product.sizes.get(0).SizeName}"
                         android:textSize="16dp" />
                     <View
                         android:layout_width="match_parent"
@@ -171,9 +172,8 @@
                         android:id="@+id/btn_radio_size_lon"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Lớn"
+                        android:text="@{product.product.sizes.get(1).SizeName}"
                         android:textSize="16dp" />
-
                 </RadioGroup>
             </RelativeLayout>
         </LinearLayout>
@@ -224,18 +224,17 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="12dp">
                 <Button
+                    android:id="@+id/btn_chonMon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Chọn món"
-                    android:textSize="13dp"
-                android:onClick="@{()->handleClick.addItemProduct(product.product,product.quantityItem)}"
-                android:fontFamily="@font/utm_avo"
+                    android:textSize="15dp"
+                    android:textAllCaps="false"
+                    android:onClick="@{()->handleClick.addItemProduct(product.product,product.quantityItem,product.size.getSizeID)}"
+                    android:fontFamily="@font/roboto_medium"
                     android:background="@drawable/boder"
                     android:layout_marginHorizontal="8dp"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
-
         </LinearLayout>
     </RelativeLayout>
-
 </layout>
-    <!--                    android:onClick="@{()->product.addItemToCart(product.product,product.quantityItem)}"-->

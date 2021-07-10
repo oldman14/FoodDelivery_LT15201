@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class Product {
     public int ProductID;
     public String ProductName;
@@ -15,6 +17,7 @@ public class Product {
     public String ProductImage;
     public String ProductNote;
     public int TypeID;
+    public List<Size> sizes;
 
     public Product(int productID, String productName, int productPrice, String productImage, String productNote, int typeID) {
         ProductID = productID;
@@ -24,10 +27,20 @@ public class Product {
         ProductNote = productNote;
         TypeID = typeID;
     }
+
+    public Product(int productID, String productName, int productPrice, String productImage, String productNote, int typeID, List<Size> sizes) {
+        ProductID = productID;
+        ProductName = productName;
+        ProductPrice = productPrice;
+        ProductImage = productImage;
+        ProductNote = productNote;
+        TypeID = typeID;
+        this.sizes = sizes;
+    }
+
     @BindingAdapter({"productImage"})
     public static void loadImage(ImageView imageView, String productImage){
         Picasso.get().load(productImage).into(imageView);
-
     }
 
     @Override
@@ -98,5 +111,13 @@ public class Product {
 
     public void setTypeID(int typeID) {
         TypeID = typeID;
+    }
+
+    public List<Size> getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(List<Size> sizes) {
+        this.sizes = sizes;
     }
 }

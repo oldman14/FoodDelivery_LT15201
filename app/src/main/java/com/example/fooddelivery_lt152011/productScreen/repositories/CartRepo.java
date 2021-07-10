@@ -30,8 +30,7 @@ public class  CartRepo {
         calculateCartTotal();
     }
 
-    public boolean addItemToCart(Product product, int quantity) {
-        Log.d("TAG", "addItemToCart: "+quantity);
+    public boolean addItemToCart(Product product, int quantity, int sizeID) {
         if (mutableCart.getValue() == null) {
             initCart();
         }
@@ -41,17 +40,15 @@ public class  CartRepo {
                 if (cartItem.getQuantity() == 10) {
                     return false;
                 }
-
                 int index = cartItemList.indexOf(cartItem);
                 cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 cartItemList.set(index, cartItem);
-
                 mutableCart.setValue(cartItemList);
                 calculateCartTotal();
                 return true;
             }
         }
-        CartItem cartItem = new CartItem(product, quantity);
+        CartItem cartItem = new CartItem(product, quantity, sizeID);
         cartItemList.add(cartItem);
         mutableCart.setValue(cartItemList);
         calculateCartTotal();

@@ -4,10 +4,15 @@ package com.example.fooddelivery_lt152011.networking.Service;
 import com.example.fooddelivery_lt152011.networking.HttpAnotation.HttpMethod;
 import com.example.fooddelivery_lt152011.networking.HttpAnotation.MethodType;
 import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
+import com.example.fooddelivery_lt152011.productScreen.SizeResponse;
+
+import java.util.List;
 
 public interface ProductService {
-        @HttpMethod(method = MethodType.GET,url = "totnghiep_database/api/product_getall.php")
+        @HttpMethod(method = MethodType.GET,url = "totnghiep_database/api/product_getallsize.php")
         ProductReponse getListProduct();
+        @HttpMethod(method = MethodType.GET,url = "totnghiep_database/api/product_getallsize.php")
+        List<SizeResponse> getAllSize();
 
 
 //        @HttpMethod(method = MethodType.POST,url = "android_networking/api/load_product_brand.php")

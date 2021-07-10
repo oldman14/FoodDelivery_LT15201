@@ -1,7 +1,6 @@
 package com.example.fooddelivery_lt152011.productScreen.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,10 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.fooddelivery_lt152011.productScreen.CartItem;
 import com.example.fooddelivery_lt152011.productScreen.ListTypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.Product;
+import com.example.fooddelivery_lt152011.productScreen.Size;
 import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.repositories.CartRepo;
 import com.example.fooddelivery_lt152011.productScreen.repositories.ProductRepository;
-import com.example.fooddelivery_lt152011.productScreen.repositories.TypeProRes;
 
 import java.util.List;
 
@@ -27,7 +26,8 @@ public class ProductViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> favourite = new MutableLiveData<>();
     private MutableLiveData<Product> mutableProduct = new MutableLiveData<>();
     private MutableLiveData<Boolean> isConnect = new MutableLiveData<>();
-
+    private MutableLiveData<Size> size = new MutableLiveData<>();
+    private MutableLiveData<Integer> priceProduct = new MutableLiveData<>();
     public LiveData<Boolean> getIsConnect() {
         if (isConnect==null){
             isConnect = new MutableLiveData<>();
@@ -39,7 +39,6 @@ public class ProductViewModel extends AndroidViewModel {
         isConnect.setValue(aboolean);
     }
 
-    TypeProRes typeProRes = new TypeProRes();
     CartRepo cartItemRepo = new CartRepo();
 
     ProductRepository productRepository = new ProductRepository();
@@ -49,6 +48,26 @@ public class ProductViewModel extends AndroidViewModel {
         favourite.setValue(false);
     }
 
+    public MutableLiveData<Integer> getPriceProduct() {
+        if (priceProduct==null){
+            priceProduct = new MutableLiveData<>();
+        }
+        return priceProduct;
+    }
+
+    public void setPriceProduct(Integer price) {
+        priceProduct.setValue(price);
+    }
+
+    public LiveData<Size> getSize(){
+        if (size == null){
+            size = new MutableLiveData<>();
+        }
+        return size;
+    }
+    public void setSize(Size s) {
+        size.setValue(s);
+    }
     public LiveData<Boolean> getFavoite(){
         if (favourite==null){
             favourite = new MutableLiveData<>();
@@ -95,8 +114,8 @@ public class ProductViewModel extends AndroidViewModel {
         return cartItemRepo.getCart();
     }
 
-    public boolean addItemToCart(Product product, int quantity) {
-        return cartItemRepo.addItemToCart(product, quantity);
+    public boolean addItemToCart(Product product, int quantity ,int sizeID) {
+        return cartItemRepo.addItemToCart(product, quantity, sizeID);
     }
 
     public void removeItemFromCart(CartItem cartItem) {
@@ -117,7 +136,9 @@ public class ProductViewModel extends AndroidViewModel {
     }
 
     public void minusQuantity(){
-        quantityItem.setValue(quantityItem.getValue()-1);
+        if (quantityItem.getValue()>1){
+            quantityItem.setValue(quantityItem.getValue()-1);
+        }
     }
     public void plusQuantity(){
         quantityItem.setValue(quantityItem.getValue()+1);
