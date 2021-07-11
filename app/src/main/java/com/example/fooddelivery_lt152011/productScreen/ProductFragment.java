@@ -25,8 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.devs.readmoreoption.ReadMoreOption;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentProductBinding;
@@ -34,7 +32,7 @@ import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewMode
 import com.example.fooddelivery_lt152011.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -86,7 +84,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                     recyclerView.setLayoutManager(linearLayoutManager);
                     recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
-                        public void onScrollStateChanged(@NonNull @NotNull RecyclerView recyclerView, int newState) {
+                        public void onScrollStateChanged(@NonNull  RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
                             int position = linearLayoutManager.findFirstVisibleItemPosition();
                             typeSelect.setText(listTypeProduct.get(position).getTypeName());
