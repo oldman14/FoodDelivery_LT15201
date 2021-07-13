@@ -29,7 +29,7 @@ public class ProductRepository {
 
     public ProductRepository() {
         httpAdapter = new HttpAdapter();
-        httpAdapter.setBaseUrl("https://192.168.171.3/");
+        httpAdapter.setBaseUrl("https://192.168.171.2/");
         productService = httpAdapter.create(ProductService.class);
         typeProductService = httpAdapter.create(TypeProductService.class);
     }

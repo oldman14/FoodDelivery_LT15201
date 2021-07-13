@@ -68,8 +68,8 @@ public class InforOderFragment extends Fragment {
         ivshipper = view.findViewById( R.id.ivshipper );
         shipname = view.findViewById( R.id.shipname );
         dao = new UserDAO( getContext() );
-        orderDAO = new OrderDAO( getContext() );
-        shipperDAO = new ShipperDAO( getContext() );
+        orderDAO = new OrderDAO();
+        shipperDAO = new ShipperDAO(getContext());
         ModelUser nameimg = dao.getUserNames( Integer.parseInt( SendOTPActivity.phone ) );
         Log.d( "LogOrrder", "onCreateView: " + nameimg.getUserID() );
         ModelOrder itemorder = orderDAO.getItemOrder( nameimg.getUserID() );
@@ -151,7 +151,7 @@ public class InforOderFragment extends Fragment {
                 mMap.animateCamera( CameraUpdateFactory.newLatLngZoom( latLng, 16 ) );
                 mMap.addMarker( markerOptions );
                 dao = new UserDAO( getContext() );
-                orderDAO = new OrderDAO( getContext() );
+                orderDAO = new OrderDAO();
                 shipperDAO = new ShipperDAO( getContext() );
                 ModelUser nameimg = dao.getUserNames( Integer.parseInt( SendOTPActivity.phone ) );
                 Log.d( "LogOrrder", "onCreateView: " + nameimg.getUserID() );

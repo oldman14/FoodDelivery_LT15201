@@ -31,7 +31,6 @@ import com.example.fooddelivery_lt152011.LoginScreen.UserDAO;
 import com.example.fooddelivery_lt152011.MainActivity;
 import com.example.fooddelivery_lt152011.MyOrder.InforOderFragment;
 import com.example.fooddelivery_lt152011.R;
-import com.example.httpconnection.Http.HttpAdapter;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;

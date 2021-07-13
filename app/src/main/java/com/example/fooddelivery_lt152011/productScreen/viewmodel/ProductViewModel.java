@@ -28,6 +28,10 @@ public class ProductViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> isConnect = new MutableLiveData<>();
     private MutableLiveData<Size> size = new MutableLiveData<>();
     private MutableLiveData<Integer> priceProduct = new MutableLiveData<>();
+    CartRepo cartItemRepo = new CartRepo();
+    ProductRepository productRepository = new ProductRepository();
+
+
     public LiveData<Boolean> getIsConnect() {
         if (isConnect==null){
             isConnect = new MutableLiveData<>();
@@ -39,9 +43,7 @@ public class ProductViewModel extends AndroidViewModel {
         isConnect.setValue(aboolean);
     }
 
-    CartRepo cartItemRepo = new CartRepo();
 
-    ProductRepository productRepository = new ProductRepository();
     public ProductViewModel(@NonNull Application application) {
         super(application);
         quantityItem.setValue(0);
