@@ -1,10 +1,12 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,19 +20,35 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import com.example.fooddelivery_lt152011.R;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentCartBinding;
+import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
+import com.example.fooddelivery_lt152011.networking.Service.OderService;
+import com.example.fooddelivery_lt152011.productScreen.entities.InfoLocation;
+import com.example.fooddelivery_lt152011.productScreen.entities.Store;
+import com.example.fooddelivery_lt152011.productScreen.viewmodel.LocationViewModel;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
+import com.example.fooddelivery_lt152011.productScreen.viewmodel.StoreViewModel;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class CartFragment extends Fragment implements CartListAdapter.CartInterface {
 
     private static final String TAG = "CartFragment";
     ProductViewModel productViewModel;
+    StoreViewModel storeViewModel;
+    LocationViewModel locationViewModel;
     FragmentCartBinding fragmentCartBinding;
     BottomsheetCartItemBinding bottomsheetCartItemBinding;
-//    NavController navController;
-
+    HttpAdapter httpAdapter;
+    OderService oderService;
+    Store store;
+    InfoLocation infoLocation;
     public CartFragment() {
         // Required empty public constructor
     }
@@ -46,17 +64,71 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        navController = Navigation.findNavController(view);
+        httpAdapter = new HttpAdapter();
+        httpAdapter.setBaseUrl("https://192.168.171.2/");
+        oderService = httpAdapter.create(OderService.class);
         final CartListAdapter cartListAdapter = new CartListAdapter(this);
         fragmentCartBinding.cartRecyclerView.setAdapter(cartListAdapter);
         fragmentCartBinding.cartRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         RelativeLayout bottomsheetLayout = view.findViewById(R.id.bottom_sheet_cart_layout);
+        storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
+        storeViewModel.getStore().observe(getViewLifecycleOwner(), new Observer<Store>() {
+            @Override
+            public void onChanged(Store s) {
+                store = s;
+            }
+        });
+        locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
+        locationViewModel.getLocation().observe(getViewLifecycleOwner(), new Observer<InfoLocation>() {
+            @Override
+            public void onChanged(InfoLocation location) {
+                infoLocation = location;
+            }
+        });
         productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
             @Override
             public void onChanged(List<CartItem> cartItems) {
+                JSONArray jsonArray = new JSONArray();
+                for (CartItem item: cartItems) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("productID", item.product.ProductID);
+                        jsonObject.put("quantity", item.getQuantity());
+                        jsonObject.put("sizeID", item.sizeID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    jsonArray.put(jsonObject);
+                }
+                JSONObject oderObject = new JSONObject();
+                UUID oderID = UUID.randomUUID();
+                try {
+                    oderObject.put("oderID", oderID);
+                    oderObject.put("storeID", store.StoreID);
+                    oderObject.put("address", infoLocation.getAddress());
+                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
+                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
+                    oderObject.put("totalMoney", productViewModel.getTotalPrice().getValue());
+                    oderObject.put("detailOder", jsonArray);
+                } catch (Exception e){
+                    Log.d(TAG, "onChanged: "+e);
+                }
+                cartListAdapter.submitList(cartItems);
+                HashMap<String, String> data = new HashMap<String,String>();
+                data.put("oder",oderObject.toString());
                 cartListAdapter.submitList(cartItems);
                 fragmentCartBinding.placeOrderButton.setEnabled(cartItems.size() > 0);
+                fragmentCartBinding.placeOrderButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "onClick: "+oderObject.toString());
+                        if (oderService.insertOder(oderObject.toString())){
+                            Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
+                            getActivity().getFragmentManager().popBackStack();
+                        }
+                    }
+                });
             }
         });
 

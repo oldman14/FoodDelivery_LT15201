@@ -10,4 +10,6 @@ import java.util.HashMap;
 public interface OderService {
     @HttpMethod(method = MethodType.GET,url = "totnghiep_database/api/product_getallsize.php")
     ProductReponse getListProduct();
+    @HttpMethod(method = MethodType.POST,url = "totnghiep_database/api/Oder_insert.php")
+    boolean insertOder(@Form(name="oder") String oder);
 }

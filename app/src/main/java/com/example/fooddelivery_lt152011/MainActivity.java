@@ -34,8 +34,10 @@ import com.example.fooddelivery_lt152011.networking.Service.StoreService;
 import com.example.fooddelivery_lt152011.productScreen.MyConnect;
 import com.example.fooddelivery_lt152011.productScreen.ProductFragment;
 import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
+import com.example.fooddelivery_lt152011.productScreen.entities.InfoLocation;
 import com.example.fooddelivery_lt152011.productScreen.entities.Store;
 import com.example.fooddelivery_lt152011.productScreen.entities.StoreResponse;
+import com.example.fooddelivery_lt152011.productScreen.viewmodel.LocationViewModel;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.StoreViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_address_toolbar;
     StoreViewModel storeViewModel;
     double lat, lng;
+    InfoLocation infoLocation;
     private boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -192,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
                 myLocation = task.getResult();
-                Log.d("TAG", "onComplete: "+myLocation);
                 lat = myLocation.getLatitude();
                 lng = myLocation.getLongitude();
                 final double[] distance = {10000};
@@ -231,6 +233,9 @@ public class MainActivity extends AppCompatActivity {
                         String postalCode = addresses.get(0).getPostalCode();
                         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
                         tv_address_toolbar.setText(address);
+                        infoLocation = new InfoLocation(myLocation, address);
+                        LocationViewModel locationViewModel = new ViewModelProvider(MainActivity.this).get(LocationViewModel.class);
+                        locationViewModel.setLocation(infoLocation);
                     }
                 }
             }

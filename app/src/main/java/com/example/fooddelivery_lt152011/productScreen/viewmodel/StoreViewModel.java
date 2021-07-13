@@ -23,6 +23,7 @@ public class StoreViewModel extends AndroidViewModel {
     public MutableLiveData<List<Store>> listStore  = new MutableLiveData<>();
     public MutableLiveData<Store> store = new MutableLiveData<>();
 
+
     public MutableLiveData<Store> getStore() {
         return store;
     }
@@ -38,7 +39,6 @@ public class StoreViewModel extends AndroidViewModel {
     public void setStoreID(int id) {
         storeID.setValue(id);
     }
-
 
     public StoreViewModel(@NonNull @NotNull Application application) {
         super(application);

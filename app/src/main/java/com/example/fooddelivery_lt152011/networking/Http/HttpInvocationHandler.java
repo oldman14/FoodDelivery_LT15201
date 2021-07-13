@@ -147,7 +147,7 @@ public class HttpInvocationHandler implements InvocationHandler {
             stringBuilder.append(line);
             list.add(line);
         }
-
+        Log.d("TAG", "invoke: "+stringBuilder+"method"+method.getReturnType());
         return gson.fromJson(stringBuilder.toString(), method.getReturnType());
 
     }// always verify the host - dont check for certificate
