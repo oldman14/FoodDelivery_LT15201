@@ -15,10 +15,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.fooddelivery_lt152011.AccountScreen.AccountFragment;
 import com.example.fooddelivery_lt152011.HomeScreen.HomeFragment;
 import com.example.fooddelivery_lt152011.productScreen.MyConnect;
 import com.example.fooddelivery_lt152011.productScreen.ProductFragment;
-import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         },0,5000);
         navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigation);
+        navigationView.setSelectedItemId(R.id.navigation_product);
         productViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         loadFragment(new ProductFragment());
         intentFilter = new IntentFilter();
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_account:
-                    fragment = new ProductReponse.AccountFragment();
+                    fragment = new AccountFragment();
                     loadFragment(fragment);
                     return true;
             }

@@ -5,6 +5,6 @@ import com.example.fooddelivery_lt152011.networking.HttpAnotation.MethodType;
 import com.example.fooddelivery_lt152011.productScreen.TypeResponse;
 
 public interface TypeProductService {
-    @HttpMethod(method = MethodType.GET,url = "totnghiep_database/api/typeproduct_getall.php")
+    @HttpMethod(method = MethodType.GET,url = "FOODDELIVERY/api/TypeProduct_getAll.php")
     TypeResponse getListTypeProduct();
 }

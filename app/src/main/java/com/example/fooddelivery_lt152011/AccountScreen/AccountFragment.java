@@ -64,7 +64,7 @@ public class AccountFragment extends Fragment {
         cvFavoriteFood=view.findViewById( R.id.cvFavoriteFood );
         imgAvatar=view.findViewById( R.id.imgAvatar );
         tvNameUser=view.findViewById( R.id.tvNameUser );
-        dao=new UserDAO( getContext() );
+        dao=new UserDAO();
         dbHelper = new DbHelper( getActivity() );
         ModelUser nameimg=dao.getUserNames( Integer.parseInt( SendOTPActivity.phone ) );
        if(nameimg.getUserName()!=null){

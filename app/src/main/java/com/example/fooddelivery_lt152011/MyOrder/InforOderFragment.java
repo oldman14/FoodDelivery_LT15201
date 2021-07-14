@@ -50,44 +50,23 @@ public class InforOderFragment extends Fragment {
     Thread thread;
     GoogleMap mMap;
     Marker marker;
-    Marker shipmarker;
-    Circle userLocationAccuracyCircle;
-    ImageView ivshipper;
     ShipperDAO shipperDAO;
-    TextView shipname, shipphone;
     UserDAO dao;
     OrderDAO orderDAO;
-    Circle shipLocationAccuracyCircle;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate( R.layout.fragment_infor_oder, container, false );
-        shipphone = view.findViewById( R.id.shipphone );
-        ivshipper = view.findViewById( R.id.ivshipper );
-        shipname = view.findViewById( R.id.shipname );
-        dao = new UserDAO( getContext() );
-        orderDAO = new OrderDAO( getContext() );
-        shipperDAO = new ShipperDAO( getContext() );
+        dao = new UserDAO();
+        orderDAO = new OrderDAO();
+        shipperDAO = new ShipperDAO( );
         ModelUser nameimg = dao.getUserNames( Integer.parseInt( SendOTPActivity.phone ) );
         Log.d( "LogOrrder", "onCreateView: " + nameimg.getUserID() );
         ModelOrder itemorder = orderDAO.getItemOrder( nameimg.getUserID() );
         Log.d( "LogOrrder", "onCreateView: " + itemorder.getShipID() );
         ModelShipper getship = shipperDAO.getShips( itemorder.getShipID() );
-        //set phone shipper
-        shipphone.setText( String.valueOf( getship.getShipPhone() ) );
-        //set name shipper
-        shipname.setText( getship.getShipName() );
-        //set img shipper
-        Uri uri = Uri.parse( getship.getShipImage() );
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap( this.getActivity().getContentResolver(), uri );
-            ivshipper.setImageBitmap( bitmap );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
         //view Map
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById( R.id.map );
@@ -150,9 +129,9 @@ public class InforOderFragment extends Fragment {
                 markerOptions.title( "Vị trí của bạn" );
                 mMap.animateCamera( CameraUpdateFactory.newLatLngZoom( latLng, 16 ) );
                 mMap.addMarker( markerOptions );
-                dao = new UserDAO( getContext() );
-                orderDAO = new OrderDAO( getContext() );
-                shipperDAO = new ShipperDAO( getContext() );
+                dao = new UserDAO(  );
+                orderDAO = new OrderDAO( );
+                shipperDAO = new ShipperDAO( );
                 ModelUser nameimg = dao.getUserNames( Integer.parseInt( SendOTPActivity.phone ) );
                 Log.d( "LogOrrder", "onCreateView: " + nameimg.getUserID() );
                 ModelOrder itemorder = orderDAO.getItemOrder( nameimg.getUserID() );

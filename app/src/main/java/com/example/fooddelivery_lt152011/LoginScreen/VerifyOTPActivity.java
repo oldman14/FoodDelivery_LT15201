@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.fooddelivery_lt152011.AccountScreen.AccountFragment;
 import com.example.fooddelivery_lt152011.MainActivity;
 import com.example.fooddelivery_lt152011.Notification.SharedPreference;
 import com.example.fooddelivery_lt152011.R;
@@ -47,7 +48,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
 
          textMobile = findViewById( R.id.textMobile);
         textMobile.setText(String.format("+84-%s", getIntent().getStringExtra("mobile")));
-        ProductReponse.AccountFragment newFragment = new ProductReponse.AccountFragment();
+       AccountFragment newFragment = new AccountFragment();
         ProgressBar progressBar = findViewById( R.id.progressBar);
         Button buttonVerify = findViewById( R.id.buttonVerify);
         TextView resendOTP = findViewById( R.id.textResendOTP);
@@ -60,7 +61,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
         requestSMSPermission();
         new OTPReceiver().setText(input1,input2,input3,input4,input5,input6);
 
-        dao = new UserDAO(this);
+        dao = new UserDAO();
         dbHelper = new DbHelper(this);
         setupOTPInputs();
         verifycationId = getIntent().getStringExtra("verifycationId");

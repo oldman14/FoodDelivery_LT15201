@@ -2,17 +2,15 @@ package com.example.fooddelivery_lt152011.MyOrder;
 
 import android.content.Context;
 
-import com.example.fooddelivery_lt152011.SystemService.SystemService;
-import com.example.httpconnection.Http.HttpAdapter;
+import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
+import com.example.fooddelivery_lt152011.networking.Service.SystemService;
 
 
 public class ShipperDAO {
-    Context context;
     SystemService systemService;
 
-    public ShipperDAO(Context context) {
-        this.context = context;
-        HttpAdapter adapter = new HttpAdapter(context);
+    public ShipperDAO() {
+        com.example.fooddelivery_lt152011.networking.Http.HttpAdapter adapter = new HttpAdapter();
         adapter.setBaseUrl("http://192.168.1.9/");
         systemService = adapter.create(SystemService.class);
     }

@@ -3,7 +3,6 @@ package com.example.fooddelivery_lt152011.MyOrder;
 import android.content.Context;
 
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
-import com.example.fooddelivery_lt152011.networking.HttpAnotation.HttpMethod;
 import com.example.fooddelivery_lt152011.networking.Service.SystemService;
 
 public class OrderDAO {

@@ -5,9 +5,9 @@ import com.example.fooddelivery_lt152011.LoginScreen.ModelStatusUser;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
 import com.example.fooddelivery_lt152011.MyOrder.ModelOrder;
 import com.example.fooddelivery_lt152011.MyOrder.ModelShipper;
-import com.example.httpconnection.HttpAnotation.Form;
-import com.example.httpconnection.HttpAnotation.HttpMethod;
-import com.example.httpconnection.HttpAnotation.MethodType;
+import com.example.fooddelivery_lt152011.networking.HttpAnotation.Form;
+import com.example.fooddelivery_lt152011.networking.HttpAnotation.HttpMethod;
+import com.example.fooddelivery_lt152011.networking.HttpAnotation.MethodType;
 
 public interface SystemService {
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/User_insert.php")
