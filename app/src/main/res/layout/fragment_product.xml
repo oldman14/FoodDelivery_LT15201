@@ -36,10 +36,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/middle_product_fragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
         <LinearLayout
-            android:id="@+id/middle_product_fragment"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginHorizontal="5dp"
@@ -48,9 +55,8 @@
             android:orientation="horizontal"
             android:paddingHorizontal="8dp"
             android:paddingVertical="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="@color/background"
+         >
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -81,7 +87,6 @@
                     android:padding="10dp"
                     android:src="@drawable/ic_arrow_drop_down_24" />
             </RelativeLayout>
-
             <androidx.appcompat.widget.SearchView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -89,7 +94,6 @@
                 android:layout_weight=".15"
                 android:background="@drawable/boder"
                 android:gravity="center" />
-
             <ImageButton
                 android:id="@+id/btn_favorite_productfragment"
                 android:layout_width="0dp"
@@ -98,7 +102,7 @@
                 android:background="@drawable/boder"
                 android:src="@drawable/ic_favorite_24" />
         </LinearLayout>
-
+        </androidx.cardview.widget.CardView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_product_fragment"
             android:layout_width="0dp"
@@ -109,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/middle_product_fragment"
-            tools:listitem="@layout/item_rec_product" />
+            tools:listitem="@layout/item_rec_typeproduct" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <include layout="@layout/bottom_sheet"
         android:product="@{product}"

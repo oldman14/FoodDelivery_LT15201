@@ -120,7 +120,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
-                android:paddingHorizontal="5dp"
                 android:paddingVertical="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -145,37 +144,45 @@
                 android:layout_height="0.5dp"
                 android:background="@color/secondary_font"
                 android:paddingHorizontal="10dp"/>
-            <RelativeLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
-                <RadioGroup
-                    android:id="@+id/radioGroupSize"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <RadioButton
-                        android:checked="true"
-                        android:buttonTint="@color/orange_primary"
-                        android:id="@+id/btn_radio_size_nho"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{product.product.sizes.get(0).SizeName}"
-                        android:textSize="16dp" />
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@color/secondary_font"
-                        android:paddingHorizontal="10dp"/>
-                    <RadioButton
-                        android:buttonTint="@color/orange_primary"
-                        android:id="@+id/btn_radio_size_lon"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{product.product.sizes.get(1).SizeName}"
-                        android:textSize="16dp" />
-                </RadioGroup>
-            </RelativeLayout>
+                tools:itemCount="2"
+                tools:listitem="@layout/radio_button_custom"
+                />
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                >-->
+<!--                <RadioGroup-->
+<!--                    android:id="@+id/radioGroupSize"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    >-->
+<!--                    <RadioButton-->
+<!--                            android:layout_weight="9"-->
+<!--                            android:checked="true"-->
+<!--                            android:buttonTint="@color/orange_primary"-->
+<!--                            android:id="@+id/btn_radio_size_nho"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="@{product.product.sizes.get(0).SizeName}"-->
+<!--                            android:textSize="16dp" />-->
+<!--                    <View-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="0.5dp"-->
+<!--                        android:background="@color/secondary_font"-->
+<!--                        android:paddingHorizontal="10dp"/>-->
+<!--                    <RadioButton-->
+<!--                        android:buttonTint="@color/orange_primary"-->
+<!--                        android:id="@+id/btn_radio_size_lon"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@{product.product.sizes.get(1).SizeName}"-->
+<!--                        android:textSize="16dp" />-->
+<!--                </RadioGroup>-->
+<!--            </RelativeLayout>-->
         </LinearLayout>
             </LinearLayout>
         </ScrollView>

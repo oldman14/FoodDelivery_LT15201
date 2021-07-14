@@ -63,6 +63,8 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     public BottomSheetDialog bottomSheetDialogType;
     public RadioGroup radioGroup;
     public TypeBottomSheetApdapter.TypeBotSheetInterface typeBotSheetInterface;
+    public RadBtnAdapter radBtnAdapter;
+    public RecyclerView recyclerViewRad;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,23 +231,23 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
         bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
-        radioGroup = view.findViewById(R.id.radioGroupSize);
+//        radioGroup = view.findViewById(R.id.radioGroupSize);
         mViewModel.setSize(product.getSizes().get(0));
-        RadioButton radioButton = view.findViewById(R.id.btn_radio_size_nho);
-        radioButton.setChecked(true);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.btn_radio_size_nho:
-                        mViewModel.setSize(product.getSizes().get(0));
-                        break;
-                    case R.id.btn_radio_size_lon:
-                        mViewModel.setSize(product.getSizes().get(1));
-                        break;
-                }
-            }
-        });
+//        RadioButton radioButton = view.findViewById(R.id.btn_radio_size_nho);
+//        radioButton.setChecked(true);
+//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                switch (checkedId){
+//                    case R.id.btn_radio_size_nho:
+//                        mViewModel.setSize(product.getSizes().get(0));
+//                        break;
+//                    case R.id.btn_radio_size_lon:
+//                        mViewModel.setSize(product.getSizes().get(1));
+//                        break;
+//                }
+//            }
+//        });
         mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
             @Override
             public void onChanged(Size size) {
@@ -253,6 +255,12 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
             }
         });
+        radBtnAdapter = new RadBtnAdapter(product.getSizes(), getContext(), mViewModel);
+        recyclerViewRad = view.findViewById(R.id.recRadioButton);
+        recyclerViewRad.setAdapter(radBtnAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerViewRad.setLayoutManager(layoutManager);
         btn_minus = view.findViewById(R.id.btn_minus_quantity);
         btn_plus = view.findViewById(R.id.btn_plus_quantity);
         tv_quantityItem = view.findViewById(R.id.tv_quantity_detail_product);

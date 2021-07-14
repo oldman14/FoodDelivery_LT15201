@@ -24,7 +24,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.example.fooddelivery_lt152011.AccountScreen.AccountFragment;
 import com.example.fooddelivery_lt152011.HomeScreen.HomeFragment;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     StoreViewModel storeViewModel;
     double lat, lng;
     InfoLocation infoLocation;
+    RelativeLayout toolbar_logo, toolbar_address;
     private boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -97,12 +101,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-//                Log.i("tag", "A Kiss every 5 seconds");
-            }
-        }, 0, 5000);
+        toolbar_logo = findViewById(R.id.toolbar1);
+        toolbar_address = findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigation);
         navigationView.setSelectedItemId(R.id.navigation_product);
@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         requestPermision();
         tv_address_toolbar = findViewById(R.id.tv_address_toolbar);
+
+
         //create storeModel
         if (locationPermission=true){
             getMyLocation();
@@ -155,14 +157,20 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    toolbar_address.setVisibility(View.GONE);
+                    toolbar_logo.setVisibility(View.VISIBLE);
                     fragment = new HomeFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_product:
+                    toolbar_address.setVisibility(View.VISIBLE);
+                    toolbar_logo.setVisibility(View.GONE);
                     fragment = new ProductFragment();
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_account:
+                    toolbar_address.setVisibility(View.GONE);
+                    toolbar_logo.setVisibility(View.VISIBLE);
                     fragment = new AccountFragment();
                     loadFragment(fragment);
                     return true;

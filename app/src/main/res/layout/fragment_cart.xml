@@ -80,7 +80,6 @@
                 android:layout_height="wrap_content"
                 android:text="90 Cao Thắng, Phường 3, Quận 3, Thành Phố Hồ Chí Minh"
                 android:textSize="18dp"
-
                 android:fontFamily="@font/roboto_light"
                 android:textColor="@color/secondary_font"
                 />
