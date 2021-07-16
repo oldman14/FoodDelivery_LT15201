@@ -31,7 +31,7 @@ public class  CartRepo {
         calculateCartTotal();
     }
 
-    public boolean addItemToCart(Product product, int quantity, Size size) {
+    public boolean addItemToCart(Product product, int quantity, Size size, int amount) {
         if (mutableCart.getValue() == null) {
             initCart();
         }
@@ -49,7 +49,7 @@ public class  CartRepo {
                 return true;
             }
         }
-        CartItem cartItem = new CartItem(product, quantity, size);
+        CartItem cartItem = new CartItem(product, quantity, size, amount);
         cartItemList.add(cartItem);
         mutableCart.setValue(cartItemList);
         calculateCartTotal();

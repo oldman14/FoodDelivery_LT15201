@@ -10,16 +10,18 @@ public class CartItem {
     Product product;
     public int quantity;
     Size size;
+    int amount;
 
     public CartItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }
 
-    public CartItem(Product product, int quantity, Size s) {
+    public CartItem(Product product, int quantity, Size size, int amount) {
         this.product = product;
         this.quantity = quantity;
-        this.size = s;
+        this.size = size;
+        this.amount = amount;
     }
 
     public Product getProduct() {

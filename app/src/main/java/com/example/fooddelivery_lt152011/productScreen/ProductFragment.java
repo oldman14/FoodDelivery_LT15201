@@ -238,9 +238,9 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         public ProductHandleClick(Context context) {
             this.context = context;
         }
-        public void addItemProduct(Product product,  int quantity, Size size ){
+        public void addItemProduct(Product product,  int quantity, Size size, int amount ){
             Toast.makeText(context, size+"", Toast.LENGTH_SHORT).show();
-            mViewModel.addItemToCart(product, quantity, size);
+            mViewModel.addItemToCart(product, quantity, size, amount);
             bottomSheetDialog.dismiss();
         }
         public String convertString(int price){
@@ -288,6 +288,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                         jsonObject.put("productID", item.product.ProductID);
                         jsonObject.put("quantity", item.getQuantity());
                         jsonObject.put("sizeID", item.size.SizeID);
+                        jsonObject.put("amount", item.amount);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
