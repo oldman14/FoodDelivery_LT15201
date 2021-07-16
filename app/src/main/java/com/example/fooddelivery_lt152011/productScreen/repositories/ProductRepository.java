@@ -36,14 +36,24 @@ public class ProductRepository {
     public LiveData<List<TypeProduct>> getProducts() {
         if (typeProductRes == null) {
             typeProductRes = new MutableLiveData<>();
-            getListProduct();
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getListProduct();
+                }
+            }, 1000);
         }
         return typeProductRes;
     }
     public LiveData<List<ListTypeProduct>> getTypeProducts(){
         if (listTypeProduct==null){
             listTypeProduct = new MutableLiveData<>();
-            getListTypeProduct();
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getListTypeProduct();
+                }
+            }, 1000);
         }
         return listTypeProduct;
     }

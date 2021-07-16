@@ -237,7 +237,7 @@
                     android:text="Chọn món"
                     android:textSize="15dp"
                     android:textAllCaps="false"
-                    android:onClick="@{()->handleClick.addItemProduct(product.product,product.quantityItem,product.size.getSizeID)}"
+                    android:onClick="@{()->handleClick.addItemProduct(product.product,product.quantityItem,product.size)}"
                     android:fontFamily="@font/roboto_medium"
                     android:background="@drawable/boder"
                     android:layout_marginHorizontal="8dp"/>

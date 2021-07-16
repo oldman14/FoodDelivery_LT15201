@@ -9,9 +9,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,18 +31,32 @@ import android.widget.Toast;
 import com.devs.readmoreoption.ReadMoreOption;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
+import com.example.fooddelivery_lt152011.databinding.CartRowBinding;
+import com.example.fooddelivery_lt152011.databinding.FragmentCartBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentProductBinding;
+
+import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
+import com.example.fooddelivery_lt152011.networking.Service.OderService;
+import com.example.fooddelivery_lt152011.productScreen.entities.InfoLocation;
+import com.example.fooddelivery_lt152011.productScreen.entities.Store;
+import com.example.fooddelivery_lt152011.productScreen.viewmodel.LocationViewModel;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.example.fooddelivery_lt152011.R;
+import com.example.fooddelivery_lt152011.productScreen.viewmodel.StoreViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class ProductFragment extends Fragment implements OneItemClick, TypeBottomSheetApdapter.TypeBotSheetInterface {
-    public Spinner spinner;
     public TypeProAdapter typeProAdapter;
     public RecTypeAdapter recTypeAdapter;
     public ProductViewModel mViewModel;
@@ -65,6 +81,15 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     public TypeBottomSheetApdapter.TypeBotSheetInterface typeBotSheetInterface;
     public RadBtnAdapter radBtnAdapter;
     public RecyclerView recyclerViewRad;
+    public FragmentCartBinding fragmentCartBinding;
+    ProductViewModel productViewModel;
+    StoreViewModel storeViewModel;
+    LocationViewModel locationViewModel;
+    HttpAdapter httpAdapter;
+    OderService oderService;
+    Store store;
+    InfoLocation infoLocation;
+    public CartRowBinding cartRowBinding;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +124,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 }
             }
         });
-
         mViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
             @Override
             public void onChanged(List<CartItem> cartItems) {
@@ -137,8 +161,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                         ShowBottomSheetType();
                     }
                 });
-
-
             }
         });
         imgFavorite.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +181,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 inflater, R.layout.fragment_product, container, false);
         bottomSheetBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_sheet, container, false);
         bottomsheetCartItemBinding = DataBindingUtil.inflate(inflater, R.layout.bottomsheet_cart_item,container, false);
+        fragmentCartBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_cart, container,false);
         View view = fragmentProductBinding.getRoot();
         imgFavorite = view.findViewById(R.id.btn_favorite_productfragment);
         bottomsheetLayoutItem = view.findViewById(R.id.bottomSheet_detailproduct);
@@ -169,11 +192,12 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomsheetLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CartFragment fragment = new CartFragment();
-                 getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, fragment, "productDetail")
-                .addToBackStack(null)
-                .commit();
+//                CartFragment fragment = new CartFragment();
+//                 getActivity().getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.frame_container, fragment, "productDetail")
+//                .addToBackStack(null)
+//                .commit();
+                oderSheet();
             }
         });
         //read more text view
@@ -214,45 +238,126 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         public ProductHandleClick(Context context) {
             this.context = context;
         }
-        public void addItemProduct(Product product,  int quantity, int sizeID ){
-            Toast.makeText(context, sizeID+"", Toast.LENGTH_SHORT).show();
-            mViewModel.addItemToCart(product, quantity, sizeID);
+        public void addItemProduct(Product product,  int quantity, Size size ){
+            Toast.makeText(context, size+"", Toast.LENGTH_SHORT).show();
+            mViewModel.addItemToCart(product, quantity, size);
             bottomSheetDialog.dismiss();
         }
         public String convertString(int price){
             return new DecimalFormat("##,###đ").format(price);
         }
     }
+    public void oderSheet(){
+        View view = fragmentCartBinding.getRoot();
+        CartItemAdapter cartItemAdapter= new CartItemAdapter(mViewModel.getCart().getValue(), getContext());
+        RecyclerView recyclerView = view.findViewById(R.id.cartRecyclerView);
+        recyclerView.setAdapter(cartItemAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        Button placeOrderButton = view.findViewById(R.id.placeOrderButton);
+        if (view.getParent()!=null){
+            ((ViewGroup)view.getParent()).removeView(view);
+        }
+        httpAdapter = new HttpAdapter();
+        httpAdapter.setBaseUrl("https://192.168.171.2/");
+        oderService = httpAdapter.create(OderService.class);
+        storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
+        storeViewModel.getStore().observe(getViewLifecycleOwner(), new Observer<Store>() {
+            @Override
+            public void onChanged(Store s) {
+                store = s;
+            }
+        });
+        locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
+        locationViewModel.getLocation().observe(getViewLifecycleOwner(), new Observer<InfoLocation>() {
+            @Override
+            public void onChanged(InfoLocation location) {
+                infoLocation = location;
+            }
+        });
+        productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
+        productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
+            @Override
+            public void onChanged(List<CartItem> cartItems) {
+                JSONArray jsonArray = new JSONArray();
+                for (CartItem item: cartItems) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("productID", item.product.ProductID);
+                        jsonObject.put("quantity", item.getQuantity());
+                        jsonObject.put("sizeID", item.size.SizeID);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    jsonArray.put(jsonObject);
+                }
+                JSONObject oderObject = new JSONObject();
+                UUID oderID = UUID.randomUUID();
+                try {
+                    oderObject.put("oderID", oderID);
+                    oderObject.put("storeID", store.StoreID);
+                    oderObject.put("address", infoLocation.getAddress());
+                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
+                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
+                    oderObject.put("totalMoney", productViewModel.getTotalPrice().getValue());
+                    oderObject.put("detailOder", jsonArray);
+                } catch (Exception e){
+                    Log.d("TAG", "onChanged: "+e);
+                }
+                placeOrderButton.setEnabled(cartItems.size() > 0);
+                placeOrderButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("TAG", "onClick: "+oderObject.toString());
+                        if (oderService.insertOder(oderObject.toString())){
+                            Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
+                            getActivity().getFragmentManager().popBackStack();
+                        }
+                    }
+                });
+            }
+        });
+
+        productViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                String price = new DecimalFormat("##,###đ").format(aDouble);
+                fragmentCartBinding.orderTotalTextView.setText("Tổng cộng: " + price);
+            }
+        });
+
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
+        bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull @org.jetbrains.annotations.NotNull View bottomSheet, int newState) {
+            }
+            @Override
+            public void onSlide(@NonNull @org.jetbrains.annotations.NotNull View bottomSheet, float slideOffset) {
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
     @Override
     public void onItemClick(Product product) {
         mViewModel.setProduct(product);
-        fragmentProductBinding.setProduct(mViewModel);
+//        fragmentProductBinding.setProduct(mViewModel);
         bottomSheetBinding.setProduct(mViewModel);
         ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
         bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
-//        radioGroup = view.findViewById(R.id.radioGroupSize);
         mViewModel.setSize(product.getSizes().get(0));
-//        RadioButton radioButton = view.findViewById(R.id.btn_radio_size_nho);
-//        radioButton.setChecked(true);
-//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                switch (checkedId){
-//                    case R.id.btn_radio_size_nho:
-//                        mViewModel.setSize(product.getSizes().get(0));
-//                        break;
-//                    case R.id.btn_radio_size_lon:
-//                        mViewModel.setSize(product.getSizes().get(1));
-//                        break;
-//                }
-//            }
-//        });
         mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
             @Override
             public void onChanged(Size size) {
                 int quantity = mViewModel.getQuantityItem().getValue();
                 mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
+                Toast.makeText(getContext(), ""+(quantity*size.getSizePrice()), Toast.LENGTH_SHORT).show();
+
             }
         });
         radBtnAdapter = new RadBtnAdapter(product.getSizes(), getContext(), mViewModel);
@@ -278,12 +383,11 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 }
             }
         });
-
         mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 tv_quantityItem.setText(integer.toString());
-                mViewModel.setPriceProduct((integer * product.getProductPrice())+mViewModel.getSize().getValue().getSizePrice());
+                mViewModel.setPriceProduct((integer * product.getProductPrice())+mViewModel.getSize().getValue().getSizePrice()*integer);
             }
         });
         Button btn_chonMon = view.findViewById(R.id.btn_chonMon);
@@ -313,7 +417,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
-
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull @org.jetbrains.annotations.NotNull View bottomSheet, int newState) {

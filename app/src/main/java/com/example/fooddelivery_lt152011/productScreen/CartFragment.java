@@ -100,7 +100,7 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
                     try {
                         jsonObject.put("productID", item.product.ProductID);
                         jsonObject.put("quantity", item.getQuantity());
-                        jsonObject.put("sizeID", item.sizeID);
+                        jsonObject.put("sizeID", item.size.SizeID);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

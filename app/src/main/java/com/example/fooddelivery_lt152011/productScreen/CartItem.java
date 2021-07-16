@@ -9,17 +9,17 @@ import androidx.recyclerview.widget.DiffUtil;
 public class CartItem {
     Product product;
     public int quantity;
-    Integer sizeID;
+    Size size;
 
     public CartItem(Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }
 
-    public CartItem(Product product, int quantity, int sizeID) {
+    public CartItem(Product product, int quantity, Size s) {
         this.product = product;
         this.quantity = quantity;
-        this.sizeID = sizeID;
+        this.size = s;
     }
 
     public Product getProduct() {

@@ -116,8 +116,8 @@ public class ProductViewModel extends AndroidViewModel {
         return cartItemRepo.getCart();
     }
 
-    public boolean addItemToCart(Product product, int quantity ,int sizeID) {
-        return cartItemRepo.addItemToCart(product, quantity, sizeID);
+    public boolean addItemToCart(Product product, int quantity ,Size size) {
+        return cartItemRepo.addItemToCart(product, quantity, size);
     }
 
     public void removeItemFromCart(CartItem cartItem) {
