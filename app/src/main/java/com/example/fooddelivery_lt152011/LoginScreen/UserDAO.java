@@ -7,12 +7,11 @@ import com.example.fooddelivery_lt152011.networking.Service.SystemService;
 
 
 public class UserDAO {
-    Context context;
     SystemService systemService;
 
-    public UserDAO(Context context) {
-        this.context = context;
-        HttpAdapter adapter = new HttpAdapter();
+    public UserDAO() {
+
+        com.example.fooddelivery_lt152011.networking.Http.HttpAdapter adapter = new HttpAdapter();
         adapter.setBaseUrl("http://192.168.1.9/");
         systemService = adapter.create(SystemService.class);
     }

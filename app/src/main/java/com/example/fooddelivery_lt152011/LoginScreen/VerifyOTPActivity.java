@@ -48,7 +48,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
 
          textMobile = findViewById( R.id.textMobile);
         textMobile.setText(String.format("+84-%s", getIntent().getStringExtra("mobile")));
-        AccountFragment newFragment = new AccountFragment();
+       AccountFragment newFragment = new AccountFragment();
         ProgressBar progressBar = findViewById( R.id.progressBar);
         Button buttonVerify = findViewById( R.id.buttonVerify);
         TextView resendOTP = findViewById( R.id.textResendOTP);
@@ -61,7 +61,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
         requestSMSPermission();
         new OTPReceiver().setText(input1,input2,input3,input4,input5,input6);
 
-        dao = new UserDAO(this);
+        dao = new UserDAO();
         dbHelper = new DbHelper(this);
         setupOTPInputs();
         verifycationId = getIntent().getStringExtra("verifycationId");

@@ -1,4 +1,4 @@
 package com.example.fooddelivery_lt152011.HomeScreen;
 
-public class ModelHome {
+public class  ModelHome {
 }

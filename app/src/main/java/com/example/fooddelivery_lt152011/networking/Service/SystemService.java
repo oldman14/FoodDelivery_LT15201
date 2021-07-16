@@ -3,12 +3,13 @@ package com.example.fooddelivery_lt152011.networking.Service;
 
 import com.example.fooddelivery_lt152011.LoginScreen.ModelStatusUser;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
+import com.example.fooddelivery_lt152011.MyOrder.ModelListDetailOrder;
 import com.example.fooddelivery_lt152011.MyOrder.ModelOrder;
 import com.example.fooddelivery_lt152011.MyOrder.ModelShipper;
+import com.example.fooddelivery_lt152011.MyOrder.ModelStore;
 import com.example.fooddelivery_lt152011.networking.HttpAnotation.Form;
 import com.example.fooddelivery_lt152011.networking.HttpAnotation.HttpMethod;
 import com.example.fooddelivery_lt152011.networking.HttpAnotation.MethodType;
-
 
 public interface SystemService {
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/User_insert.php")
@@ -28,4 +29,10 @@ public interface SystemService {
 
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/getShip.php/")
     ModelShipper getShip(@Form( name="ShipID" ) int ShipID);
+
+    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/getIFStore.php/")
+    ModelStore getIFStore(@Form( name="StoreID" ) int StoreID);
+
+    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/DetailOder_getByOrderID.php/")
+    ModelListDetailOrder getDetail(@Form( name="OrderID" ) String OrderID);
 }
