@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/productimg"
+        android:src="@drawable/img1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"/>
+    <TextView
+        android:id="@+id/productname"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_margin="10dp"
+        android:layout_toRightOf="@id/productimg"
+        android:text="Trà Sữa Trân Châu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textSize="16dp"
+        android:textColor="#000000"
+        android:id="@+id/soluong"
+        android:layout_margin="10dp"
+        android:layout_below="@id/productname"
+        android:layout_toRightOf="@id/productimg"
+        android:text="Số lượng : "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textSize="16dp"
+        android:textColor="#FF0000"
+        android:id="@+id/productquantity"
+        android:text="2"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/productname"
+        android:layout_toRightOf="@id/soluong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textColor="#000000"
+        android:id="@+id/kichthuoc"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/productname"
+        android:layout_marginLeft="80dp"
+        android:layout_toRightOf="@id/productquantity"
+        android:text="Size: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/productsize"
+        android:layout_margin="10dp"
+        android:layout_below="@id/productname"
+        android:layout_toRightOf="@id/kichthuoc"
+        android:text="Lớn"
+        android:textSize="16dp"
+        android:textColor="#FF0000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/amounts"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/productname"
+        android:text="300.000đ"
+        android:textColor="#FF0000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.example.fooddelivery_lt152011;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +27,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+    public static Toolbar toolbar;
    public static final String BroadcastStrngforAction="checkinternet";
     private IntentFilter intentFilter;
     public static  BottomNavigationView navigationView;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         new Timer().scheduleAtFixedRate(new TimerTask(){
             @Override
             public void run(){
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         },0,5000);
         navigationView = findViewById(R.id.navigation);
+        toolbar=findViewById( R.id.toolbar );
         navigationView.setOnNavigationItemSelectedListener(mOnNavigation);
         navigationView.setSelectedItemId(R.id.navigation_product);
         productViewModel = new ViewModelProvider(this).get(ProductViewModel.class);

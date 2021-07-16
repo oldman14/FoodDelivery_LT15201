@@ -11,10 +11,9 @@
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/botomtop"
-        android:layout_marginTop="5dp"
        android:src="@drawable/ic_remove_24"
         android:layout_centerHorizontal="true"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_width="match_parent" />
     <TextView
         android:id="@+id/titleIF"
@@ -102,11 +101,12 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/status_1"
                     android:textColor="#000000"
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="Đã đặt"
+                    android:text="Đang Đặt"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
             </LinearLayout>
@@ -125,6 +125,7 @@
 
 
                 <TextView
+                    android:id="@+id/status_2"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Đang giao"
@@ -143,6 +144,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/status_3"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Thành công"
@@ -165,8 +167,9 @@
         android:layout_below="@id/v"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="40dp">
         <ImageView
+            android:id="@+id/sportAdmin"
             android:src="@drawable/support_agent_24"
             android:layout_marginLeft="20dp"
             android:layout_gravity="center"
@@ -174,6 +177,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"/>
         <TextView
+            android:id="@+id/nameShip"
             android:paddingLeft="-10dp"
             android:textColor="#000000"
             android:textSize="20dp"
@@ -184,6 +188,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
         <ImageView
+            android:id="@+id/callShip"
             android:layout_marginRight="30dp"
             android:layout_gravity="center"
             android:src="@drawable/callphone"
@@ -231,6 +236,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp">
             <TextView
+                android:id="@+id/nameStore"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:textSize="16dp"
@@ -238,10 +244,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/addressstore"
                 android:text="59 - Đ.số 10 - Phường Tam Bình - TP.Thủ Đức"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/phoneStore"
                 android:text="0712121212"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -282,6 +290,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/locationGiao"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:textSize="16dp"
@@ -293,7 +302,8 @@
     </LinearLayout>
     <View
         android:id="@+id/v2"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_below="@id/diemgiao"
         android:background="#B3B0B0"
         android:layout_gravity="center"
@@ -301,7 +311,8 @@
         android:layout_height="2dp"/>
     <TextView
         android:id="@+id/dsmua"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
@@ -314,7 +325,7 @@
         android:layout_below="@id/dsmua"
         android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:layout_height="120dp"/>
+        android:layout_height="150dp"/>
     <LinearLayout
         android:gravity="center"
         android:orientation="horizontal"
@@ -330,6 +341,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
         <TextView
+            android:id="@+id/totalmoney"
             android:textSize="23dp"
             android:textStyle="bold"
             android:textColor="#FF0000"
