@@ -209,7 +209,7 @@
         android:layout_margin="5dp"
         android:layout_below="@id/v1"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="80dp">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -221,28 +221,22 @@
                 android:layout_height="40dp"/>
             <TextView
                 android:layout_marginLeft="10dp"
-                android:textColor="#000000"
+                android:id="@+id/nameStore"
                 android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_gravity="center"
                 android:textSize="18dp"
-                android:gravity="center"
-                android:text="CỬA HÀNG"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"/>
+                android:text="THE COFFE HOUSE Thủ Đức"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_marginLeft="65dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
-            <TextView
-                android:id="@+id/nameStore"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:textSize="16dp"
-                android:text="THE COFFE HOUSE Thủ Đức"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+            android:layout_height="50dp">
+
             <TextView
                 android:id="@+id/addressstore"
                 android:text="59 - Đ.số 10 - Phường Tam Bình - TP.Thủ Đức"

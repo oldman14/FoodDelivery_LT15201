@@ -83,4 +83,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta01'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.jd-alexander:library:1.1.0'
+
+
+    compile 'com.synnapps:carouselview:0.1.5'
+
 }

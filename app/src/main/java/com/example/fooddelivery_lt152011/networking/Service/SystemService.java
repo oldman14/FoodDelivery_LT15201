@@ -1,6 +1,7 @@
 package com.example.fooddelivery_lt152011.networking.Service;
 
 
+import com.example.fooddelivery_lt152011.HomeScreen.ModelListCoupon;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelStatusUser;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
 import com.example.fooddelivery_lt152011.MyOrder.ModelListDetailOrder;
@@ -35,4 +36,7 @@ public interface SystemService {
 
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/DetailOder_getByOrderID.php/")
     ModelListDetailOrder getDetail(@Form( name="OrderID" ) String OrderID);
+
+    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/get_Coupon.php/")
+    ModelListCoupon coupon(@Form( name="Status" ) String status);
 }
