@@ -12,7 +12,7 @@ public class UserDAO {
     public UserDAO() {
 
         com.example.fooddelivery_lt152011.networking.Http.HttpAdapter adapter = new HttpAdapter();
-        adapter.setBaseUrl("http://192.168.1.9/");
+        adapter.setBaseUrl("http://192.168.171.2/");// chỗ này ko cần http à
         systemService = adapter.create(SystemService.class);
     }
 

@@ -29,21 +29,31 @@ public class ProductRepository {
 
     public ProductRepository() {
         httpAdapter = new HttpAdapter();
-        httpAdapter.setBaseUrl("http://192.168.1.9/");
+        httpAdapter.setBaseUrl("http://192.168.171.2/");
         productService = httpAdapter.create(ProductService.class);
         typeProductService = httpAdapter.create(TypeProductService.class);
     }
     public LiveData<List<TypeProduct>> getProducts() {
         if (typeProductRes == null) {
             typeProductRes = new MutableLiveData<>();
-            getListProduct();
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getListProduct();
+                }
+            }, 1000);
         }
         return typeProductRes;
     }
     public LiveData<List<ListTypeProduct>> getTypeProducts(){
         if (listTypeProduct==null){
             listTypeProduct = new MutableLiveData<>();
-            getListTypeProduct();
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getListTypeProduct();
+                }
+            }, 1000);
         }
         return listTypeProduct;
     }

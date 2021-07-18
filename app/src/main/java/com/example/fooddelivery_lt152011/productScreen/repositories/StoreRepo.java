@@ -27,7 +27,7 @@ public class StoreRepo {
             listStore = new MutableLiveData<>();
             getStore();
         } else{
-            Log.d("TAG", "getStoreResponse: "+listStore);
+            Log.d("TAG", "getStoreResponse: "+listStore.getValue());
         }
         return listStore;
     }

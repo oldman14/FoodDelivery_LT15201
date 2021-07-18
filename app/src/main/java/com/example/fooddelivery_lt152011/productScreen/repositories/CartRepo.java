@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.fooddelivery_lt152011.productScreen.CartItem;
 import com.example.fooddelivery_lt152011.productScreen.Product;
+import com.example.fooddelivery_lt152011.productScreen.Size;
 
 
 import java.util.ArrayList;
@@ -30,13 +31,13 @@ public class  CartRepo {
         calculateCartTotal();
     }
 
-    public boolean addItemToCart(Product product, int quantity, int sizeID) {
+    public boolean addItemToCart(Product product, int quantity, Size size, int amount) {
         if (mutableCart.getValue() == null) {
             initCart();
         }
         List<CartItem> cartItemList = new ArrayList<>(mutableCart.getValue());
         for (CartItem cartItem: cartItemList) {
-            if (cartItem.getProduct().getProductID()==(product.getProductID())) {
+            if (cartItem.getProduct().getProductID()==(product.getProductID())&cartItem.getProduct().getSizes()==product.getSizes()) {
                 if (cartItem.getQuantity() == 10) {
                     return false;
                 }
@@ -48,7 +49,7 @@ public class  CartRepo {
                 return true;
             }
         }
-        CartItem cartItem = new CartItem(product, quantity, sizeID);
+        CartItem cartItem = new CartItem(product, quantity, size, amount);
         cartItemList.add(cartItem);
         mutableCart.setValue(cartItemList);
         calculateCartTotal();

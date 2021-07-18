@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.fooddelivery_lt152011.R;
@@ -49,6 +51,9 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
     OderService oderService;
     Store store;
     InfoLocation infoLocation;
+    RadioButton radioButton;
+    RecyclerView recyclerView;
+
     public CartFragment() {
         // Required empty public constructor
     }
@@ -95,7 +100,7 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
                     try {
                         jsonObject.put("productID", item.product.ProductID);
                         jsonObject.put("quantity", item.getQuantity());
-                        jsonObject.put("sizeID", item.sizeID);
+                        jsonObject.put("sizeID", item.size.SizeID);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
