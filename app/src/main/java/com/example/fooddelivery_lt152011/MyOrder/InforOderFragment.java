@@ -70,7 +70,6 @@ public class InforOderFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        MainActivity.toolbar.setVisibility( View.GONE );
         View view = inflater.inflate( R.layout.fragment_infor_oder, container, false );
         tick_1=view.findViewById( R.id.tick_1 );
         tick_2=view.findViewById( R.id.tick_2 );

@@ -2,6 +2,7 @@ package com.example.fooddelivery_lt152011;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;//có rôf
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -27,8 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
-
 import com.example.fooddelivery_lt152011.AccountScreen.AccountFragment;
 import com.example.fooddelivery_lt152011.HomeScreen.HomeFragment;
 import com.example.fooddelivery_lt152011.MyOrder.InforOderFragment;
@@ -67,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     Location myLocation = null;
     Geocoder geocoder;
     List<Address> addresses;
+    public  static Toolbar toolbar;
     private final static int LOCATION_REQUEST_CODE = 23;
     boolean locationPermission = false;
     private TextView tv_address_toolbar;
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar_logo = findViewById(R.id.toolbar1);
-        toolbar_address = findViewById(R.id.toolbar);
+        toolbar_address =findViewById(R.id.toolbar);
         navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(mOnNavigation);
         navigationView.setSelectedItemId(R.id.navigation_product);
