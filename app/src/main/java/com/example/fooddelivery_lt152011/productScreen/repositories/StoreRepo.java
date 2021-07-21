@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
 import com.example.fooddelivery_lt152011.networking.Service.StoreService;
 import com.example.fooddelivery_lt152011.productScreen.entities.Store;
@@ -19,7 +20,7 @@ public class StoreRepo {
     MutableLiveData<List<Store>> listStore;
     public StoreRepo() {
         httpAdapter = new HttpAdapter();
-        httpAdapter.setBaseUrl("https://192.168.171.2/");
+        httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
         storeService = httpAdapter.create(StoreService.class);
     }
     public LiveData<List<Store>> getStoreResponse() {

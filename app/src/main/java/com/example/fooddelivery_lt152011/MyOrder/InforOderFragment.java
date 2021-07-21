@@ -70,6 +70,8 @@ public class InforOderFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+       MainActivity.toolbar_address.setVisibility( View.GONE );
+        MainActivity.toolbar_logo.setVisibility(View.GONE);
         View view = inflater.inflate( R.layout.fragment_infor_oder, container, false );
         tick_1=view.findViewById( R.id.tick_1 );
         tick_2=view.findViewById( R.id.tick_2 );
@@ -250,7 +252,7 @@ public class InforOderFragment extends Fragment {
         nameStore.setText( getifstore.getStoreName() );
         addressstore.setText( getifstore.getStoreAddress() );
         phoneStore.setText( "0"+getifstore.getStorePhone() );
-        totalmoney.setText( (int) itemorder.getTotalMoney() );
+        totalmoney.setText(String.valueOf(  itemorder.getTotalMoney() ));
         detailOrderDAO=new DetailOrderDAO();
         list=new ArrayList<>();
         list=detailOrderDAO.detailOrders( itemorder.getOrderID() );

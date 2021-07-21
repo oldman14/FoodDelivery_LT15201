@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devs.readmoreoption.ReadMoreOption;
+import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.MainActivity;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
@@ -262,12 +263,13 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             ((ViewGroup)view.getParent()).removeView(view);
         }
         httpAdapter = new HttpAdapter();
-        httpAdapter.setBaseUrl("https://192.168.171.2/");
+        httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
         oderService = httpAdapter.create(OderService.class);
         storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
         storeViewModel.getStore().observe(getViewLifecycleOwner(), new Observer<Store>() {
             @Override
             public void onChanged(Store s) {
+                Log.d( "TAG", "Check store"+s.StoreName );
                 store = s;
             }
         });
@@ -289,7 +291,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                         jsonObject.put("productID", item.product.ProductID);
                         jsonObject.put("quantity", item.getQuantity());
                         jsonObject.put("sizeID", item.size.SizeID);
-                        jsonObject.put("amount", item.amount);
+                        jsonObject.put("amount", item.amount);// nãi e thêm chỗ này vs sửa mấy cái put ên dưới
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -298,13 +300,13 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 JSONObject oderObject = new JSONObject();
                 UUID oderID = UUID.randomUUID();
                 try {
-                    oderObject.put("oderID", oderID);
-                    oderObject.put("storeID", store.StoreID);
-                    oderObject.put("address", infoLocation.getAddress());
-                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
-                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
-                    oderObject.put("totalMoney", productViewModel.getTotalPrice().getValue());
-                    oderObject.put("detailOder", jsonArray);
+                    oderObject.put("OrderID", oderID);
+                    oderObject.put("StoreID", store.StoreID);
+                    oderObject.put("Address", infoLocation.getAddress());
+                    oderObject.put("OrderLat", infoLocation.getLocation().getLatitude());
+                    oderObject.put("OrderLong", infoLocation.getLocation().getLongitude());
+                    oderObject.put("TotalMoney", productViewModel.getTotalPrice().getValue());
+                    oderObject.put("detailOrder", jsonArray);
                 } catch (Exception e){
                     Log.d("TAG", "onChanged: "+e);
                 }
@@ -312,6 +314,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 placeOrderButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d( "TAG", "Log oder: "+oderObject.toString() );
                         Log.d("TAG", "onClick: "+oderObject.toString());
                         if (oderService.insertOder(oderObject.toString())){
                             Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();

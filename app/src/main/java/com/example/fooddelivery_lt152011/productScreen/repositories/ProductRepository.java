@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
 import com.example.fooddelivery_lt152011.networking.Service.ProductService;
 import com.example.fooddelivery_lt152011.networking.Service.TypeProductService;
@@ -29,7 +30,7 @@ public class ProductRepository {
 
     public ProductRepository() {
         httpAdapter = new HttpAdapter();
-        httpAdapter.setBaseUrl("http://192.168.171.2/");
+        httpAdapter.setBaseUrl( HTTP_URL.Final_URL);
         productService = httpAdapter.create(ProductService.class);
         typeProductService = httpAdapter.create(TypeProductService.class);
     }

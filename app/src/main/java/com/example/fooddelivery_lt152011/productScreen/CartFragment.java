@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.R;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentCartBinding;
@@ -70,7 +71,7 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         httpAdapter = new HttpAdapter();
-        httpAdapter.setBaseUrl("https://192.168.171.2/");
+        httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
         oderService = httpAdapter.create(OderService.class);
         final CartListAdapter cartListAdapter = new CartListAdapter(this);
         fragmentCartBinding.cartRecyclerView.setAdapter(cartListAdapter);
@@ -109,19 +110,19 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
                 JSONObject oderObject = new JSONObject();
                 UUID oderID = UUID.randomUUID();
                 try {
-                    oderObject.put("oderID", oderID);
-                    oderObject.put("storeID", store.StoreID);
-                    oderObject.put("address", infoLocation.getAddress());
-                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
-                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
-                    oderObject.put("totalMoney", productViewModel.getTotalPrice().getValue());
-                    oderObject.put("detailOder", jsonArray);
+                    oderObject.put("OrderID", oderID);
+                    oderObject.put("StoreID", store.StoreID);
+                    oderObject.put("Address", infoLocation.getAddress());
+                    oderObject.put("OrderLat", infoLocation.getLocation().getLatitude());
+                    oderObject.put("OrderLong", infoLocation.getLocation().getLongitude());
+                    oderObject.put("TotalMoney", productViewModel.getTotalPrice().getValue());
+                    oderObject.put("detailOrder", jsonArray);
                 } catch (Exception e){
                     Log.d(TAG, "onChanged: "+e);
                 }
                 cartListAdapter.submitList(cartItems);
                 HashMap<String, String> data = new HashMap<String,String>();
-                data.put("oder",oderObject.toString());
+                data.put("orderfood",oderObject.toString());
                 cartListAdapter.submitList(cartItems);
                 fragmentCartBinding.placeOrderButton.setEnabled(cartItems.size() > 0);
                 fragmentCartBinding.placeOrderButton.setOnClickListener(new View.OnClickListener() {

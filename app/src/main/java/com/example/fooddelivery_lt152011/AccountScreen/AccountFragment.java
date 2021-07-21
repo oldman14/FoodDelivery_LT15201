@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.LoginScreen.DbHelper;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelStatusUser;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
@@ -48,7 +49,7 @@ public class AccountFragment extends Fragment {
     private ImageView edtimage,imgAvatar;
     TextView tvSĐT,tvNameUser;
     private static final int Image_Capture_Code = 1;
-    public static final  String url="http://192.168.1.9/";
+    public static final  String url= HTTP_URL.Final_URL;
     DbHelper dbHelper;
     public  static SystemService action;
     UserDAO dao;

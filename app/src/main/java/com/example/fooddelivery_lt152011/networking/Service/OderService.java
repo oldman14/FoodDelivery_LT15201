@@ -11,5 +11,5 @@ public interface OderService {
     @HttpMethod(method = MethodType.GET,url = "FOODDELIVERY/api/product_getallsize.php")
     ProductReponse getListProduct();
     @HttpMethod(method = MethodType.POST,url = "FOODDELIVERY/api/Order_insert.php")
-    boolean insertOder(@Form(name="oder") String oder);
+    boolean insertOder(@Form(name="orderfood") String orderfood);
 }

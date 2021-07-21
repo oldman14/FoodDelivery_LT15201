@@ -30,7 +30,6 @@ public class HomeFragment extends Fragment {
     ArrayList<ModelCoupon> list;
     CouponDAO couponDAO;
     CarouselView carouselView;
-    String[] img;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -1,5 +1,6 @@
 package com.example.fooddelivery_lt152011.HomeScreen;
 
+import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.MyOrder.ModelOrder;
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
 import com.example.fooddelivery_lt152011.networking.Service.SystemService;
@@ -11,7 +12,7 @@ public class CouponDAO {
 
     public CouponDAO() {
         HttpAdapter adapter = new HttpAdapter();
-        adapter.setBaseUrl("http://192.168.1.9/");
+        adapter.setBaseUrl( HTTP_URL.Final_URL );
         systemService = adapter.create(SystemService.class);
     }
 

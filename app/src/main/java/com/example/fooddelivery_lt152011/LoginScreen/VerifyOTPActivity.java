@@ -87,7 +87,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
                                 final String token = SharedPreference.getInstance(VerifyOTPActivity.this).getDeviceToken();
                                 Log.d("Log12","aaa"+token);
                                 Log.d("Log1234","aa21a"+nPhone);
-                                ModelStatusUser status = dao.loginRegisDevice(nPhone,String.valueOf( token ));
+                                ModelStatusUser status = dao.loginRegisDevice(Integer.parseInt( nPhone ),String.valueOf( token ));
                                 Toast.makeText(VerifyOTPActivity.this, status.getMessage(), Toast.LENGTH_SHORT).show();
 //                                if (status.getError()==false){
 //                                    ModelUser newUser = dao.getUser(nPhone);

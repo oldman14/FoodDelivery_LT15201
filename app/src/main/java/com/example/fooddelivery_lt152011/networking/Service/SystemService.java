@@ -14,7 +14,7 @@ import com.example.fooddelivery_lt152011.networking.HttpAnotation.MethodType;
 
 public interface SystemService {
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/User_insert.php")
-    ModelStatusUser loginRegisDevice(@Form(name = "phone") String phone, @Form(name = "token") String token);
+    ModelStatusUser loginRegisDevice(@Form(name = "phone") int phone, @Form(name = "token") String token);
 
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/User_getItem.php/")
     ModelUser getUser(@Form(name = "phone") String phone);

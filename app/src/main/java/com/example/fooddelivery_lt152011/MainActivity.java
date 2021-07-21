@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     StoreViewModel storeViewModel;
     double lat, lng;
     InfoLocation infoLocation;
-    RelativeLayout toolbar_logo, toolbar_address;
+    public  static RelativeLayout toolbar_logo, toolbar_address;
     private boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -152,10 +152,10 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    toolbar_address.setVisibility(View.GONE);
-                    toolbar_logo.setVisibility(View.VISIBLE);
                     fragment = new HomeFragment();
                     loadFragment(fragment);
+                    toolbar_address.setVisibility(View.GONE);
+                    toolbar_logo.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.navigation_product:
                     fragment = new ProductFragment();
@@ -166,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_account:
                     fragment = new AccountFragment();
                     loadFragment(fragment);
+                    toolbar_address.setVisibility( View.GONE );
+                    toolbar_logo.setVisibility(View.GONE);
                     return true;
             }
             return false;
@@ -191,8 +193,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
                 myLocation = task.getResult();
-                lat = myLocation.getLatitude();
-                lng = myLocation.getLongitude();
+//                lat = myLocation.getLatitude();
+//                lng = myLocation.getLongitude();
                 final double[] distance = {10000};
                 storeViewModel.getListStore().observe(MainActivity.this, new Observer<List<Store>>() {
                     @Override

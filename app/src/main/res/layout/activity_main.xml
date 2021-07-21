@@ -19,7 +19,7 @@
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+       />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_below="@id/navigation"
         android:layout_alignParentBottom="true"
@@ -31,3 +31,4 @@
         app:itemTextColor="@color/color_selected_bot_nav"
         app:menu="@menu/navigation" />
 </RelativeLayout>
+<!--    app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
