@@ -18,7 +18,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String COLUMN5 = "UserBirthday";
     private static final String COLUMN6 = "UserImage";
     private static final String COLUMN7 = "Token";
-    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_NAME+"("+COLUMN1+" INTEGER PRIMARY KEY AUTOINCREMENT,"+ COLUMN2+" TEXT,"+COLUMN3+" INTEGER,"+COLUMN4+" TEXT,"+COLUMN5+" TEXT,"+COLUMN6+" TEXT,"+COLUMN7+" TEXT"+")";
+    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_NAME+"("+COLUMN1+" INTEGER PRIMARY KEY AUTOINCREMENT,"+COLUMN2+" TEXT,"+COLUMN3+" INTEGER,"+COLUMN4+" TEXT,"+COLUMN5+" TEXT,"+COLUMN6+" TEXT,"+COLUMN7+" TEXT"+")";
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private String sql = "SELECT * FROM " + TABLE_NAME;
     private String delete = "DELETE FROM " + TABLE_NAME;
@@ -75,5 +75,15 @@ public class DbHelper extends SQLiteOpenHelper {
     public void delete(){
         SQLiteDatabase database = this.getWritableDatabase();
         database.execSQL(delete);
+    }
+
+    public void update(String phone, String name, String mail,String birthday, String image){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN2,name); //These Fields should be your String values of actual column names
+        cv.put(COLUMN4,mail);
+        cv.put(COLUMN5,birthday);
+        cv.put(COLUMN6,image);
+        database.update(TABLE_NAME, cv, "UserPhone = ?", new String[]{phone});
     }
 }

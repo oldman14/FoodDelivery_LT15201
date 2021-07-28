@@ -20,5 +20,10 @@ public class OrderDAO {
         return itemorder;
     }
 
+    public int getNewID(){
+        int id = systemService.getNewID();
+        return id;
+    }
+
 
 }

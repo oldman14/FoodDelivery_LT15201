@@ -75,6 +75,7 @@ public class ModelUser {
         Token = token;
     }
 
-    public void setUserName(String string) {
+    public void setUserName(String userName) {
+        UserName = userName;
     }
 }

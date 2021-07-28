@@ -89,10 +89,11 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
                                 Log.d("Log1234","aa21a"+nPhone);
                                 ModelStatusUser status = dao.loginRegisDevice(Integer.parseInt( nPhone ),String.valueOf( token ));
                                 Toast.makeText(VerifyOTPActivity.this, status.getMessage(), Toast.LENGTH_SHORT).show();
-//                                if (status.getError()==false){
-//                                    ModelUser newUser = dao.getUser(nPhone);
-//                                    dbHelper.addUser(newUser);
-//                                }
+                                if (status.getError()==false){
+                                    ModelUser newUser = dao.getUser(nPhone);
+                                    dbHelper.addUser(newUser);
+
+                                }
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);

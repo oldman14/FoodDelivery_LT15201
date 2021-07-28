@@ -30,7 +30,11 @@ import android.widget.Toast;
 
 import com.devs.readmoreoption.ReadMoreOption;
 import com.example.fooddelivery_lt152011.HTTP_URL;
+import com.example.fooddelivery_lt152011.LoginScreen.DbHelper;
+import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
+import com.example.fooddelivery_lt152011.LoginScreen.UserDAO;
 import com.example.fooddelivery_lt152011.MainActivity;
+import com.example.fooddelivery_lt152011.MyOrder.OrderDAO;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
 import com.example.fooddelivery_lt152011.databinding.CartRowBinding;
@@ -53,6 +57,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +90,9 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     public RadBtnAdapter radBtnAdapter;
     public RecyclerView recyclerViewRad;
     public FragmentCartBinding fragmentCartBinding;
+    UserDAO userDAO;
+    OrderDAO orderDAO;
+    DbHelper dbHelper;
     ProductViewModel productViewModel;
     StoreViewModel storeViewModel;
     LocationViewModel locationViewModel;
@@ -99,6 +108,9 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        userDAO = new UserDAO();
+        orderDAO = new OrderDAO();
+        dbHelper = new DbHelper(getActivity());
         mViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         mViewModel.getProducts().observe(getViewLifecycleOwner(), new Observer<List<TypeProduct>>() {
             @Override
@@ -285,6 +297,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             @Override
             public void onChanged(List<CartItem> cartItems) {
                 JSONArray jsonArray = new JSONArray();
+
                 for (CartItem item: cartItems) {
                     JSONObject jsonObject = new JSONObject();
                     try {
@@ -299,17 +312,24 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 }
                 JSONObject oderObject = new JSONObject();
                 UUID oderID = UUID.randomUUID();
+
+//                int oderID = orderDAO.getNewID();
                 try {
-                    oderObject.put("OrderID", oderID);
-                    oderObject.put("StoreID", store.StoreID);
-                    oderObject.put("Address", infoLocation.getAddress());
-                    oderObject.put("OrderLat", infoLocation.getLocation().getLatitude());
-                    oderObject.put("OrderLong", infoLocation.getLocation().getLongitude());
-                    oderObject.put("TotalMoney", productViewModel.getTotalPrice().getValue());
+                    ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
+                    oderObject.put("userID", modelUser.getUserID());
+                    oderObject.put("orderID", oderID);
+                    oderObject.put("storeID", store.StoreID);
+                    oderObject.put("address", infoLocation.getAddress());
+                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
+                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
+                    oderObject.put("totalMoney", productViewModel.getTotalPrice().getValue());
                     oderObject.put("detailOrder", jsonArray);
                 } catch (Exception e){
                     Log.d("TAG", "onChanged: "+e);
                 }
+
+                HashMap<String, String> data = new HashMap<String,String>();
+                data.put("orderfood",oderObject.toString());
                 placeOrderButton.setEnabled(cartItems.size() > 0);
                 placeOrderButton.setOnClickListener(new View.OnClickListener() {
                     @Override

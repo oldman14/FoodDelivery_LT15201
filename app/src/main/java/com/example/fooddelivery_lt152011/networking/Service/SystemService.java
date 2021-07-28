@@ -39,4 +39,7 @@ public interface SystemService {
 
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/get_Coupon.php/")
     ModelListCoupon coupon(@Form( name="Status" ) String status);
+
+    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/Order_getNewID.php/")
+    int getNewID();
 }

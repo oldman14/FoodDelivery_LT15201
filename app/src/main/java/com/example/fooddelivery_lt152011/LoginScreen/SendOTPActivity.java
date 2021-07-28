@@ -32,7 +32,7 @@ public class SendOTPActivity extends AppCompatActivity {
         Button buttonGetOTP = findViewById( R.id.buttonGetOTP);
         dbHelper = new DbHelper(this);
         ProgressBar progressBar = findViewById( R.id.progressBar);
-      //  checkuser();
+        checkuser();
 
         buttonGetOTP.setOnClickListener(new View.OnClickListener() {
             @Override
