@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -34,6 +35,7 @@ import com.example.fooddelivery_lt152011.LoginScreen.DbHelper;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
 import com.example.fooddelivery_lt152011.LoginScreen.UserDAO;
 import com.example.fooddelivery_lt152011.MainActivity;
+import com.example.fooddelivery_lt152011.MyOrder.InforOderFragment;
 import com.example.fooddelivery_lt152011.MyOrder.OrderDAO;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
 import com.example.fooddelivery_lt152011.databinding.BottomsheetCartItemBinding;
@@ -311,7 +313,8 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                     jsonArray.put(jsonObject);
                 }
                 JSONObject oderObject = new JSONObject();
-                UUID oderID = UUID.randomUUID();
+                final String oderID = UUID.randomUUID().toString().replace("-", "");
+//                UUID oderID = UUID.randomUUID();
 
 //                int oderID = orderDAO.getNewID();
                 try {
@@ -334,10 +337,11 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 placeOrderButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d( "TAG", "Log oder: "+oderObject.toString() );
-                        Log.d("TAG", "onClick: "+oderObject.toString());
                         if (oderService.insertOder(oderObject.toString())){
                             Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
+                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                            Fragment myFragment = new InforOderFragment();
+                            activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
                             getActivity().getFragmentManager().popBackStack();
                         }
                     }

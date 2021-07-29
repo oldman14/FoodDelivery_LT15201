@@ -6,15 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <include layout="@layout/layout_toolbar"
-        android:id="@+id/toolbar"/>
-    <include
-        android:id="@+id/toolbar1"
-        layout="@layout/toolbar_logo"
-        android:visibility="gone"
-        />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layout_toolbarMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <include layout="@layout/layout_toolbar"
+            android:id="@+id/toolbar"/>
+        <include
+            android:id="@+id/toolbar1"
+            layout="@layout/toolbar_logo"
+            android:visibility="gone"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <FrameLayout
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/layout_toolbarMain"
         android:layout_above="@id/navigation"
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
