@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+
+    >
+    <data>
+        <variable
+            name="cartItem"
+            type="com.example.fooddelivery_lt152011.productScreen.CartItem" />
+        <variable
+            name="product"
+            type="com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel" />
+    </data>
+
+    <RelativeLayout
+
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/bottom_sheet_cart_order"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:background="@drawable/boder_cart"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/cart_bottom_sheet_left"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:id="@+id/quantityCartItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Đơn hàng đang được xử lý"
+                />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <TextView
+            android:layout_alignEnd="@id/cart_bottom_sheet_left"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boder"
+            android:paddingHorizontal="10dp"
+            android:text="Xem"
+            android:textSize="18dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/orange_dark"/>
+    </RelativeLayout>
+</layout>
+

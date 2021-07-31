@@ -9,9 +9,9 @@ import com.example.fooddelivery_lt152011.productScreen.SizeResponse;
 import java.util.List;
 
 public interface ProductService {
-        @HttpMethod(method = MethodType.GET,url = "FOODDELIVERY/api/Product_getAll.php")
+        @HttpMethod(method = MethodType.GET,url = "FoodDelivery/api/Product_getAll.php")
         ProductReponse getListProduct();
-        @HttpMethod(method = MethodType.GET,url = "FOODDELIVERY/api/product_getallsize.php")
+        @HttpMethod(method = MethodType.GET,url = "FoodDelivery/api/product_getallsize.php")
         List<SizeResponse> getAllSize();
 
 

@@ -13,13 +13,13 @@ import com.example.fooddelivery_lt152011.networking.HttpAnotation.HttpMethod;
 import com.example.fooddelivery_lt152011.networking.HttpAnotation.MethodType;
 
 public interface SystemService {
-    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/User_insert.php")
+    @HttpMethod(method = MethodType.POST, url = "FoodDelivery/api/User_insert.php")
     ModelStatusUser loginRegisDevice(@Form(name = "phone") int phone, @Form(name = "token") String token);
 
-    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/User_getItem.php/")
+    @HttpMethod(method = MethodType.POST, url = "FoodDelivery/api/User_getItem.php/")
     ModelUser getUser(@Form(name = "phone") String phone);
 
-    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/getUserNames.php/")
+    @HttpMethod(method = MethodType.POST, url = "FoodDelivery/api/getUserNames.php/")
     ModelUser getUserNames(@Form( name="UserPhone" ) int UserPhone);
 
     @HttpMethod( method = MethodType.POST,url = "FOODDELIVERY/api/User_update.php")

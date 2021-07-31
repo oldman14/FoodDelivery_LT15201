@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;//có rôf
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -166,18 +167,17 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_account:
                     fragment = new AccountFragment();
                     loadFragment(fragment);
-                    toolbar_address.setVisibility( View.GONE );
-                    toolbar_logo.setVisibility(View.GONE);
+                    toolbar_address.setVisibility(View.GONE);
+                    toolbar_logo.setVisibility(View.VISIBLE);
                     return true;
             }
             return false;
         }
     };
-
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_container, fragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(fragment.getClass().getSimpleName());
         transaction.commit();
     }
 

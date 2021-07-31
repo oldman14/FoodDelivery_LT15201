@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fooddelivery_lt152011.LoginScreen.DbHelper;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
 import com.example.fooddelivery_lt152011.LoginScreen.SendOTPActivity;
 import com.example.fooddelivery_lt152011.LoginScreen.UserDAO;
@@ -66,7 +67,7 @@ public class InforOderFragment extends Fragment {
     OrderDAO orderDAO;
     ImageView tick_1, tick_2, tick_3, sportAdmin, callShip;
     TextView status_1, status_2, status_3, nameShip, locationGiao, nameStore, addressstore, phoneStore, totalmoney;
-
+    DbHelper dbHelper;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -74,6 +75,9 @@ public class InforOderFragment extends Fragment {
         MainActivity.toolbar_address.setVisibility(View.GONE);
         MainActivity.toolbar_logo.setVisibility(View.GONE);
         View view = inflater.inflate(R.layout.fragment_infor_oder, container, false);
+
+        dbHelper = new DbHelper(getActivity());
+
         tick_1 = view.findViewById(R.id.tick_1);
         tick_2 = view.findViewById(R.id.tick_2);
         status_2 = view.findViewById(R.id.status_2);
@@ -94,7 +98,7 @@ public class InforOderFragment extends Fragment {
         shipperDAO = new ShipperDAO();
         detailOrderDAO = new DetailOrderDAO();
         list = new ArrayList<>();
-        ModelUser nameimg = dao.getUserNames(Integer.parseInt(SendOTPActivity.phone));
+        ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
         ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
@@ -168,7 +172,7 @@ public class InforOderFragment extends Fragment {
                 dao = new UserDAO();
                 orderDAO = new OrderDAO();
                 shipperDAO = new ShipperDAO();
-                ModelUser nameimg = dao.getUserNames(Integer.parseInt(SendOTPActivity.phone));
+                ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
                 Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
                 ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
                 Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
@@ -239,7 +243,7 @@ public class InforOderFragment extends Fragment {
         orderDAO = new OrderDAO();
         shipperDAO = new ShipperDAO();
         storeDAO = new StoreDAO();
-        ModelUser nameimg = dao.getUserNames(Integer.parseInt(SendOTPActivity.phone));
+        ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
         ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
@@ -261,8 +265,6 @@ public class InforOderFragment extends Fragment {
         rcvSP.setLayoutManager(layoutManager);
         adapter = new ProductOrderIF_Adapter(getContext(), list);
         rcvSP.setAdapter(adapter);
-
-
         callShip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

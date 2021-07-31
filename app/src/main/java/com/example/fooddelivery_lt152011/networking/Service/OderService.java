@@ -8,8 +8,8 @@ import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
 import java.util.HashMap;
 
 public interface OderService {
-    @HttpMethod(method = MethodType.GET,url = "FOODDELIVERY/api/product_getallsize.php")
+    @HttpMethod(method = MethodType.GET,url = "FoodDelivery/api/product_getallsize.php")
     ProductReponse getListProduct();
-    @HttpMethod(method = MethodType.POST,url = "FOODDELIVERY/api/Order_insert.php")
+    @HttpMethod(method = MethodType.POST,url = "FoodDelivery/api/Order_insert.php")
     boolean insertOder(@Form(name="orderfood") String orderfood);
 }
