@@ -103,11 +103,31 @@
                     android:fontFamily="@font/roboto_light"
                     android:lines="1"
                     android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
                     android:text="90 Cao Thắng, Phường 3, Quận 3, Thành Phố Hồ Chí Minh"
                     android:textColor="@color/secondary_font"
                     android:textSize="16dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyễn Văn Giàu"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/black"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="5dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0912542426"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/black"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="5dp"
+                    />
             </androidx.appcompat.widget.LinearLayoutCompat>
-
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -138,7 +158,11 @@
                 tools:itemCount="2"
                 />
         </androidx.appcompat.widget.LinearLayoutCompat>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+        </RelativeLayout>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

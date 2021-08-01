@@ -30,17 +30,15 @@ public class  CartRepo {
         mutableCart.setValue(new ArrayList<CartItem>());
         calculateCartTotal();
     }
-
     public boolean addItemToCart(Product product, int quantity, Size size, int amount) {
         if (mutableCart.getValue() == null) {
             initCart();
         }
         List<CartItem> cartItemList = new ArrayList<>(mutableCart.getValue());
         for (CartItem cartItem: cartItemList) {
-            if (cartItem.getProduct().getProductID()==(product.getProductID())&cartItem.getProduct().getSizes()==product.getSizes()) {
-                if (cartItem.getQuantity() == 10) {
-                    return false;
-                }
+            Log.d("TAG", "addItemToCartzxc: "+cartItem.getProduct().getProductName()+" "+cartItem.size.SizeName);
+            if (cartItem.getProduct().getProductID()==(product.getProductID())&&cartItem.size==size) {
+                Log.d("TAG", "Log size: "+cartItem.size+" "+size);
                 int index = cartItemList.indexOf(cartItem);
                 cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 cartItemList.set(index, cartItem);
@@ -68,12 +66,9 @@ public class  CartRepo {
 
     public  void changeQuantity(CartItem cartItem, int quantity) {
         if (mutableCart.getValue() == null) return;
-
         List<CartItem> cartItemList = new ArrayList<>(mutableCart.getValue());
-
-        CartItem updatedItem = new CartItem(cartItem.getProduct(), quantity);
+        CartItem updatedItem = new CartItem(cartItem.getProduct(), quantity,cartItem.size, cartItem.amount);
         cartItemList.set(cartItemList.indexOf(cartItem), updatedItem);
-
         mutableCart.setValue(cartItemList);
         calculateCartTotal();
     }

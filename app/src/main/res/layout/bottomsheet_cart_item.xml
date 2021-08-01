@@ -19,7 +19,6 @@
         app:behavior_hideable="true"
         app:behavior_peekHeight="0dp"
         android:layout_marginHorizontal="12dp"
-        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:background="@drawable/boder_cart"
         android:layout_height="wrap_content">

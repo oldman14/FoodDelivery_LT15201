@@ -1,5 +1,6 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
+import android.annotation.SuppressLint;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -9,8 +10,8 @@ import androidx.recyclerview.widget.DiffUtil;
 public class CartItem {
     Product product;
     public int quantity;
-    Size size;
-    int amount;
+    public Size size;
+    public int amount;
 
     public CartItem(Product product, int quantity) {
         this.product = product;
@@ -26,6 +27,14 @@ public class CartItem {
 
     public Product getProduct() {
         return product;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
     }
 
     public void setProduct(Product product) {
@@ -46,7 +55,7 @@ public class CartItem {
         if (o == null || getClass() != o.getClass()) return false;
         CartItem cartItem = (CartItem) o;
         return getQuantity() == cartItem.getQuantity() &&
-                getProduct().equals(cartItem.getProduct());
+                getProduct().equals(cartItem.getProduct()) && getSize().equals(cartItem.size);
     }
 
     @BindingAdapter("android:setVal")

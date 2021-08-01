@@ -121,9 +121,6 @@ public class CartFragment extends Fragment implements CartListAdapter.CartInterf
                     Log.d(TAG, "onChanged: "+e);
                 }
                 cartListAdapter.submitList(cartItems);
-                HashMap<String, String> data = new HashMap<String,String>();
-                data.put("orderfood",oderObject.toString());
-                cartListAdapter.submitList(cartItems);
                 fragmentCartBinding.placeOrderButton.setEnabled(cartItems.size() > 0);
                 fragmentCartBinding.placeOrderButton.setOnClickListener(new View.OnClickListener() {
                     @Override

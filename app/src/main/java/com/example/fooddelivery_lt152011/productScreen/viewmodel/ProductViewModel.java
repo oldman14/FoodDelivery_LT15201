@@ -29,10 +29,28 @@ public class ProductViewModel extends AndroidViewModel {
     private MutableLiveData<Size> size = new MutableLiveData<>();
     private MutableLiveData<Integer> priceProduct = new MutableLiveData<>();
     private MutableLiveData<Boolean> isOrder = new MutableLiveData<>();
+    private MutableLiveData<CartItem> cartItemMutable = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isEditing = new MutableLiveData<>();
     CartRepo cartItemRepo = new CartRepo();
     ProductRepository productRepository = new ProductRepository();
 
+    public MutableLiveData<CartItem> getCartItemMutable() {
+        return cartItemMutable;
+    }
 
+    public void setCartItemMutable(CartItem cartItem) {
+        cartItemMutable.setValue(cartItem);
+    }
+
+    public LiveData<Boolean> getIsEditing() {
+        if (isEditing==null){
+            isEditing.setValue(false);
+        }
+        return isEditing;
+    }
+    public void setIsEditing(boolean aboolean) {
+        isEditing.setValue(aboolean);
+    }
     public LiveData<Boolean> getIsConnect() {
         if (isConnect==null){
             isConnect = new MutableLiveData<>();
@@ -148,13 +166,18 @@ public class ProductViewModel extends AndroidViewModel {
         cartItemRepo.initCart();
     }
 
-    public void minusQuantity(){
-        if (quantityItem.getValue()>1){
+    public void minusQuantity(boolean isEdit){
+        if (isEdit==true){
+            if (quantityItem.getValue()>0){
+                quantityItem.setValue(quantityItem.getValue()-1);
+            }
+        } else if (quantityItem.getValue()>1){
             quantityItem.setValue(quantityItem.getValue()-1);
         }
     }
     public void plusQuantity(){
         quantityItem.setValue(quantityItem.getValue()+1);
     }
+
 
 }
