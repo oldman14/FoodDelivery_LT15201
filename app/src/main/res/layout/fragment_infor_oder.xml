@@ -1,0 +1,34 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+
+               <fragment
+                   android:id="@+id/map"
+                   android:name="com.google.android.gms.maps.SupportMapFragment"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent" />
+               <ImageView
+                   android:padding="5dp"
+                   android:src="@drawable/back"
+                   android:layout_alignParentTop="true"
+                   android:layout_alignParentLeft="true"
+                   android:layout_margin="20dp"
+                   android:background="#DFDBDB"
+                   android:layout_width="30dp"
+                   android:layout_height="30dp"/>
+           </RelativeLayout>
+
+        <include
+            android:id="@+id/infor"
+            layout="@layout/bottom_sheet_iforder" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

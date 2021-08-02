@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:elevation="5dp"
+    android:padding="8dp"
+    android:layout_height="45dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <ImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/img_check_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/selector_radio_custom"
+        />
+    <TextView
+        android:layout_marginHorizontal="8dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/size_radioBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vừa"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:layout_toEndOf="@id/img_check_radio"
+        />
+    <TextView
+        android:id="@+id/priceSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textSize="18dp"
+        android:text="+7000đ"
+        android:layout_centerVertical="true"
+        android:paddingHorizontal="8dp"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

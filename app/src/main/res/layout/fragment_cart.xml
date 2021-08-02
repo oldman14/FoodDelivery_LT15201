@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   >
+    <data>
+        <variable
+            name="cartItem"
+            type="com.example.fooddelivery_lt152011.productScreen.CartItem" />
+
+    </data>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f7"
+   >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".views.CartFragment">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/toolbar_cart_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/roboto_medium"
+                    android:paddingVertical="5dp"
+                    android:text="Xác nhận đơn hàng"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/white"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_close_24" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/address_cart_item_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar_cart_item"
+            android:layout_marginVertical="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="1dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="8dp"
+                    android:text="Giao đến"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20dp" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_light"
+                    android:lines="1"
+                    android:paddingHorizontal="10dp"
+                    android:text="90 Cao Thắng, Phường 3, Quận 3, Thành Phố Hồ Chí Minh"
+                    android:textColor="@color/secondary_font"
+                    android:textSize="16dp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/titelorder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/address_cart_item_layout"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="1dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="8dp"
+                    android:text="Tóm tắt đơn hàng"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20dp" />
+            </androidx.cardview.widget.CardView>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <RelativeLayout
+            android:layout_above="@id/cvtotal"
+            android:layout_below="@id/titelorder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cartRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/cart_row" />
+            </ScrollView>
+        </RelativeLayout>
+       <androidx.cardview.widget.CardView
+           android:id="@+id/cvtotal"
+           android:layout_width="match_parent"
+           android:layout_height="150dp"
+           android:layout_above="@id/order"
+           app:cardElevation="2dp">
+           <RelativeLayout
+               android:layout_alignParentRight="true"
+               android:layout_alignParentLeft="true"
+               android:layout_above="@id/order"
+               android:layout_width="match_parent"
+               android:layout_height="150dp">
+               <TextView
+                   android:textSize="18dp"
+                   android:id="@+id/t1"
+                   android:textStyle="bold"
+                   android:textColor="@color/black"
+                   android:text="Tổng Cộng"
+                   android:layout_margin="10dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"/>
+               <TextView
+                   android:textSize="16dp"
+                   android:id="@+id/t2"
+                   android:layout_alignParentLeft="true"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginTop="5dp"
+                   android:layout_below="@id/t1"
+                   android:text="Thành tiền"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"/>
+               <TextView
+                   android:textColor="@color/black"
+                   android:textSize="16dp"
+                   android:id="@+id/money"
+                   android:layout_marginRight="15dp"
+                   android:layout_marginTop="5dp"
+                   android:layout_below="@id/t1"
+                   android:layout_alignParentRight="true"
+                   android:text="140.000đ"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"/>
+               <TextView
+                   android:textSize="16dp"
+                   android:id="@+id/t3"
+                   android:layout_alignParentLeft="true"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginTop="15dp"
+                   android:layout_below="@id/t2"
+                   android:textColor="@color/gradient_end_color"
+                   android:text="Chọn khuyến mãi"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"/>
+               <ImageView
+                   android:id="@+id/vcoupon"
+                   android:src="@drawable/next_24"
+                   android:layout_marginRight="15dp"
+                   android:layout_marginTop="15dp"
+                   android:paddingLeft="20dp"
+                   android:paddingRight="10dp"
+                   android:layout_below="@id/money"
+                   android:layout_alignParentRight="true"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"/>
+               <TextView
+                   android:textSize="16dp"
+                   android:layout_below="@id/t3"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginTop="15dp"
+                   android:text="Số tiền thanh toán"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"/>
+               <TextView
+                   android:textColor="@color/black"
+                   android:id="@+id/total"
+                   android:layout_alignParentRight="true"
+                   android:textSize="16dp"
+                   android:layout_below="@id/t3"
+                   android:layout_marginRight="15dp"
+                   android:layout_marginTop="15dp"
+                   android:text="100.000đ"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"/>
+           </RelativeLayout>
+       </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:cardElevation="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/orange_primary">
+                <TextView
+                    android:id="@+id/orderTotalTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="Tổng cộng: 26"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:id="@+id/placeOrderButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:backgroundTint="@color/white"
+                    android:text="ĐẶt hàng"
+                    android:textColor="@color/orange_primary" />
+            </RelativeLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</RelativeLayout>
+</layout>
