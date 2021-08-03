@@ -31,6 +31,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.example.fooddelivery_lt152011.AccountScreen.AccountFragment;
 import com.example.fooddelivery_lt152011.HomeScreen.HomeFragment;
+import com.example.fooddelivery_lt152011.LoginScreen.DbHelper;
+import com.example.fooddelivery_lt152011.LoginScreen.VerifyOTPActivity;
 import com.example.fooddelivery_lt152011.MyOrder.InforOderFragment;
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
 import com.example.fooddelivery_lt152011.networking.Service.StoreService;
@@ -40,6 +42,7 @@ import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
 import com.example.fooddelivery_lt152011.productScreen.entities.InfoLocation;
 import com.example.fooddelivery_lt152011.productScreen.entities.Store;
 import com.example.fooddelivery_lt152011.productScreen.entities.StoreResponse;
+import com.example.fooddelivery_lt152011.productScreen.repositories.FavoriteRepo;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.LocationViewModel;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.StoreViewModel;
@@ -75,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     double lat, lng;
     InfoLocation infoLocation;
     public  static RelativeLayout toolbar_logo, toolbar_address;
+    DbHelper dbHelper;
+    public static int UserID;
     private boolean isNetworkConnected(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -115,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         requestPermision();
         tv_address_toolbar = findViewById(R.id.tv_address_toolbar);
+        dbHelper = new DbHelper(MainActivity.this);
+        UserID = dbHelper.getUser().getUserID();
         //create storeModel
         if (locationPermission=true){
             getMyLocation();
@@ -126,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             productViewModel.setIsConnect(false);
         }
+//        FavoriteRepo favoriteRepo = new FavoriteRepo();
+//        favoriteRepo.getFavorite();
     }
 
     @Override

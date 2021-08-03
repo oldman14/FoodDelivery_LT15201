@@ -29,7 +29,6 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(context).inflate(R.layout.item_rec_typeproduct, parent, false);
         return new ViewHolder(view);
     }
@@ -38,7 +37,6 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TypeProduct typeProduct = typeProducts.get(position);
         holder.tv_title.setText(typeProduct.getTypeName());
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(
                 holder.recProduct.getContext(),
                 LinearLayoutManager.VERTICAL,

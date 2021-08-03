@@ -6,15 +6,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.fooddelivery_lt152011.HTTP_URL;
+import com.example.fooddelivery_lt152011.MainActivity;
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
+import com.example.fooddelivery_lt152011.networking.Service.FavoriteService;
 import com.example.fooddelivery_lt152011.networking.Service.ProductService;
 import com.example.fooddelivery_lt152011.networking.Service.TypeProductService;
+import com.example.fooddelivery_lt152011.productScreen.FavoriteRespone;
 import com.example.fooddelivery_lt152011.productScreen.ListTypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.Product;
 import com.example.fooddelivery_lt152011.productScreen.ProductReponse;
-import com.example.fooddelivery_lt152011.productScreen.SizeResponse;
 import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.TypeResponse;
+import com.example.fooddelivery_lt152011.productScreen.entities.Favorite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,34 +30,57 @@ public class ProductRepository {
     public MutableLiveData<TypeResponse> typeProduct = new MutableLiveData<>();
     public MutableLiveData<List<ListTypeProduct>> listTypeProduct;
     private MutableLiveData<List<TypeProduct>> typeProductRes;
-
+    private FavoriteService favoriteService;
+    public MutableLiveData<List<Product>> favorite;
     public ProductRepository() {
         httpAdapter = new HttpAdapter();
         httpAdapter.setBaseUrl( HTTP_URL.Final_URL);
         productService = httpAdapter.create(ProductService.class);
         typeProductService = httpAdapter.create(TypeProductService.class);
+        favoriteService = httpAdapter.create(FavoriteService.class);
     }
+    public void getFavoriteProduct() {
+        try {
+            FavoriteRespone favoriteRespone = favoriteService.getAllFav(MainActivity.UserID);
+            List<Favorite> favorites = favoriteRespone.getFavorites();
+            ProductReponse productReponses = productService.getListProduct();
+            List<Product> productList = productReponses.getProduct();
+            List<Product> products = new ArrayList<>();
+            Log.d("TAG", "getFavoriteProductList: "+favorites.get(0).getProductID());
+            for (int i = 0; i < favorites.size(); i++) {
+                Log.d("TAG", "getFavorite: "+favorites.get(i).getProductID());
+                for (int j = 0; j < productList.size(); j++) {
+                    Log.d("TAG", "getFavoriteProduct: "+productList.get(j).getProductID());
+                    if(favorites.get(i).getProductID() == productList.get(j).getProductID()){
+                        products.add(productList.get(j));
+                        Log.d("TAG", "getFavoriteProduct: "+productList.get(j).getProductID());
+                    }
+                }
+            }
+            favorite.setValue(products);
+        } catch (Exception e){
+            Log.d("TAG", "getFavorite: "+e);
+        }
+    }
+    public LiveData<List<Product>> getFavorite(){
+        if (favorite == null){
+            favorite = new MutableLiveData<>();
+            getFavoriteProduct();
+        }
+        return favorite;
+    }
+
     public LiveData<List<TypeProduct>> getProducts() {
         if (typeProductRes == null) {
             typeProductRes = new MutableLiveData<>();
-            new android.os.Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getListProduct();
-                }
-            }, 1000);
+            getListProduct();
         }
         return typeProductRes;
     }
     public LiveData<List<ListTypeProduct>> getTypeProducts(){
         if (listTypeProduct==null){
             listTypeProduct = new MutableLiveData<>();
-            new android.os.Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getListTypeProduct();
-                }
-            }, 1000);
+            getListTypeProduct();
         }
         return listTypeProduct;
     }
@@ -66,8 +92,6 @@ public class ProductRepository {
         } catch (Exception e){
             Log.d("TAG", "getListTypeProduct: "+e.getMessage());
         }
-
-
     }
     public void getListProduct(){
         try {

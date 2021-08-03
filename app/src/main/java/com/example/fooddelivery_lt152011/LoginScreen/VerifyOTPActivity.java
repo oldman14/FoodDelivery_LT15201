@@ -41,6 +41,7 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
     UserDAO dao;
     DbHelper dbHelper;
     TextView textMobile;
+    public static int userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +93,6 @@ public class VerifyOTPActivity extends AppCompatActivity implements Serializable
                                 if (status.getError()==false){
                                     ModelUser newUser = dao.getUser(nPhone);
                                     dbHelper.addUser(newUser);
-
                                 }
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);

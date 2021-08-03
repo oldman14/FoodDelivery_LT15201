@@ -12,7 +12,9 @@ import com.example.fooddelivery_lt152011.productScreen.ListTypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.Product;
 import com.example.fooddelivery_lt152011.productScreen.Size;
 import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
+import com.example.fooddelivery_lt152011.productScreen.entities.Favorite;
 import com.example.fooddelivery_lt152011.productScreen.repositories.CartRepo;
+import com.example.fooddelivery_lt152011.productScreen.repositories.FavoriteRepo;
 import com.example.fooddelivery_lt152011.productScreen.repositories.ProductRepository;
 
 import java.util.List;
@@ -34,12 +36,17 @@ public class ProductViewModel extends AndroidViewModel {
     CartRepo cartItemRepo = new CartRepo();
     ProductRepository productRepository = new ProductRepository();
 
+
     public MutableLiveData<CartItem> getCartItemMutable() {
         return cartItemMutable;
     }
 
     public void setCartItemMutable(CartItem cartItem) {
         cartItemMutable.setValue(cartItem);
+    }
+
+    public LiveData<List<Product>> getFavorite() {
+        return productRepository.getFavorite();
     }
 
     public LiveData<Boolean> getIsEditing() {
@@ -102,10 +109,13 @@ public class ProductViewModel extends AndroidViewModel {
     public LiveData<Boolean> getFavoite(){
         if (favourite==null){
             favourite = new MutableLiveData<>();
+//            favourite.setValue(false);
         }
         return favourite;
     }
-
+    public void setFavourite(boolean aboolean){
+        favourite.setValue(aboolean);
+    }
     public void changFavourite(){
         if (favourite.getValue()==true){
             favourite.setValue(false);

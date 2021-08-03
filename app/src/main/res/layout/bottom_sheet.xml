@@ -87,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:onClick="@{()->product.changFavourite()}"
+                    android:onClick="@{()->handleClick.changeFavorite(product.product)}"
                 />
                 <TextView
                     android:layout_gravity="center"

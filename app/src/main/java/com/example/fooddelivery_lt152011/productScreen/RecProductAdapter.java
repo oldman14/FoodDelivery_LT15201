@@ -11,7 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.R;
+import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -22,7 +24,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
     public Context context;
     public List<Product> productList;
     private OneItemClick oneItemClick;
-
+    HttpAdapter httpAdapter;
     public RecProductAdapter(Context context, List<Product> productList,OneItemClick oneItemClick) {
         this.context = context;
         this.productList = productList;
@@ -40,8 +42,8 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
-
-        holder.tv_proName.setText(product.getProductName());
+        httpAdapter = new HttpAdapter();
+        httpAdapter.setBaseUrl( HTTP_URL.Final_URL );        holder.tv_proName.setText(product.getProductName());
         holder.tv_proNote.setText(product.getProductNote());
         holder.tv_proPrice.setText(new DecimalFormat("##,###đ").format(product.getProductPrice()));
         Picasso.get().load(product.ProductImage).into(holder.imageView);
@@ -49,7 +51,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
             @Override
             public void onClick(View v) {
                 Log.d("TAG", "logposition: "+position);
-                oneItemClick.onItemClick(product);
+                oneItemClick.onItemClick(product, httpAdapter);
             }
         });
     }
@@ -69,8 +71,6 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
             tv_proPrice =  itemView.findViewById(R.id.tv_proPice);
             imageView = itemView.findViewById(R.id.img_product);
         }
-
-
     }
 
 }

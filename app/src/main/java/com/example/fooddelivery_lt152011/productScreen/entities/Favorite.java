@@ -1,27 +1,37 @@
 package com.example.fooddelivery_lt152011.productScreen.entities;
 
 public class Favorite {
-    private String userID;
-    private int productID;
+    private int FavoriteID;
+    private int UserID;
+    private int ProductID;
 
-    public Favorite(String userID, int productID) {
-        this.userID = userID;
-        this.productID = productID;
+    public Favorite(int favoriteID, int userID, int productID) {
+        FavoriteID = favoriteID;
+        UserID = userID;
+        ProductID = productID;
     }
 
-    public String getUserID() {
-        return userID;
+    public int getFavoriteID() {
+        return FavoriteID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setFavoriteID(int favoriteID) {
+        FavoriteID = favoriteID;
+    }
+
+    public int getUserID() {
+        return UserID;
+    }
+
+    public void setUserID(int userID) {
+        UserID = userID;
     }
 
     public int getProductID() {
-        return productID;
+        return ProductID;
     }
 
     public void setProductID(int productID) {
-        this.productID = productID;
+        ProductID = productID;
     }
 }

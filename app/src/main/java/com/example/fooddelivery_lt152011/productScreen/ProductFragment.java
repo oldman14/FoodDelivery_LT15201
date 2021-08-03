@@ -44,7 +44,9 @@ import com.example.fooddelivery_lt152011.databinding.FragmentCartBinding;
 import com.example.fooddelivery_lt152011.databinding.FragmentProductBinding;
 
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
+import com.example.fooddelivery_lt152011.networking.Service.FavoriteService;
 import com.example.fooddelivery_lt152011.networking.Service.OderService;
+import com.example.fooddelivery_lt152011.productScreen.entities.Favorite;
 import com.example.fooddelivery_lt152011.productScreen.entities.InfoLocation;
 import com.example.fooddelivery_lt152011.productScreen.entities.Store;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.LocationViewModel;
@@ -101,9 +103,11 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     LocationViewModel locationViewModel;
     HttpAdapter httpAdapter;
     OderService oderService;
+    FavoriteService favoriteService;
     Store store;
     InfoLocation infoLocation;
     public CartRowBinding cartRowBinding;
+    List<Product> favoriteProduct;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +146,12 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 } else {
                     recyclerView.setVisibility(View.GONE);
                 }
+            }
+        });
+        mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                favoriteProduct = products;
             }
         });
         mViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
@@ -204,7 +214,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             @Override
             public void onClick(View v) {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                Fragment myFragment = new FavoriteFragment();
+                Fragment myFragment = new FavoriteFragment(getContext(),favoriteProduct, ProductFragment.this::onItemClick);
                 activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
                 MainActivity.navigationView.setVisibility(View.GONE);
                 MainActivity.toolbar_address.setVisibility(View.GONE);
@@ -393,8 +403,25 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                     Log.d("TAG", "remove cart: "+mViewModel.getCartItemMutable().getValue());
                 }
             }
+        }
+        public void changeFavorite(Product product){
+            if (mViewModel.favourite.getValue()==true){
+                mViewModel.setFavourite(false);
+                if (favoriteService.deleteFav(MainActivity.UserID, product.ProductID)){
+                    Toast.makeText(getContext(), "Delete Favo thanh cong", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Delete that bai", Toast.LENGTH_SHORT).show();
 
+                }
+            } else {
+                mViewModel.setFavourite(true);
+                if (favoriteService.insertFav(MainActivity.UserID, product.ProductID)==true){
+                    Toast.makeText(getContext(), "Favo thanh cong", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Favo that bai", Toast.LENGTH_SHORT).show();
 
+                }
+            }
         }
         public String convertString(int price){
             return new DecimalFormat("##,###đ").format(price);
@@ -417,6 +444,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         httpAdapter = new HttpAdapter();
         httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
         oderService = httpAdapter.create(OderService.class);
+        favoriteService = httpAdapter.create(FavoriteService.class);
         storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
         storeViewModel.getStore().observe(getViewLifecycleOwner(), new Observer<Store>() {
             @Override
@@ -506,9 +534,10 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
     @Override
-    public void onItemClick(Product product) {
+    public void onItemClick(Product product, HttpAdapter httpAdapter1) {
         mViewModel.setIsEditing(false);
         mViewModel.setProduct(product);
+        favoriteService = httpAdapter1.create(FavoriteService.class);
         bottomSheetBinding.setProduct(mViewModel);
         ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
         bottomSheetBinding.setHandleClick(productHandleClick);
@@ -538,6 +567,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean==true){
+
                     imageButton_favorute.setImageResource(R.drawable.ic_favorite_24);
                 } else {
                     imageButton_favorute.setImageResource(R.drawable.ic_favorite_border_24);
@@ -547,7 +577,9 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         imageButton_favorute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                    if(favoriteService.insertFav(MainActivity.UserID,product.ProductID)){
+                        Toast.makeText(getContext(), "favorite", Toast.LENGTH_SHORT).show();
+                    };
             }
         });
         mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {

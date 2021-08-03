@@ -22,7 +22,6 @@ public class StoreRepo {
         httpAdapter = new HttpAdapter();
 //        httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
         httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
-
         storeService = httpAdapter.create(StoreService.class);
     }
     public LiveData<List<Store>> getStoreResponse() {
