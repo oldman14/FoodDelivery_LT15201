@@ -63,10 +63,8 @@ public class ProductRepository {
         }
     }
     public LiveData<List<Product>> getFavorite(){
-        if (favorite == null){
             favorite = new MutableLiveData<>();
             getFavoriteProduct();
-        }
         return favorite;
     }
 

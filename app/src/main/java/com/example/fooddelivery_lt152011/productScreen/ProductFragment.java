@@ -108,6 +108,8 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     InfoLocation infoLocation;
     public CartRowBinding cartRowBinding;
     List<Product> favoriteProduct;
+    Fragment myFragmentFav;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,13 +216,17 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             @Override
             public void onClick(View v) {
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                Fragment myFragment = new FavoriteFragment(getContext(),favoriteProduct, ProductFragment.this::onItemClick);
-                activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
+                mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+                    @Override
+                    public void onChanged(List<Product> products) {
+                        myFragmentFav = new FavoriteFragment(getContext(),products, ProductFragment.this::onItemClick);
+                    }
+                });
+                activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragmentFav ).addToBackStack( null ).commit();
                 MainActivity.navigationView.setVisibility(View.GONE);
                 MainActivity.toolbar_address.setVisibility(View.GONE);
             }
         });
-
     }
 
 
@@ -235,6 +241,10 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomsheetCartItemBinding = DataBindingUtil.inflate(inflater, R.layout.bottomsheet_cart_item,container, false);
         fragmentCartBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_cart, container,false);
         View view = fragmentProductBinding.getRoot();
+        httpAdapter = new HttpAdapter();
+        httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
+        oderService = httpAdapter.create(OderService.class);
+        favoriteService = httpAdapter.create(FavoriteService.class);
         imgFavorite = view.findViewById(R.id.btn_favorite_productfragment);
         bottomsheetLayoutItem = view.findViewById(R.id.bottomSheet_detailproduct);
         bottomsheetLayout = view.findViewById(R.id.bottom_sheet_cart_layout);
@@ -405,10 +415,12 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             }
         }
         public void changeFavorite(Product product){
+            Log.d("TAG", "changeFavorite: "+product.getProductID()+" "+MainActivity.UserID);
             if (mViewModel.favourite.getValue()==true){
                 mViewModel.setFavourite(false);
                 if (favoriteService.deleteFav(MainActivity.UserID, product.ProductID)){
                     Toast.makeText(getContext(), "Delete Favo thanh cong", Toast.LENGTH_SHORT).show();
+                     mViewModel.getFavorite().getValue();
                 } else {
                     Toast.makeText(getContext(), "Delete that bai", Toast.LENGTH_SHORT).show();
 
@@ -417,9 +429,9 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 mViewModel.setFavourite(true);
                 if (favoriteService.insertFav(MainActivity.UserID, product.ProductID)==true){
                     Toast.makeText(getContext(), "Favo thanh cong", Toast.LENGTH_SHORT).show();
+                    mViewModel.getFavorite().getValue();
                 } else {
                     Toast.makeText(getContext(), "Favo that bai", Toast.LENGTH_SHORT).show();
-
                 }
             }
         }
@@ -441,10 +453,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         if (view.getParent()!=null){
             ((ViewGroup)view.getParent()).removeView(view);
         }
-        httpAdapter = new HttpAdapter();
-        httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
-        oderService = httpAdapter.create(OderService.class);
-        favoriteService = httpAdapter.create(FavoriteService.class);
+
         storeViewModel = new ViewModelProvider(requireActivity()).get(StoreViewModel.class);
         storeViewModel.getStore().observe(getViewLifecycleOwner(), new Observer<Store>() {
             @Override
@@ -514,7 +523,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                             Fragment myFragment = new InforOderFragment();
                             activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
                         }
-
                     }
                 });
             }
@@ -537,12 +545,24 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     public void onItemClick(Product product, HttpAdapter httpAdapter1) {
         mViewModel.setIsEditing(false);
         mViewModel.setProduct(product);
-        favoriteService = httpAdapter1.create(FavoriteService.class);
         bottomSheetBinding.setProduct(mViewModel);
         ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
         bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
+        ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
         mViewModel.setSize(product.getSizes().get(0));
+        mViewModel.setFavourite(false);
+        mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                Log.d("TAG", "onChanged: "+products.size());
+                for (int i = 0; i < products.size(); i++) {
+                    if (product.getProductID() == products.get(i).getProductID()){
+                        mViewModel.setFavourite(true);
+                    }
+                }
+            }
+        });
         mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
             @Override
             public void onChanged(Size size) {
@@ -550,6 +570,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
             }
         });
+
         radBtnAdapter = new RadBtnAdapter(product.getSizes(), getContext(), mViewModel);
         recyclerViewRad = view.findViewById(R.id.recRadioButton);
         recyclerViewRad.setAdapter(radBtnAdapter);
@@ -562,26 +583,24 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         TextView detail_product = view.findViewById(R.id.detail_product);
         readMoreOption.addReadMoreTo(detail_product, product.ProductNote);
         mViewModel.setQuantityItem(1);
-        ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
         mViewModel.getFavoite().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean==true){
-
                     imageButton_favorute.setImageResource(R.drawable.ic_favorite_24);
                 } else {
                     imageButton_favorute.setImageResource(R.drawable.ic_favorite_border_24);
                 }
             }
         });
-        imageButton_favorute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    if(favoriteService.insertFav(MainActivity.UserID,product.ProductID)){
-                        Toast.makeText(getContext(), "favorite", Toast.LENGTH_SHORT).show();
-                    };
-            }
-        });
+//        imageButton_favorute.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                    if(favoriteService.insertFav(MainActivity.UserID,product.ProductID)){
+//                        Toast.makeText(getContext(), "favorite", Toast.LENGTH_SHORT).show();
+//                    };
+//            }
+//        });
         mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
@@ -618,6 +637,4 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
-
-
 }

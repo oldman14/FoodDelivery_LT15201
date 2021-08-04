@@ -79,7 +79,6 @@ public class ProductViewModel extends AndroidViewModel {
         return isOrder;
     }
 
-
     public ProductViewModel(@NonNull Application application) {
         super(application);
         quantityItem.setValue(0);
