@@ -1,10 +1,12 @@
 package com.example.fooddelivery_lt152011.productScreen;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -31,6 +33,9 @@ import android.widget.Toast;
 
 import com.devs.readmoreoption.ReadMoreOption;
 import com.example.fooddelivery_lt152011.HTTP_URL;
+import com.example.fooddelivery_lt152011.HomeScreen.CouponDAO;
+import com.example.fooddelivery_lt152011.HomeScreen.Coupon_Adapter;
+import com.example.fooddelivery_lt152011.HomeScreen.ModelCoupon;
 import com.example.fooddelivery_lt152011.LoginScreen.DbHelper;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
 import com.example.fooddelivery_lt152011.LoginScreen.UserDAO;
@@ -64,6 +69,7 @@ import org.json.JSONObject;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -71,12 +77,20 @@ import java.util.UUID;
 public class ProductFragment extends Fragment implements OneItemClick, TypeBottomSheetApdapter.TypeBotSheetInterface, CartItemAdapter.CartItemInterface {
     public TypeProAdapter typeProAdapter;
     public RecTypeAdapter recTypeAdapter;
+    public  static TextView money;
+    public static ProductViewModel productViewModel;
+    public static FragmentCartBinding fragmentCartBinding;
+    RecyclerView lvcoupon;
+    Coupon_Adapter adapter;
+    ArrayList<ModelCoupon> listcoupon;
+    ArrayList<ModelCoupon> list;
     public ProductViewModel mViewModel;
     public BottomSheetBehavior bottomSheetBehavior;
     public BottomSheetBinding bottomSheetBinding;
     public RelativeLayout bottomsheetLayoutItem;
     public RelativeLayout bottomsheetLayout, bottomsheetOder;
     private LinearLayout linearLayoutBottom;
+     double totalcoupon;
     private OneItemClick oneItemClick;
     public TextView tv_price, tv_quantityCart, tv_quantityItem;
     public FragmentProductBinding fragmentProductBinding;
@@ -88,17 +102,20 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     private List<ListTypeProduct> listTypeProduct;
     private ImageView imgFavorite;
     private TextView typeSelect;
+    public static AlertDialog dialog;
+    public  static  TextView total;
+    public ArrayList<ModelCoupon> lCoupon;
+    CouponDAO couponDAO;
     public BottomSheetDialog bottomSheetDialogType;
     public RadioGroup radioGroup;
     public TypeBottomSheetApdapter.TypeBotSheetInterface typeBotSheetInterface;
     public RadBtnAdapter radBtnAdapter;
     public RecyclerView recyclerViewRad;
-    public FragmentCartBinding fragmentCartBinding;
     BottomSheetBehavior bottomSheetBehaviorCartItem;
     UserDAO userDAO;
+    ImageView back;
     OrderDAO orderDAO;
     DbHelper dbHelper;
-    ProductViewModel productViewModel;
     StoreViewModel storeViewModel;
     LocationViewModel locationViewModel;
     HttpAdapter httpAdapter;
@@ -120,6 +137,8 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         Log.d("TAG", "Reload from backstack: ");
         userDAO = new UserDAO();
         orderDAO = new OrderDAO();
+        couponDAO=new CouponDAO();
+        lCoupon=new ArrayList<>();
         dbHelper = new DbHelper(getActivity());
         mViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         mViewModel.getProducts().observe(getViewLifecycleOwner(), new Observer<List<TypeProduct>>() {
@@ -430,6 +449,11 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
     //bottomsheet hiển thị chi tiết món
     public void oderSheet(){
         View view = fragmentCartBinding.getRoot();
+        //phần coupon
+        money=view.findViewById( R.id.money );
+        ImageView vcoupon=view.findViewById( R.id.vcoupon );
+        total=view.findViewById( R.id.total );
+
         CartItemAdapter cartItemAdapter= new CartItemAdapter(mViewModel.getCart().getValue(), getContext(), mViewModel, ProductFragment.this::EditItemClick);
         RecyclerView recyclerView = view.findViewById(R.id.cartRecyclerView);
         recyclerView.setAdapter(cartItemAdapter);
@@ -520,13 +544,67 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             }
         });
 
+
         productViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                String price = new DecimalFormat("##,###đ").format(aDouble);
-                fragmentCartBinding.orderTotalTextView.setText("Tổng cộng: " + price);
+                String price = new DecimalFormat("##,###đ").format( productViewModel.getTotalPrice().getValue());
+               totalcoupon=productViewModel.getTotalPrice().getValue();
+                fragmentCartBinding.orderTotalTextView.setText("TỔNG CỘNG : "+price);
+                money.setText( String.valueOf(  price ));
+                total.setText( String.valueOf(  price));
             }
         });
+
+
+        vcoupon.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog= new AlertDialog.Builder(getActivity()).create();
+                final View view = View.inflate(getActivity(), R.layout.fragment_coupon_, null);
+                lvcoupon=view.findViewById( R.id.lvcoupon );
+                back=view.findViewById( R.id.back );
+                couponDAO=new CouponDAO();
+                listcoupon=new ArrayList<>();
+                list=new ArrayList<>();
+                listcoupon=couponDAO.listcoupon();
+                for (int i=0; i<listcoupon.size();i++){
+                    if (totalcoupon >= listcoupon.get( i ).getCouponCondition()){
+                        list.add( listcoupon.get( i ) );
+                        Log.d( "TAG", "onCreateView11: "+list.size() );
+                    }
+                }
+                if( list.size()!=0){
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                    lvcoupon.setLayoutManager(layoutManager);
+                    adapter = new Coupon_Adapter(list,getContext());
+                    lvcoupon.setAdapter(adapter);
+                }
+                if(list.size()==0){
+                    final  android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
+                    builder.setMessage("Xin Lỗi.Bạn không đủ điều kiện để giảm giá").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog1, int which) {
+                            dialog1.cancel();
+                            dialog.dismiss();
+                        }
+                    });
+                    final android.app.AlertDialog alertDialog =builder.create();
+                    alertDialog.show();
+                    ;
+                }
+
+                back.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                } );
+
+                dialog.setView(view);
+                dialog.show();
+            }
+        } );
 
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();

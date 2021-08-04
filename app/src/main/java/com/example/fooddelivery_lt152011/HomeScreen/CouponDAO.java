@@ -16,8 +16,8 @@ public class CouponDAO {
         systemService = adapter.create(SystemService.class);
     }
 
-    public ArrayList<ModelCoupon> listcoupon(String status){
-     ArrayList<ModelCoupon> itemcoupon=systemService.coupon( status ).getCoupons();
+    public ArrayList<ModelCoupon> listcoupon( ){
+     ArrayList<ModelCoupon> itemcoupon=systemService.coupon().getCoupon();
         return itemcoupon;
     }
 }
