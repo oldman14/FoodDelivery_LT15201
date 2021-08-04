@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_margin="10dp"
+            android:src="@drawable/back"
+            android:padding="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+        <TextView
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+           android:layout_margin="15dp"
+            android:layout_centerHorizontal="true"
+            android:text="Phiếu Giảm Giá"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <View
+            android:id="@+id/view"
+            android:layout_below="@id/back"
+            android:background="#A8A5A5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lvcoupon"
+           android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/view"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"/>
+    </RelativeLayout>
+
+</FrameLayout>

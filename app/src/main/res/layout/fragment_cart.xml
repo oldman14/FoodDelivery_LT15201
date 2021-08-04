@@ -131,6 +131,7 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/titelorder"
             android:layout_below="@+id/address_cart_item_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,21 +150,111 @@
                     android:textColor="@color/black"
                     android:textSize="22dp" />
             </androidx.cardview.widget.CardView>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cartRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/cart_row"
-                tools:itemCount="2"
-                />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <RelativeLayout
+            android:layout_above="@id/cvtotal"
+            android:layout_below="@id/titelorder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/cartRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/cart_row" />
+            </ScrollView>
         </RelativeLayout>
         <androidx.cardview.widget.CardView
+            android:id="@+id/cvtotal"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_above="@id/order"
+            app:cardElevation="2dp">
+            <RelativeLayout
+                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"
+                android:layout_above="@id/order"
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+                <TextView
+                    android:textSize="18dp"
+                    android:id="@+id/t1"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="Tổng Cộng"
+                    android:layout_margin="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:textSize="16dp"
+                    android:id="@+id/t2"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/t1"
+                    android:text="Thành tiền"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:id="@+id/money"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@id/t1"
+                    android:layout_alignParentRight="true"
+                    android:text="140.000đ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:textSize="16dp"
+                    android:id="@+id/t3"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@id/t2"
+                    android:textColor="@color/gradient_end_color"
+                    android:text="Chọn khuyến mãi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/vcoupon"
+                    android:src="@drawable/next_24"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp"
+                    android:layout_below="@id/money"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:textSize="16dp"
+                    android:layout_below="@id/t3"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Số tiền thanh toán"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:textColor="@color/black"
+                    android:id="@+id/total"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"
+                    android:layout_below="@id/t3"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="100.000đ"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

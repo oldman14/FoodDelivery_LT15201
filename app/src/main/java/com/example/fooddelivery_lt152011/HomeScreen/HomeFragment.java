@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ public class HomeFragment extends Fragment {
     ArrayList<ModelCoupon> list;
     CouponDAO couponDAO;
     CarouselView carouselView;
+    RecyclerView lvSelling;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,7 +39,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         list=new ArrayList<>();
         couponDAO=new CouponDAO();
-        list=couponDAO.listcoupon( "Đang Chạy" );
+        list=couponDAO.listcoupon();
+        lvSelling=view.findViewById( R.id.lvSelling );
         carouselView=view.findViewById( R.id.carouselView );
         carouselView.setPageCount(list.size());
         carouselView.setImageListener( new ImageListener() {

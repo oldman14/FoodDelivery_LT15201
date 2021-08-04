@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:elevation="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+       <LinearLayout
+           android:background="#e3e3e3"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+           <ImageView
+               android:background="@drawable/border_right"
+               android:padding="5dp"
+               android:id="@+id/imgcoupon"
+               android:src="@drawable/coupon"
+               android:layout_width="100dp"
+               android:layout_height="100dp"/>
+           <TextView
+               android:textStyle="bold"
+               android:id="@+id/notecoupon"
+               android:textColor="@color/black"
+               android:layout_gravity="center"
+               android:textSize="20dp"
+               android:layout_margin="10dp"
+               android:text="Giảm Giá 30% tổng giá trị đơn hàng trên 500k"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+       </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

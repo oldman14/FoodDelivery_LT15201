@@ -8,11 +8,11 @@ public class ModelCoupon {
     private Date DateStart;
     private Date DateEnd;
     private String CouponNote;
-    private String CouponCondition;
+    private Double CouponCondition;
     private int CouponPrice;
     private String Status;
 
-    public ModelCoupon(int couponID, String couponImagge, Date dateStart, Date dateEnd, String couponNote, String couponCondition, int couponPrice, String status) {
+    public ModelCoupon(int couponID, String couponImagge, Date dateStart, Date dateEnd, String couponNote, Double couponCondition, int couponPrice, String status) {
         CouponID = couponID;
         CouponImagge = couponImagge;
         DateStart = dateStart;
@@ -63,11 +63,11 @@ public class ModelCoupon {
         CouponNote = couponNote;
     }
 
-    public String getCouponCondition() {
+    public Double getCouponCondition() {
         return CouponCondition;
     }
 
-    public void setCouponCondition(String couponCondition) {
+    public void setCouponCondition(Double couponCondition) {
         CouponCondition = couponCondition;
     }
 

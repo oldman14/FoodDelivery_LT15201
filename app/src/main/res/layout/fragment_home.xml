@@ -22,6 +22,31 @@
         app:slideInterval="7000"
         app:strokeColor="#FF777777"
         app:strokeWidth="1dp"/>
+    <RelativeLayout
+        android:layout_below="@id/carouselView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/title"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_margin="10dp"
+            android:text="SẢN PHẨM BÁN CHẠY"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ScrollView
+            android:layout_margin="10dp"
+            android:layout_below="@id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lvSelling"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </ScrollView>
+    </RelativeLayout>
 </RelativeLayout>
 
 </FrameLayout>
