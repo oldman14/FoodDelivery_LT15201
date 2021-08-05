@@ -45,7 +45,6 @@ public class StoreViewModel extends AndroidViewModel {
         storeID.setValue(0);
     }
     public LiveData<List<Store>> getListStore(){
-        Log.d("TAG", "getListStore: "+storeRepo.getStoreResponse().getValue());
         return  storeRepo.getStoreResponse();
     }
 

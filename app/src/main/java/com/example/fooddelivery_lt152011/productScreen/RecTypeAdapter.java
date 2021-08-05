@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,11 +20,11 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
     private List<TypeProduct> typeProducts;
     private Context context;
     private OneItemClick oneItemClick;
-
-    public RecTypeAdapter(List<TypeProduct> typeProducts, Context context, OneItemClick oneItemClick) {
+    LifecycleOwner lifecycleOwner;
+    public RecTypeAdapter(List<TypeProduct> typeProducts, Context context, LifecycleOwner lifecycleOwner) {
         this.typeProducts = typeProducts;
         this.context = context;
-        this.oneItemClick = oneItemClick;
+        this.lifecycleOwner = lifecycleOwner;
     }
 
     @NonNull
@@ -43,7 +44,7 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
                 false
         );
         layoutManager.setInitialPrefetchItemCount(typeProduct.getProducts().size());
-        RecProductAdapter recProductAdapter = new RecProductAdapter(context, typeProduct.getProducts(),  oneItemClick);
+        RecProductAdapter recProductAdapter = new RecProductAdapter(context, typeProduct.getProducts(), lifecycleOwner);
         Log.d("TAG", "onBindViewHolder: "+typeProduct.getProducts().size());
         holder.recProduct.setLayoutManager(layoutManager);
         holder.recProduct.setAdapter(recProductAdapter);

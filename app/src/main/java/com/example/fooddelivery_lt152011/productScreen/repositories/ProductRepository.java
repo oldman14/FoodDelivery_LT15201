@@ -46,14 +46,10 @@ public class ProductRepository {
             ProductReponse productReponses = productService.getListProduct();
             List<Product> productList = productReponses.getProduct();
             List<Product> products = new ArrayList<>();
-            Log.d("TAG", "getFavoriteProductList: "+favorites.get(0).getProductID());
             for (int i = 0; i < favorites.size(); i++) {
-                Log.d("TAG", "getFavorite: "+favorites.get(i).getProductID());
                 for (int j = 0; j < productList.size(); j++) {
-                    Log.d("TAG", "getFavoriteProduct: "+productList.get(j).getProductID());
                     if(favorites.get(i).getProductID() == productList.get(j).getProductID()){
                         products.add(productList.get(j));
-                        Log.d("TAG", "getFavoriteProduct: "+productList.get(j).getProductID());
                     }
                 }
             }

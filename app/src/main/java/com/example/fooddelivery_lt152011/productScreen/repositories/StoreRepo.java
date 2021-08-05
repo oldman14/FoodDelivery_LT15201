@@ -38,7 +38,6 @@ public class StoreRepo {
         try {
           StoreResponse storeResponse = storeService.getListStore();
           List<Store> stores= storeResponse.getStores();
-          Log.d("TAG", "getStore: "+storeResponse.getStores().get(0).getStoreName());
           listStore.setValue(stores);
         } catch (Exception e){
             Log.d("TAG", "getStore: "+e);
