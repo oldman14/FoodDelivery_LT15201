@@ -714,5 +714,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomSheetDialog.show();
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
     }
 }

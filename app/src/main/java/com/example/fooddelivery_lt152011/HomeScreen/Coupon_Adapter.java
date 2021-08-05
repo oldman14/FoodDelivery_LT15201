@@ -21,7 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Coupon_Adapter extends RecyclerView.Adapter<Coupon_Adapter.ViewHolder> {
-    public  static double couponprice;
+    public static double couponprice;
     ArrayList<ModelCoupon> lcoupon;
     Context context;
 
@@ -32,7 +32,7 @@ public class Coupon_Adapter extends RecyclerView.Adapter<Coupon_Adapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View v= LayoutInflater.from( context ).inflate( R.layout.item_coupon,parent,false);
+        View v = LayoutInflater.from( context ).inflate( R.layout.item_coupon, parent, false );
         ViewHolder holder = new ViewHolder( v );
         return holder;
     }
@@ -51,23 +51,24 @@ public class Coupon_Adapter extends RecyclerView.Adapter<Coupon_Adapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgcoupon;
         TextView notecoupon;
+
         public ViewHolder(@NonNull @NotNull View itemView) {
             super( itemView );
-            imgcoupon=itemView.findViewById( R.id.imgcoupon );
-            notecoupon=itemView.findViewById( R.id.notecoupon );
+            imgcoupon = itemView.findViewById( R.id.imgcoupon );
+            notecoupon = itemView.findViewById( R.id.notecoupon );
             itemView.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    couponprice= lcoupon.get( getAdapterPosition()).getCouponPrice();
-                    Log.d( "TAG", "onClick123: "+couponprice );
+                    couponprice = lcoupon.get( getAdapterPosition() ).getCouponPrice();
+                    Log.d( "TAG", "onClick123: " + couponprice );
 
-                    double discount= (ProductFragment.productViewModel.getTotalPrice().getValue() * (Coupon_Adapter.couponprice/100));
-                    Log.d( "TAG", "onClick: "+discount );
-                    String price = new DecimalFormat("##,###đ").format( ProductFragment.productViewModel.getTotalPrice().getValue() - discount);
-                    String money1=new DecimalFormat("##,###đ").format(  ProductFragment.productViewModel.getTotalPrice().getValue());
-                    ProductFragment.total.setText(price);
-                    ProductFragment.money.setText(money1);
-                    ProductFragment.fragmentCartBinding.orderTotalTextView.setText("TỔNG CỘNG : "+price);
+                    double discount = (ProductFragment.productViewModel.getTotalPrice().getValue() * (Coupon_Adapter.couponprice / 100));
+                    Log.d( "TAG", "onClick: " + discount );
+                    String price = new DecimalFormat( "##,###đ" ).format( ProductFragment.productViewModel.getTotalPrice().getValue() - discount );
+                    String money1 = new DecimalFormat( "##,###đ" ).format( ProductFragment.productViewModel.getTotalPrice().getValue() );
+                    ProductFragment.total.setText( price );
+                    ProductFragment.money.setText( money1 );
+                    ProductFragment.fragmentCartBinding.orderTotalTextView.setText( "TỔNG CỘNG : " + price );
                     ProductFragment.dialog.dismiss();
                 }
             } );

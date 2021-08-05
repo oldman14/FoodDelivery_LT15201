@@ -1,6 +1,7 @@
 package com.example.fooddelivery_lt152011.networking.Service;
 
 
+import com.example.fooddelivery_lt152011.HomeScreen.ModelCountProduct;
 import com.example.fooddelivery_lt152011.HomeScreen.ModelListCoupon;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelStatusUser;
 import com.example.fooddelivery_lt152011.LoginScreen.ModelUser;
@@ -42,4 +43,7 @@ public interface SystemService {
 
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/Order_getNewID.php/")
     int getNewID();
+    @HttpMethod(method = MethodType.GET, url = "FOODDELIVERY/api/GetCountProduct.php/")
+    ModelCountProduct countProduct();
+
 }

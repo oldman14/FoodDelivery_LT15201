@@ -60,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/namePr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{product.product.ProductName}"
@@ -67,6 +68,7 @@
                     android:textColor="@color/black"
                     android:textSize="22dp" />
                 <TextView
+                    android:id="@+id/pricePr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

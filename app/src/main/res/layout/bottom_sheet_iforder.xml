@@ -314,16 +314,25 @@
         android:text="Danh Sách Mua"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvSP"
-        android:layout_below="@id/dsmua"
-        android:layout_margin="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"/>
+        <ScrollView
+            android:layout_below="@id/dsmua"
+            android:id="@+id/scrollview"
+            android:layout_above="@id/tong"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvSP"
+                android:layout_below="@id/dsmua"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </ScrollView>
     <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:id="@+id/tong"
+        android:layout_alignParentBottom="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_below="@id/rcvSP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView

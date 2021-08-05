@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -16,7 +17,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.example.fooddelivery_lt152011.MyOrder.ProductOrderIF_Adapter;
 import com.example.fooddelivery_lt152011.R;
+import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
+import com.example.fooddelivery_lt152011.productScreen.OneItemClick;
+import com.example.fooddelivery_lt152011.productScreen.Product;
+import com.example.fooddelivery_lt152011.productScreen.ProductFragment;
+import com.example.fooddelivery_lt152011.productScreen.RecProductAdapter;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
@@ -32,6 +40,8 @@ public class HomeFragment extends Fragment {
     CouponDAO couponDAO;
     CarouselView carouselView;
     RecyclerView lvSelling;
+    ArrayList<Product> arrayList;
+    CountProductDAO countProductDAO;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,6 +50,8 @@ public class HomeFragment extends Fragment {
         list=new ArrayList<>();
         couponDAO=new CouponDAO();
         list=couponDAO.listcoupon();
+        arrayList=new ArrayList<>();
+        countProductDAO=new CountProductDAO();
         lvSelling=view.findViewById( R.id.lvSelling );
         carouselView=view.findViewById( R.id.carouselView );
         carouselView.setPageCount(list.size());
@@ -49,6 +61,8 @@ public class HomeFragment extends Fragment {
                 Picasso.get().load( list.get( position).getCouponImagge() ).into( imageView );
             }
         } );
+
         return view;
     }
+
 }
