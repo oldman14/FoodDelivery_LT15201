@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -74,7 +76,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class ProductFragment extends Fragment implements OneItemClick, TypeBottomSheetApdapter.TypeBotSheetInterface, CartItemAdapter.CartItemInterface {
+public class ProductFragment extends Fragment  implements TypeBottomSheetApdapter.TypeBotSheetInterface, CartItemAdapter.CartItemInterface {
     public TypeProAdapter typeProAdapter;
     public RecTypeAdapter recTypeAdapter;
     public  static TextView money;
@@ -136,7 +138,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         super.onViewCreated(view, savedInstanceState);
         MainActivity.navigationView.setVisibility(View.VISIBLE);
         MainActivity.toolbar_address.setVisibility(View.VISIBLE);
-        Log.d("TAG", "Reload from backstack: ");
         userDAO = new UserDAO();
         orderDAO = new OrderDAO();
         couponDAO=new CouponDAO();
@@ -149,7 +150,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 RecyclerView recyclerView = view.findViewById(R.id.rec_product_fragment);
                 if (typeProducts!=null){
                     fragmentProductBinding.setIsLoading(false);
-                    recTypeAdapter = new RecTypeAdapter(typeProducts, getContext(), ProductFragment.this::onItemClick);
+                    recTypeAdapter = new RecTypeAdapter(typeProducts, getContext(), getViewLifecycleOwner());
                     linearLayoutManager = new LinearLayoutManager(getContext());
                     linearLayoutManager.scrollToPosition(0);
                     recyclerView.computeHorizontalScrollOffset();
@@ -238,7 +239,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
                     @Override
                     public void onChanged(List<Product> products) {
-                        myFragmentFav = new FavoriteFragment(getContext(),products, ProductFragment.this::onItemClick);
+                        myFragmentFav = new FavoriteFragment(getContext(),products, getViewLifecycleOwner());
                     }
                 });
                 activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragmentFav ).addToBackStack( null ).commit();
@@ -327,9 +328,8 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         mViewModel.setQuantityItem(cartItem.quantity);
         mViewModel.setSize(cartItem.size);
         bottomSheetBinding.setProduct(mViewModel);
-        Log.d("TAG", "EditItemClick: "+cartItem.quantity);
-        ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
-        bottomSheetBinding.setHandleClick(productHandleClick);
+//        RecProductAdapter.ViewHolder.ProductHandleClick productHandleClick = new RecProductAdapter.ViewHolder.ProductHandleClick(getContext());
+//        bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
         mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
             @Override
@@ -338,7 +338,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
             }
         });
-
         radBtnAdapter = new RadBtnAdapter(product.getSizes(), getContext(), mViewModel);
         recyclerViewRad = view.findViewById(R.id.recRadioButton);
         recyclerViewRad.setAdapter(radBtnAdapter);
@@ -361,7 +360,6 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                 }
             }
         });
-
         imageButton_favorute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -409,55 +407,48 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-    public class ProductHandleClick {
-        Context context;
-        public ProductHandleClick(Context context) {
-            this.context = context;
-        }
-        public void addItemProduct(Product product,  int quantity, Size size, int amount ){
-            if(mViewModel.getIsEditing().getValue()!=true){
-                if (quantity!=0){
-                    mViewModel.addItemToCart(product, quantity, size, amount);
-                    bottomSheetDialog.dismiss();
-                    Log.d("TAG", "addItemProduct: "+mViewModel.getCart().getValue().size());
-                }
-            } else {
-                if (quantity!=0){
-                    mViewModel.changeQuantity(mViewModel.getCartItemMutable().getValue(),quantity);
-                    bottomSheetDialog.dismiss();
-                    Log.d("TAG", "addItemProduct: "+mViewModel.getCart().getValue().size());
-                } else {
-                    mViewModel.removeItemFromCart(mViewModel.getCartItemMutable().getValue());
-                    bottomSheetDialog.dismiss();
-                    Log.d("TAG", "remove cart: "+mViewModel.getCartItemMutable().getValue());
-                }
-            }
-        }
-        public void changeFavorite(Product product){
-            Log.d("TAG", "changeFavorite: "+product.getProductID()+" "+MainActivity.UserID);
-            if (mViewModel.favourite.getValue()==true){
-                mViewModel.setFavourite(false);
-                if (favoriteService.deleteFav(MainActivity.UserID, product.ProductID)){
-                    Toast.makeText(getContext(), "Delete Favo thanh cong", Toast.LENGTH_SHORT).show();
-                     mViewModel.getFavorite().getValue();
-                } else {
-                    Toast.makeText(getContext(), "Delete that bai", Toast.LENGTH_SHORT).show();
-
-                }
-            } else {
-                mViewModel.setFavourite(true);
-                if (favoriteService.insertFav(MainActivity.UserID, product.ProductID)==true){
-                    Toast.makeText(getContext(), "Favo thanh cong", Toast.LENGTH_SHORT).show();
-                    mViewModel.getFavorite().getValue();
-                } else {
-                    Toast.makeText(getContext(), "Favo that bai", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-        public String convertString(int price){
-            return new DecimalFormat("##,###đ").format(price);
-        }
-    }
+//    public class ProductHandleClick {
+//        Context context;
+//        public ProductHandleClick(Context context) {
+//            this.context = context;
+//        }
+//        public void addItemProduct(Product product,  int quantity, Size size, int amount ){
+//            if(mViewModel.getIsEditing().getValue()!=true){
+//                if (quantity!=0){
+//                    mViewModel.addItemToCart(product, quantity, size, amount);
+//                    bottomSheetDialog.dismiss();
+//                }
+//            } else {
+//                if (quantity!=0){
+//                    mViewModel.changeQuantity(mViewModel.getCartItemMutable().getValue(),quantity);
+//                    bottomSheetDialog.dismiss();
+//                } else {
+//                    mViewModel.removeItemFromCart(mViewModel.getCartItemMutable().getValue());
+//                    bottomSheetDialog.dismiss();
+//                }
+//            }
+//        }
+//        public void changeFavorite(Product product){
+//            if (mViewModel.favourite.getValue()==true){
+//                mViewModel.setFavourite(false);
+//                if (favoriteService.deleteFav(MainActivity.UserID, product.ProductID)){
+//                     mViewModel.getFavorite().getValue();
+//                } else {
+//                    Log.d("TAG", "Delete favorite thất bại");
+//                }
+//            } else {
+//                mViewModel.setFavourite(true);
+//                if (favoriteService.insertFav(MainActivity.UserID, product.ProductID)==true){
+//                    mViewModel.getFavorite().getValue();
+//                } else {
+//                    Log.d("TAG", "Insert favorite thất bại");
+//                }
+//            }
+//        }
+//        public String convertString(int price){
+//            return new DecimalFormat("##,###đ").format(price);
+//        }
+//    }
     //bottomsheet hiển thị chi tiết món
     public void oderSheet(){
         View view = fragmentCartBinding.getRoot();
@@ -513,12 +504,11 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    jsonArray.put(jsonObject);
+                        jsonArray.put(jsonObject);
                 }
                 JSONObject oderObject = new JSONObject();
                 final String oderID = UUID.randomUUID().toString().replace("-", "");
 //                UUID oderID = UUID.randomUUID();
-
 //                int oderID = orderDAO.getNewID();
                 try {
                     ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
@@ -557,7 +547,7 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
             @Override
             public void onChanged(Double aDouble) {
                 String price = new DecimalFormat("##,###đ").format( productViewModel.getTotalPrice().getValue());
-               totalcoupon=productViewModel.getTotalPrice().getValue();
+                totalcoupon=productViewModel.getTotalPrice().getValue();
                 fragmentCartBinding.orderTotalTextView.setText("TỔNG CỘNG : "+price);
                 money.setText( String.valueOf(  price ));
                 total.setText( String.valueOf(  price));
@@ -619,101 +609,101 @@ public class ProductFragment extends Fragment implements OneItemClick, TypeBotto
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
-    @Override
-    public void onItemClick(Product product, HttpAdapter httpAdapter1) {
-        mViewModel.setIsEditing(false);
-        mViewModel.setProduct(product);
-        bottomSheetBinding.setProduct(mViewModel);
-        ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
-        bottomSheetBinding.setHandleClick(productHandleClick);
-        View view = bottomSheetBinding.getRoot();
-        ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
-        mViewModel.setSize(product.getSizes().get(0));
-        mViewModel.setFavourite(false);
-        mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                Log.d("TAG", "onChanged: "+products.size());
-                for (int i = 0; i < products.size(); i++) {
-                    if (product.getProductID() == products.get(i).getProductID()){
-                        mViewModel.setFavourite(true);
-                    }
-                }
-            }
-        });
-        mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
-            @Override
-            public void onChanged(Size size) {
-                int quantity = mViewModel.getQuantityItem().getValue();
-                mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
-            }
-        });
 
-        radBtnAdapter = new RadBtnAdapter(product.getSizes(), getContext(), mViewModel);
-        recyclerViewRad = view.findViewById(R.id.recRadioButton);
-        recyclerViewRad.setAdapter(radBtnAdapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(RecyclerView.VERTICAL);
-        recyclerViewRad.setLayoutManager(layoutManager);
-        btn_minus = view.findViewById(R.id.btn_minus_quantity);
-        btn_plus = view.findViewById(R.id.btn_plus_quantity);
-        tv_quantityItem = view.findViewById(R.id.tv_quantity_detail_product);
-        TextView detail_product = view.findViewById(R.id.detail_product);
-        readMoreOption.addReadMoreTo(detail_product, product.ProductNote);
-        mViewModel.setQuantityItem(1);
-        mViewModel.getFavoite().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean==true){
-                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_24);
-                } else {
-                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_border_24);
-                }
-            }
-        });
-//        imageButton_favorute.setOnClickListener(new View.OnClickListener() {
+
+
+//    @Override
+//    public void onItemClick(Product product, HttpAdapter httpAdapter1) {
+//        mViewModel.setIsEditing(false);
+//        mViewModel.setProduct(product);
+//        bottomSheetBinding.setProduct(mViewModel);
+//        ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
+//        bottomSheetBinding.setHandleClick(productHandleClick);
+//        View view = bottomSheetBinding.getRoot();
+//        ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
+//        mViewModel.setSize(product.getSizes().get(0));
+//        mViewModel.setFavourite(false);
+//        mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
 //            @Override
-//            public void onClick(View v) {
-//                    if(favoriteService.insertFav(MainActivity.UserID,product.ProductID)){
-//                        Toast.makeText(getContext(), "favorite", Toast.LENGTH_SHORT).show();
-//                    };
+//            public void onChanged(List<Product> products) {
+//                for (int i = 0; i < products.size(); i++) {
+//                    if (product.getProductID() == products.get(i).getProductID()){
+//                        mViewModel.setFavourite(true);
+//                    }
+//                }
 //            }
 //        });
-        mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                tv_quantityItem.setText(integer.toString());
-                mViewModel.setPriceProduct((integer * product.getProductPrice())+mViewModel.getSize().getValue().getSizePrice()*integer);
-            }
-        });
-        Button btn_chonMon = view.findViewById(R.id.btn_chonMon);
-        mViewModel.getPriceProduct().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                String s = new DecimalFormat("##,###đ").format(integer);
-                btn_chonMon.setText("Chọn món - "+s);
-            }
-        });
-        btn_minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.minusQuantity(false);
-            }
-        });
-        btn_plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewModel.plusQuantity();
-            }
-        });
-        bottomSheetDialog = new BottomSheetDialog(getContext());
-        if (view.getParent()!=null){
-            ((ViewGroup)view.getParent()).removeView(view);
-        }
-        bottomSheetDialog.setContentView(view);
-        bottomSheetDialog.show();
-        bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-    }
+//        mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
+//            @Override
+//            public void onChanged(Size size) {
+//                int quantity = mViewModel.getQuantityItem().getValue();
+//                mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
+//            }
+//        });
+//        radBtnAdapter = new RadBtnAdapter(product.getSizes(), getContext(), mViewModel);
+//        recyclerViewRad = view.findViewById(R.id.recRadioButton);
+//        recyclerViewRad.setAdapter(radBtnAdapter);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.setOrientation(RecyclerView.VERTICAL);
+//        recyclerViewRad.setLayoutManager(layoutManager);
+//        btn_minus = view.findViewById(R.id.btn_minus_quantity);
+//        btn_plus = view.findViewById(R.id.btn_plus_quantity);
+//        tv_quantityItem = view.findViewById(R.id.tv_quantity_detail_product);
+//        TextView detail_product = view.findViewById(R.id.detail_product);
+//        readMoreOption.addReadMoreTo(detail_product, product.ProductNote);
+//        mViewModel.setQuantityItem(1);
+//        mViewModel.getFavoite().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+//            @Override
+//            public void onChanged(Boolean aBoolean) {
+//                if (aBoolean==true){
+//                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_24);
+//                } else {
+//                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_border_24);
+//                }
+//            }
+//        });
+////        imageButton_favorute.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                    if(favoriteService.insertFav(MainActivity.UserID,product.ProductID)){
+////                        Toast.makeText(getContext(), "favorite", Toast.LENGTH_SHORT).show();
+////                    };
+////            }
+////        });
+//        mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+//            @Override
+//            public void onChanged(Integer integer) {
+//                tv_quantityItem.setText(integer.toString());
+//                mViewModel.setPriceProduct((integer * product.getProductPrice())+mViewModel.getSize().getValue().getSizePrice()*integer);
+//            }
+//        });
+//        Button btn_chonMon = view.findViewById(R.id.btn_chonMon);
+//        mViewModel.getPriceProduct().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+//            @Override
+//            public void onChanged(Integer integer) {
+//                String s = new DecimalFormat("##,###đ").format(integer);
+//                btn_chonMon.setText("Chọn món - "+s);
+//            }
+//        });
+//        btn_minus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mViewModel.minusQuantity(false);
+//            }
+//        });
+//        btn_plus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mViewModel.plusQuantity();
+//            }
+//        });
+//        bottomSheetDialog = new BottomSheetDialog(getContext());
+//        if (view.getParent()!=null){
+//            ((ViewGroup)view.getParent()).removeView(view);
+//        }
+//        bottomSheetDialog.setContentView(view);
+//        bottomSheetDialog.show();
+//        bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//    }
 }

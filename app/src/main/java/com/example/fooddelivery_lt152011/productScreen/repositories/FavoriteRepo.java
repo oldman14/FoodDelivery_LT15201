@@ -34,10 +34,8 @@ public class FavoriteRepo {
 
     public LiveData<List<Favorite>> getFavorite() {
         try {
-            Log.d("TAG", "getFavorite: "+ MainActivity.UserID);
             FavoriteRespone favoriteRespone = favoriteService.getAllFav(MainActivity.UserID);
             List<Favorite> favorites = favoriteRespone.getFavorites();
-            Log.d("TAG", "getFavorite: "+favorites);
             favorite.setValue(favorites);
             return favorite;
         } catch (Exception e){

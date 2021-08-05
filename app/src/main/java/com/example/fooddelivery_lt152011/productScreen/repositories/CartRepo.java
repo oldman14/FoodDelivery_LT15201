@@ -36,9 +36,7 @@ public class  CartRepo {
         }
         List<CartItem> cartItemList = new ArrayList<>(mutableCart.getValue());
         for (CartItem cartItem: cartItemList) {
-            Log.d("TAG", "addItemToCartzxc: "+cartItem.getProduct().getProductName()+" "+cartItem.size.SizeName);
             if (cartItem.getProduct().getProductID()==(product.getProductID())&&cartItem.size==size) {
-                Log.d("TAG", "Log size: "+cartItem.size+" "+size);
                 int index = cartItemList.indexOf(cartItem);
                 cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 cartItemList.set(index, cartItem);

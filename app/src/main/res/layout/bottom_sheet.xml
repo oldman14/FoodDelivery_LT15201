@@ -9,7 +9,7 @@
         <import type="android.view.View"/>
         <variable
             name="handleClick"
-            type="com.example.fooddelivery_lt152011.productScreen.ProductFragment.ProductHandleClick" />
+            type="com.example.fooddelivery_lt152011.productScreen.RecProductAdapter.ViewHolder.ProductHandleClick" />
 
 
     </data>
