@@ -45,7 +45,6 @@ public class RecTypeAdapter extends RecyclerView.Adapter<RecTypeAdapter.ViewHold
         );
         layoutManager.setInitialPrefetchItemCount(typeProduct.getProducts().size());
         RecProductAdapter recProductAdapter = new RecProductAdapter(context, typeProduct.getProducts(), lifecycleOwner);
-        Log.d("TAG", "onBindViewHolder: "+typeProduct.getProducts().size());
         holder.recProduct.setLayoutManager(layoutManager);
         holder.recProduct.setAdapter(recProductAdapter);
     }
