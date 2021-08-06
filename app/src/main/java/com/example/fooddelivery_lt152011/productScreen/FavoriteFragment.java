@@ -18,12 +18,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.fooddelivery_lt152011.HTTP_URL;
 import com.example.fooddelivery_lt152011.MainActivity;
 import com.example.fooddelivery_lt152011.R;
 import com.example.fooddelivery_lt152011.databinding.BottomSheetBinding;
+import com.example.fooddelivery_lt152011.databinding.FragmentProductBinding;
 import com.example.fooddelivery_lt152011.networking.Http.HttpAdapter;
 import com.example.fooddelivery_lt152011.networking.Service.FavoriteService;
 import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
@@ -36,21 +38,19 @@ import java.util.List;
 
 public class FavoriteFragment extends Fragment {
     BottomNavigationView bottomNavigationView;
-    Context context;
     List<Product> productFavorite;
     private OneItemClick oneItemClick;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
     ProductViewModel mViewModel;
-    BottomSheetBinding bottomSheetBinding;
-    BottomSheetDialog bottomSheetDialog;
     HttpAdapter httpAdapter;
     FavoriteService favoriteService;
+    public BottomSheetBinding bottomSheetBinding;
     LifecycleOwner lifecycleOwner;
-    public FavoriteFragment(Context context, List<Product> productFavorite, LifecycleOwner lifecycleOwner) {
-        this.context = context;
+    public RelativeLayout bottomsheetLayoutItem;
+
+    public FavoriteFragment(List<Product> productFavorite) {
         this.productFavorite = productFavorite;
-        this.lifecycleOwner = lifecycleOwner;
     }
 
     @Override
@@ -64,13 +64,20 @@ public class FavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
-        recyclerView = view.findViewById(R.id.rec_favorite);
         bottomSheetBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_sheet, container, false);
+        recyclerView = view.findViewById(R.id.rec_favorite);
+        bottomsheetLayoutItem = view.findViewById(R.id.bottomSheet_detailproduct);
         httpAdapter = new HttpAdapter();
         httpAdapter.setBaseUrl( HTTP_URL.Final_URL );
         favoriteService = httpAdapter.create(FavoriteService.class);
         mViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
-        RecProductAdapter recProductAdapter = new RecProductAdapter(context, productFavorite, lifecycleOwner);
+        mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                Log.d("TAG", "onChanged: "+integer);
+            }
+        });
+        RecProductAdapter recProductAdapter = new RecProductAdapter(getContext(), productFavorite, getViewLifecycleOwner());
         linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.scrollToPosition(0);
         recyclerView.computeHorizontalScrollOffset();

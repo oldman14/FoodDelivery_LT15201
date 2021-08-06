@@ -86,8 +86,8 @@
                 <ImageButton
                     android:background="@color/white"
                     android:id="@+id/imgBtn_favourite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:onClick="@{()->handleClick.changeFavorite(product.product)}"
                 />
@@ -153,38 +153,6 @@
                 tools:itemCount="2"
                 tools:listitem="@layout/radio_button_custom"
                 />
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                >-->
-<!--                <RadioGroup-->
-<!--                    android:id="@+id/radioGroupSize"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    >-->
-<!--                    <RadioButton-->
-<!--                            android:layout_weight="9"-->
-<!--                            android:checked="true"-->
-<!--                            android:buttonTint="@color/orange_primary"-->
-<!--                            android:id="@+id/btn_radio_size_nho"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:text="@{product.product.sizes.get(0).SizeName}"-->
-<!--                            android:textSize="16dp" />-->
-<!--                    <View-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="0.5dp"-->
-<!--                        android:background="@color/secondary_font"-->
-<!--                        android:paddingHorizontal="10dp"/>-->
-<!--                    <RadioButton-->
-<!--                        android:buttonTint="@color/orange_primary"-->
-<!--                        android:id="@+id/btn_radio_size_lon"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="@{product.product.sizes.get(1).SizeName}"-->
-<!--                        android:textSize="16dp" />-->
-<!--                </RadioGroup>-->
-<!--            </RelativeLayout>-->
         </LinearLayout>
             </LinearLayout>
         </ScrollView>
@@ -210,15 +178,18 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_minus24"/>
+
                 <TextView
-                    android:gravity="center_horizontal"
                     android:id="@+id/tv_quantity_detail_product"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:textColor="@color/black"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginHorizontal="5dp"
-                    android:layout_gravity="center_vertical"/>
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:text="123"
+                    android:textSize="20dp" />
+
                 <ImageButton
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/round_button"

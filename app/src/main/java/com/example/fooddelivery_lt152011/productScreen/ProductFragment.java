@@ -239,7 +239,7 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
                     @Override
                     public void onChanged(List<Product> products) {
-                        myFragmentFav = new FavoriteFragment(getContext(),products, getViewLifecycleOwner());
+                        myFragmentFav = new FavoriteFragment(products);
                     }
                 });
                 activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragmentFav ).addToBackStack( null ).commit();
@@ -328,8 +328,8 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
         mViewModel.setQuantityItem(cartItem.quantity);
         mViewModel.setSize(cartItem.size);
         bottomSheetBinding.setProduct(mViewModel);
-//        RecProductAdapter.ViewHolder.ProductHandleClick productHandleClick = new RecProductAdapter.ViewHolder.ProductHandleClick(getContext());
-//        bottomSheetBinding.setHandleClick(productHandleClick);
+        RecProductAdapter.ViewHolder.ProductHandleClick productHandleClick = new RecProductAdapter.ViewHolder.ProductHandleClick(getContext());
+        bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
         mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
             @Override
@@ -500,7 +500,7 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                         jsonObject.put("productID", item.product.ProductID);
                         jsonObject.put("quantity", item.getQuantity());
                         jsonObject.put("sizeID", item.size.SizeID);
-                        jsonObject.put("amount", item.amount);// nãi e thêm chỗ này vs sửa mấy cái put ên dưới
+                        jsonObject.put("amount", item.amount);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -508,8 +508,6 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 }
                 JSONObject oderObject = new JSONObject();
                 final String oderID = UUID.randomUUID().toString().replace("-", "");
-//                UUID oderID = UUID.randomUUID();
-//                int oderID = orderDAO.getNewID();
                 try {
                     ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
                     oderObject.put("userID", modelUser.getUserID());
@@ -541,8 +539,6 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 });
             }
         });
-
-
         productViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
@@ -553,8 +549,6 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 total.setText( String.valueOf(  price));
             }
         });
-
-
         vcoupon.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -609,101 +603,4 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
-
-
-
-//    @Override
-//    public void onItemClick(Product product, HttpAdapter httpAdapter1) {
-//        mViewModel.setIsEditing(false);
-//        mViewModel.setProduct(product);
-//        bottomSheetBinding.setProduct(mViewModel);
-//        ProductHandleClick productHandleClick = new ProductHandleClick(getContext());
-//        bottomSheetBinding.setHandleClick(productHandleClick);
-//        View view = bottomSheetBinding.getRoot();
-//        ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
-//        mViewModel.setSize(product.getSizes().get(0));
-//        mViewModel.setFavourite(false);
-//        mViewModel.getFavorite().observe(getViewLifecycleOwner(), new Observer<List<Product>>() {
-//            @Override
-//            public void onChanged(List<Product> products) {
-//                for (int i = 0; i < products.size(); i++) {
-//                    if (product.getProductID() == products.get(i).getProductID()){
-//                        mViewModel.setFavourite(true);
-//                    }
-//                }
-//            }
-//        });
-//        mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
-//            @Override
-//            public void onChanged(Size size) {
-//                int quantity = mViewModel.getQuantityItem().getValue();
-//                mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
-//            }
-//        });
-//        radBtnAdapter = new RadBtnAdapter(product.getSizes(), getContext(), mViewModel);
-//        recyclerViewRad = view.findViewById(R.id.recRadioButton);
-//        recyclerViewRad.setAdapter(radBtnAdapter);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-//        layoutManager.setOrientation(RecyclerView.VERTICAL);
-//        recyclerViewRad.setLayoutManager(layoutManager);
-//        btn_minus = view.findViewById(R.id.btn_minus_quantity);
-//        btn_plus = view.findViewById(R.id.btn_plus_quantity);
-//        tv_quantityItem = view.findViewById(R.id.tv_quantity_detail_product);
-//        TextView detail_product = view.findViewById(R.id.detail_product);
-//        readMoreOption.addReadMoreTo(detail_product, product.ProductNote);
-//        mViewModel.setQuantityItem(1);
-//        mViewModel.getFavoite().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(Boolean aBoolean) {
-//                if (aBoolean==true){
-//                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_24);
-//                } else {
-//                    imageButton_favorute.setImageResource(R.drawable.ic_favorite_border_24);
-//                }
-//            }
-//        });
-////        imageButton_favorute.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-////                    if(favoriteService.insertFav(MainActivity.UserID,product.ProductID)){
-////                        Toast.makeText(getContext(), "favorite", Toast.LENGTH_SHORT).show();
-////                    };
-////            }
-////        });
-//        mViewModel.getQuantityItem().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-//            @Override
-//            public void onChanged(Integer integer) {
-//                tv_quantityItem.setText(integer.toString());
-//                mViewModel.setPriceProduct((integer * product.getProductPrice())+mViewModel.getSize().getValue().getSizePrice()*integer);
-//            }
-//        });
-//        Button btn_chonMon = view.findViewById(R.id.btn_chonMon);
-//        mViewModel.getPriceProduct().observe(getViewLifecycleOwner(), new Observer<Integer>() {
-//            @Override
-//            public void onChanged(Integer integer) {
-//                String s = new DecimalFormat("##,###đ").format(integer);
-//                btn_chonMon.setText("Chọn món - "+s);
-//            }
-//        });
-//        btn_minus.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mViewModel.minusQuantity(false);
-//            }
-//        });
-//        btn_plus.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mViewModel.plusQuantity();
-//            }
-//        });
-//        bottomSheetDialog = new BottomSheetDialog(getContext());
-//        if (view.getParent()!=null){
-//            ((ViewGroup)view.getParent()).removeView(view);
-//        }
-//        bottomSheetDialog.setContentView(view);
-//        bottomSheetDialog.show();
-//        bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
-//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//    }
 }

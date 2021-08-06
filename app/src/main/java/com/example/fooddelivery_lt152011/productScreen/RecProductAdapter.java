@@ -40,12 +40,11 @@ import java.util.List;
 
 public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.ViewHolder>{
 
-    public Context context;
+    public static Context context;
     public List<Product> productList;
-    HttpAdapter httpAdapter;
+    static HttpAdapter httpAdapter;
     public FragmentProductBinding fragmentProductBinding;
-    public BottomSheetBinding bottomSheetBinding;
-    LifecycleOwner lifecycleOwner;
+    static LifecycleOwner lifecycleOwner;
     public RecProductAdapter(Context context, List<Product> productList, LifecycleOwner lifecycleOwner) {
         this.context = context;
         this.productList = productList;
@@ -72,7 +71,6 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d( "TAG", "Log in RecPro: "+product.getSizes() );
                 holder.oneItemClick(product);
             }
         });
@@ -83,19 +81,19 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         return productList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_proName, tv_proNote, tv_proPrice;
         ImageView imageView;
-        ProductViewModel mViewModel;
+        public static ProductViewModel mViewModel;
         public RadBtnAdapter radBtnAdapter;
         public RecyclerView recyclerViewRad;
         public ImageButton btn_minus, btn_plus;
-        public TextView tv_price, tv_quantityCart, tv_quantityItem;//ánh xạ thiếếu buton lê bêm yêu thích vs lại số lương lúc trừ vs cộng
-        public BottomSheetDialog bottomSheetDialog;
+        public TextView tv_price, tv_quantityCart, tv_quantityItem;
+        public static BottomSheetDialog bottomSheetDialog;
         public BottomSheetBehavior bottomSheetBehavior;
         public ReadMoreOption readMoreOption;
-        FavoriteService favoriteService;
-        OneItemClick oneItemClick;
+        static FavoriteService favoriteService;
+        public BottomSheetBinding bottomSheetBinding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(ProductViewModel.class);
@@ -127,7 +125,6 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
             bottomSheetBinding.setHandleClick(productHandleClick);
             View view = bottomSheetBinding.getRoot();
             ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
-            Log.d( "TAG", "oneItemClick: "+product.getSizes() );
             mViewModel.setSize(product.getSizes().get(0));
             mViewModel.setFavourite(false);
             mViewModel.getFavorite().observe(lifecycleOwner, new Observer<List<Product>>() {
@@ -169,18 +166,10 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
                     }
                 }
             });
-//        imageButton_favorute.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                    if(favoriteService.insertFav(MainActivity.UserID,product.ProductID)){
-//                        Toast.makeText(context, "favorite", Toast.LENGTH_SHORT).show();
-//
-//                    };
-//            }
-//        });
             mViewModel.getQuantityItem().observe(lifecycleOwner, new Observer<Integer>() {
                 @Override
                 public void onChanged(Integer integer) {
+                    Log.d("TAG", "onChanged: "+integer);
                     tv_quantityItem.setText(integer.toString());
                     mViewModel.setPriceProduct((integer * product.getProductPrice())+mViewModel.getSize().getValue().getSizePrice()*integer);
                 }
@@ -215,12 +204,13 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
 
-        public class ProductHandleClick {
+        public static class ProductHandleClick {
             Context context;
             public ProductHandleClick(Context context) {
                 this.context = context;
             }
             public void addItemProduct(Product product,  int quantity, Size size, int amount ){
+                Log.d("TAG", "addItemProduct: "+context);
                 if(mViewModel.getIsEditing().getValue()!=true){
                     if (quantity!=0){
                         mViewModel.addItemToCart(product, quantity, size, amount);
@@ -237,6 +227,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
                 }
             }
             public void changeFavorite(Product product){
+
                 if (mViewModel.favourite.getValue()==true){
                     mViewModel.setFavourite(false);
                     if (favoriteService.deleteFav(MainActivity.UserID, product.ProductID)){
