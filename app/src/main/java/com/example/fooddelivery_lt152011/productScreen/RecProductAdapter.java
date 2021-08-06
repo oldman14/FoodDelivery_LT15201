@@ -72,6 +72,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d( "TAG", "Log in RecPro: "+product.getSizes() );
                 holder.oneItemClick(product);
             }
         });
@@ -89,7 +90,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         public RadBtnAdapter radBtnAdapter;
         public RecyclerView recyclerViewRad;
         public ImageButton btn_minus, btn_plus;
-        public TextView tv_price, tv_quantityCart, tv_quantityItem;
+        public TextView tv_price, tv_quantityCart, tv_quantityItem;//ánh xạ thiếếu buton lê bêm yêu thích vs lại số lương lúc trừ vs cộng
         public BottomSheetDialog bottomSheetDialog;
         public BottomSheetBehavior bottomSheetBehavior;
         public ReadMoreOption readMoreOption;
@@ -126,6 +127,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
             bottomSheetBinding.setHandleClick(productHandleClick);
             View view = bottomSheetBinding.getRoot();
             ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
+            Log.d( "TAG", "oneItemClick: "+product.getSizes() );
             mViewModel.setSize(product.getSizes().get(0));
             mViewModel.setFavourite(false);
             mViewModel.getFavorite().observe(lifecycleOwner, new Observer<List<Product>>() {

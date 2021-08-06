@@ -3,15 +3,20 @@ package com.example.fooddelivery_lt152011.HomeScreen;
 import com.example.fooddelivery_lt152011.productScreen.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModelCountProduct {
-    ArrayList<Product> Counts;
+    List<Product> Counts;
 
-    public ArrayList<Product> getCounts() {
+    public ModelCountProduct(List<Product> counts) {
+        Counts = counts;
+    }
+
+    public List<Product> getCounts() {
         return Counts;
     }
 
-    public void setCounts(ArrayList<Product> counts) {
+    public void setCounts(List<Product> counts) {
         Counts = counts;
     }
 }

@@ -33,6 +33,7 @@ import com.synnapps.carouselview.ImageListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -40,17 +41,19 @@ public class HomeFragment extends Fragment {
     CouponDAO couponDAO;
     CarouselView carouselView;
     RecyclerView lvSelling;
-    ArrayList<Product> arrayList;
+    RecProductAdapter adapter;
+    List<Product> productList;
     CountProductDAO countProductDAO;
+    ProductViewModel mViewmodel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         list=new ArrayList<>();
+        mViewmodel = new ViewModelProvider( requireActivity()).get(ProductViewModel.class);
         couponDAO=new CouponDAO();
         list=couponDAO.listcoupon();
-        arrayList=new ArrayList<>();
         countProductDAO=new CountProductDAO();
         lvSelling=view.findViewById( R.id.lvSelling );
         carouselView=view.findViewById( R.id.carouselView );
@@ -61,7 +64,12 @@ public class HomeFragment extends Fragment {
                 Picasso.get().load( list.get( position).getCouponImagge() ).into( imageView );
             }
         } );
-
+        productList=countProductDAO.systemService.countProduct().getCounts();
+        Log.d( "TAG", "Log home: "+productList.get( 0 ).getSizes() );
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        lvSelling.setLayoutManager(layoutManager);
+        adapter = new RecProductAdapter( getContext(),productList,getViewLifecycleOwner());
+        lvSelling.setAdapter(adapter);
         return view;
     }
 
