@@ -128,7 +128,7 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
     public CartRowBinding cartRowBinding;
     List<Product> favoriteProduct;
     Fragment myFragmentFav;
-
+    TextView streetName, address, phone, userName;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -453,10 +453,14 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
     public void oderSheet(){
         View view = fragmentCartBinding.getRoot();
         //phần coupon
+        DbHelper dbHelper = new DbHelper(getContext());
         money=view.findViewById( R.id.money );
         ImageView vcoupon=view.findViewById( R.id.vcoupon );
         total=view.findViewById( R.id.total );
-
+        address = view.findViewById(R.id.address_cart_order);
+        streetName = view.findViewById(R.id.streetName);
+        userName = view.findViewById(R.id.tv_userName_cartOrder);
+        phone = view.findViewById(R.id.tv_phone_cartOrder);
         CartItemAdapter cartItemAdapter= new CartItemAdapter(mViewModel.getCart().getValue(), getContext(), mViewModel, ProductFragment.this::EditItemClick);
         RecyclerView recyclerView = view.findViewById(R.id.cartRecyclerView);
         recyclerView.setAdapter(cartItemAdapter);
@@ -483,6 +487,10 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 infoLocation = location;
             }
         });
+        userName.setText(dbHelper.getUser().getUserName());
+        phone.setText("0"+String.valueOf(dbHelper.getUser().getUserPhone()));
+        address.setText(infoLocation.getAddress());
+        streetName.setText(locationViewModel.streetName.getValue());
         productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
             @Override

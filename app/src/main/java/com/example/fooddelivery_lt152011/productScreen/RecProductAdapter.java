@@ -94,6 +94,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         public ReadMoreOption readMoreOption;
         static FavoriteService favoriteService;
         public BottomSheetBinding bottomSheetBinding;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(ProductViewModel.class);
@@ -144,6 +145,7 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
                     mViewModel.setPriceProduct((quantity * product.getProductPrice())+(size.getSizePrice()*quantity));
                 }
             });
+
             radBtnAdapter = new RadBtnAdapter(product.getSizes(), context, mViewModel);
             recyclerViewRad = view.findViewById(R.id.recRadioButton);
             recyclerViewRad.setAdapter(radBtnAdapter);

@@ -238,11 +238,15 @@ public class MainActivity extends AppCompatActivity {
                         String state = addresses.get(0).getAdminArea();
                         String country = addresses.get(0).getCountryName();
                         String postalCode = addresses.get(0).getPostalCode();
+                        String nameStreet = addresses.get(0).getThoroughfare();
                         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                        Log.d("TAG", "onComplete: "+"state"+state+"nameStreet"+nameStreet+"knơname"+knownName);
                         tv_address_toolbar.setText(address);
+                        String streetName = knownName + " "+nameStreet;
                         infoLocation = new InfoLocation(myLocation, address);
                         LocationViewModel locationViewModel = new ViewModelProvider(MainActivity.this).get(LocationViewModel.class);
                         locationViewModel.setLocation(infoLocation);
+                        locationViewModel.setStreetName(streetName);
                     }
                 }
             }
