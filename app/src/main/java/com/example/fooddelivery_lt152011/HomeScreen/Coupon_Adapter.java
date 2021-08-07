@@ -9,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery_lt152011.R;
 import com.example.fooddelivery_lt152011.productScreen.ProductFragment;
+import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,10 +54,12 @@ public class Coupon_Adapter extends RecyclerView.Adapter<Coupon_Adapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgcoupon;
         TextView notecoupon;
+        ProductViewModel mViewModel;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super( itemView );
             imgcoupon=itemView.findViewById( R.id.imgcoupon );
             notecoupon=itemView.findViewById( R.id.notecoupon );
+            mViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(ProductViewModel.class);
             itemView.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -62,7 +67,7 @@ public class Coupon_Adapter extends RecyclerView.Adapter<Coupon_Adapter.ViewHold
                     Log.d( "TAG", "onClick123: "+couponprice );
 
                     double discount= (ProductFragment.productViewModel.getTotalPrice().getValue() * (Coupon_Adapter.couponprice/100));
-                    Log.d( "TAG", "onClick: "+discount );
+                    mViewModel.setDiscount(discount);
                     String price = new DecimalFormat("##,###đ").format( ProductFragment.productViewModel.getTotalPrice().getValue() - discount);
                     String money1=new DecimalFormat("##,###đ").format(  ProductFragment.productViewModel.getTotalPrice().getValue());
                     ProductFragment.total.setText(price);

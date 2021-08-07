@@ -212,7 +212,6 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
                 this.context = context;
             }
             public void addItemProduct(Product product,  int quantity, Size size, int amount ){
-                Log.d("TAG", "addItemProduct: "+context);
                 if(mViewModel.getIsEditing().getValue()!=true){
                     if (quantity!=0){
                         mViewModel.addItemToCart(product, quantity, size, amount);
