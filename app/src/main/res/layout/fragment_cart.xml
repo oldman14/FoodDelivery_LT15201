@@ -88,6 +88,7 @@
                 android:paddingVertical="5dp"
                 >
                 <TextView
+                    android:id="@+id/streetName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
@@ -97,6 +98,7 @@
                     android:textColor="@color/black"
                     android:textSize="20dp" />
                 <TextView
+                    android:id="@+id/address_cart_order"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -108,6 +110,7 @@
                     android:textColor="@color/secondary_font"
                     android:textSize="16dp" />
                 <TextView
+                    android:id="@+id/tv_userName_cartOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Nguyễn Văn Giàu"
@@ -118,6 +121,7 @@
                     android:paddingVertical="5dp"
                     />
                 <TextView
+                    android:id="@+id/tv_phone_cartOrder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0912542426"

@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class LocationViewModel extends AndroidViewModel {
     public MutableLiveData<String> addressUser = new MutableLiveData<>();
     public MutableLiveData<InfoLocation> location = new MutableLiveData<>();
-
+    public MutableLiveData<String> streetName = new MutableLiveData<>();
 
     public MutableLiveData<InfoLocation> getLocation() {
         return location;
@@ -25,7 +25,12 @@ public class LocationViewModel extends AndroidViewModel {
     public void setLocation(InfoLocation lo) {
         location.setValue(lo);
     }
-
+    public void setStreetName(String name){
+        streetName.setValue(name);
+    }
+    public MutableLiveData<String> getStreetName(){
+        return streetName;
+    }
     public MutableLiveData<String> getAddressUser() {
         return addressUser;
     }
