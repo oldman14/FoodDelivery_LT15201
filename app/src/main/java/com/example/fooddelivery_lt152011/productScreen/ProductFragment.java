@@ -527,13 +527,13 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                     public void onClick(View v) {
                         if (oderService.insertOder(oderObject.toString())){
                             Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
-                            mViewModel.setIsOrder(true);
-                            MainActivity.navigationView.setVisibility(View.GONE);
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                             bottomSheetDialog.dismiss();
+                            MainActivity.navigationView.setVisibility(View.GONE);
                             AppCompatActivity activity = (AppCompatActivity) v.getContext();
                             Fragment myFragment = new InforOderFragment();
                             activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            mViewModel.setIsOrder(true);
                         }
                     }
                 });
