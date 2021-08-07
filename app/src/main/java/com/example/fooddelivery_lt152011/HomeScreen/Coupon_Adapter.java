@@ -24,6 +24,8 @@ public class Coupon_Adapter extends RecyclerView.Adapter<Coupon_Adapter.ViewHold
     public static double couponprice;
     ArrayList<ModelCoupon> lcoupon;
     Context context;
+    public  static   double discount;
+    public static  double Finalprice;
 
     public Coupon_Adapter(ArrayList<ModelCoupon> lcoupon, Context context) {
         this.lcoupon = lcoupon;
@@ -62,9 +64,13 @@ public class Coupon_Adapter extends RecyclerView.Adapter<Coupon_Adapter.ViewHold
                     couponprice = lcoupon.get( getAdapterPosition() ).getCouponPrice();
                     Log.d( "TAG", "onClick123: " + couponprice );
 
-                    double discount = (ProductFragment.productViewModel.getTotalPrice().getValue() * (Coupon_Adapter.couponprice / 100));
+                    discount= (ProductFragment.productViewModel.getTotalPrice().getValue() * (Coupon_Adapter.couponprice / 100));
                     Log.d( "TAG", "onClick: " + discount );
                     String price = new DecimalFormat( "##,###đ" ).format( ProductFragment.productViewModel.getTotalPrice().getValue() - discount );
+//                    Finalprice=ProductFragment.productViewModel.getTotalPrice().getValue() - discount;
+
+                    ProductFragment.finalPrice=ProductFragment.productViewModel.getTotalPrice().getValue() - discount;
+                    Log.d( "TAG", "onClick123123123: "+  ProductFragment.finalPrice );
                     String money1 = new DecimalFormat( "##,###đ" ).format( ProductFragment.productViewModel.getTotalPrice().getValue() );
                     ProductFragment.total.setText( price );
                     ProductFragment.money.setText( money1 );

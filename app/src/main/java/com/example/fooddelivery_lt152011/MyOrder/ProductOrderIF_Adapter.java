@@ -41,7 +41,6 @@ public class ProductOrderIF_Adapter extends RecyclerView.Adapter<ProductOrderIF_
         holder.productname.setText( list.get( position ).getProductName() );
         holder.productquantity.setText( String.valueOf( list.get( position ).getQuantity() ) );
         holder.productsize.setText( String.valueOf(  list.get( position ).getSizeName() ));
-        holder.amounts.setText(String.valueOf(   list.get( position ).getAmount()) );
 
         Picasso.get().load( list.get( position ).getProductImage() ).into( holder.productimg );
     }
@@ -58,7 +57,6 @@ public class ProductOrderIF_Adapter extends RecyclerView.Adapter<ProductOrderIF_
             super( itemView );
             productimg=itemView.findViewById( R.id.productimg );
             productname=itemView.findViewById( R.id.productname );
-            amounts=itemView.findViewById( R.id.amounts );
             productquantity=itemView.findViewById( R.id.productquantity );
             productsize=itemView.findViewById( R.id.productsize );
         }

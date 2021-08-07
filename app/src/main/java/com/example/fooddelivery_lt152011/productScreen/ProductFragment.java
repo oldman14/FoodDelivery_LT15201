@@ -78,6 +78,7 @@ import java.util.UUID;
 
 public class ProductFragment extends Fragment  implements TypeBottomSheetApdapter.TypeBotSheetInterface, CartItemAdapter.CartItemInterface {
     public TypeProAdapter typeProAdapter;
+   public static double finalPrice = 0;
     public RecTypeAdapter recTypeAdapter;
     public  static TextView money;
     public static ProductViewModel productViewModel;
@@ -491,62 +492,9 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
         phone.setText("0"+String.valueOf(dbHelper.getUser().getUserPhone()));
         address.setText(infoLocation.getAddress());
         streetName.setText(locationViewModel.streetName.getValue());
+
+
         productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
-        productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
-            @Override
-            public void onChanged(List<CartItem> cartItems) {
-                if (cartItems.size()==0){
-                    bottomSheetDialog.dismiss();
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-                JSONArray jsonArray = new JSONArray();
-                CartItemAdapter cartItemAdapter= new CartItemAdapter(mViewModel.getCart().getValue(), getContext(), mViewModel, ProductFragment.this::EditItemClick);
-                recyclerView.setAdapter(cartItemAdapter);
-                for (CartItem item: cartItems) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("productID", item.product.ProductID);
-                        jsonObject.put("quantity", item.getQuantity());
-                        jsonObject.put("sizeID", item.size.SizeID);
-                        jsonObject.put("amount", item.amount);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                        jsonArray.put(jsonObject);
-                }
-                JSONObject oderObject = new JSONObject();
-                final String oderID = UUID.randomUUID().toString().replace("-", "");
-                try {
-                    ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
-                    oderObject.put("userID", modelUser.getUserID());
-                    oderObject.put("orderID", oderID);
-                    oderObject.put("storeID", store.StoreID);
-                    oderObject.put("address", infoLocation.getAddress());
-                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
-                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
-                    oderObject.put("totalMoney", productViewModel.getTotalPrice().getValue());
-                    oderObject.put("detailOrder", jsonArray);
-                } catch (Exception e){
-                    Log.d("TAG", "onChanged: "+e);
-                }
-                placeOrderButton.setEnabled(cartItems.size() > 0);
-                placeOrderButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (oderService.insertOder(oderObject.toString())){
-                            Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
-                            bottomSheetDialog.dismiss();
-                            MainActivity.navigationView.setVisibility(View.GONE);
-                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                            Fragment myFragment = new InforOderFragment();
-                            activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            mViewModel.setIsOrder(true);
-                        }
-                    }
-                });
-            }
-        });
         productViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
@@ -555,6 +503,9 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 fragmentCartBinding.orderTotalTextView.setText("TỔNG CỘNG : "+price);
                 money.setText( String.valueOf(  price ));
                 total.setText( String.valueOf(  price));
+//                finalPrice=productViewModel.getTotalPrice().getValue()-Coupon_Adapter.discount;
+//                Log.d( "log13", "onChanged: ."+finalPrice );
+//                finalPrice=productViewModel.getTotalPrice().getValue();
             }
         });
         vcoupon.setOnClickListener( new View.OnClickListener() {
@@ -605,6 +556,78 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 dialog.show();
             }
         } );
+
+
+        productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
+            @Override
+            public void onChanged(List<CartItem> cartItems) {
+                if (cartItems.size()==0){
+                    bottomSheetDialog.dismiss();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+                JSONArray jsonArray = new JSONArray();
+                CartItemAdapter cartItemAdapter= new CartItemAdapter(mViewModel.getCart().getValue(), getContext(), mViewModel, ProductFragment.this::EditItemClick);
+                recyclerView.setAdapter(cartItemAdapter);
+                for (CartItem item: cartItems) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("productID", item.product.ProductID);
+                        jsonObject.put("quantity", item.getQuantity());
+                        jsonObject.put("sizeID", item.size.SizeID);
+                        jsonObject.put("amount", item.amount);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                        jsonArray.put(jsonObject);
+                }
+                JSONObject oderObject = new JSONObject();
+                final String oderID = UUID.randomUUID().toString().replace("-", "");
+                try {
+                    ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
+                    oderObject.put("userID", modelUser.getUserID());
+                    oderObject.put("orderID", oderID);
+                    oderObject.put("storeID", store.StoreID);
+                    oderObject.put("address", infoLocation.getAddress());
+                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
+                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
+                    if(finalPrice!=0){
+                        oderObject.put("totalMoney",finalPrice );
+                    }else {
+                        oderObject.put("totalMoney",productViewModel.getTotalPrice().getValue() );
+
+                    }
+
+
+
+
+                    oderObject.put("detailOrder", jsonArray);
+                } catch (Exception e){
+                    Log.d("TAG", "onChanged: "+e);
+                }
+                placeOrderButton.setEnabled(cartItems.size() > 0);
+                placeOrderButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (oderService.insertOder(oderObject.toString())){
+                            Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
+                            bottomSheetDialog.dismiss();
+                            MainActivity.navigationView.setVisibility(View.GONE);
+                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                            Fragment myFragment = new InforOderFragment();
+                            activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            mViewModel.setIsOrder(true);
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+
+
 
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();

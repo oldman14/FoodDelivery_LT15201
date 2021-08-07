@@ -58,15 +58,4 @@
         android:textColor="#FF0000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/amounts"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="50dp"
-        android:layout_toRightOf="@id/productname"
-        android:text="300.000đ"
-        android:textColor="#FF0000"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 </RelativeLayout>
