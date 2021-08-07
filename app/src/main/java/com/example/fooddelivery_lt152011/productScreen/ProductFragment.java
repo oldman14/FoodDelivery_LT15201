@@ -78,7 +78,6 @@ import java.util.UUID;
 
 public class ProductFragment extends Fragment  implements TypeBottomSheetApdapter.TypeBotSheetInterface, CartItemAdapter.CartItemInterface {
     public TypeProAdapter typeProAdapter;
-   public static double finalPrice = 0;
     public RecTypeAdapter recTypeAdapter;
     public  static TextView money;
     public static ProductViewModel productViewModel;
@@ -130,6 +129,9 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
     List<Product> favoriteProduct;
     Fragment myFragmentFav;
     TextView streetName, address, phone, userName;
+    double finalPrice;
+    double discount;
+    List<CartItem> cartItem;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -408,48 +410,6 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-//    public class ProductHandleClick {
-//        Context context;
-//        public ProductHandleClick(Context context) {
-//            this.context = context;
-//        }
-//        public void addItemProduct(Product product,  int quantity, Size size, int amount ){
-//            if(mViewModel.getIsEditing().getValue()!=true){
-//                if (quantity!=0){
-//                    mViewModel.addItemToCart(product, quantity, size, amount);
-//                    bottomSheetDialog.dismiss();
-//                }
-//            } else {
-//                if (quantity!=0){
-//                    mViewModel.changeQuantity(mViewModel.getCartItemMutable().getValue(),quantity);
-//                    bottomSheetDialog.dismiss();
-//                } else {
-//                    mViewModel.removeItemFromCart(mViewModel.getCartItemMutable().getValue());
-//                    bottomSheetDialog.dismiss();
-//                }
-//            }
-//        }
-//        public void changeFavorite(Product product){
-//            if (mViewModel.favourite.getValue()==true){
-//                mViewModel.setFavourite(false);
-//                if (favoriteService.deleteFav(MainActivity.UserID, product.ProductID)){
-//                     mViewModel.getFavorite().getValue();
-//                } else {
-//                    Log.d("TAG", "Delete favorite thất bại");
-//                }
-//            } else {
-//                mViewModel.setFavourite(true);
-//                if (favoriteService.insertFav(MainActivity.UserID, product.ProductID)==true){
-//                    mViewModel.getFavorite().getValue();
-//                } else {
-//                    Log.d("TAG", "Insert favorite thất bại");
-//                }
-//            }
-//        }
-//        public String convertString(int price){
-//            return new DecimalFormat("##,###đ").format(price);
-//        }
-//    }
     //bottomsheet hiển thị chi tiết món
     public void oderSheet(){
         View view = fragmentCartBinding.getRoot();
@@ -492,20 +452,90 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
         phone.setText("0"+String.valueOf(dbHelper.getUser().getUserPhone()));
         address.setText(infoLocation.getAddress());
         streetName.setText(locationViewModel.streetName.getValue());
-
-
         productViewModel = new ViewModelProvider(requireActivity()).get(ProductViewModel.class);
         productViewModel.getTotalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
                 String price = new DecimalFormat("##,###đ").format( productViewModel.getTotalPrice().getValue());
-                totalcoupon=productViewModel.getTotalPrice().getValue();
+                totalcoupon=aDouble;
                 fragmentCartBinding.orderTotalTextView.setText("TỔNG CỘNG : "+price);
                 money.setText( String.valueOf(  price ));
                 total.setText( String.valueOf(  price));
-//                finalPrice=productViewModel.getTotalPrice().getValue()-Coupon_Adapter.discount;
-//                Log.d( "log13", "onChanged: ."+finalPrice );
-//                finalPrice=productViewModel.getTotalPrice().getValue();
+            }
+        });
+        productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
+            @Override
+            public void onChanged(List<CartItem> cartItems) {
+                if (cartItems.size()==0){
+                    bottomSheetDialog.dismiss();
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+                cartItem = cartItems;
+            }
+        });
+        mViewModel.getDiscount().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double aDouble) {
+                Log.d("TAG", "discount: "+aDouble);
+                discount = aDouble;
+                mViewModel.setFinalPrice(mViewModel.getTotalPrice().getValue()-discount);
+            }
+        });
+        JSONArray jsonArray = new JSONArray();
+        CartItemAdapter cartItemAdapters = new CartItemAdapter(cartItem, getContext(), mViewModel, ProductFragment.this::EditItemClick);
+        recyclerView.setAdapter(cartItemAdapters);
+
+        for (CartItem item: cartItem) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("productID", item.product.ProductID);
+                jsonObject.put("quantity", item.getQuantity());
+                jsonObject.put("sizeID", item.size.SizeID);
+                jsonObject.put("amount", item.amount);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jsonArray.put(jsonObject);
+        }
+        JSONObject oderObject = new JSONObject();
+        final String oderID = UUID.randomUUID().toString().replace("-", "");
+        Log.d("TAG", "FinalPrice: "+discount);
+        try {
+            ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
+            oderObject.put("userID", modelUser.getUserID());
+            oderObject.put("orderID", oderID);
+            oderObject.put("storeID", store.StoreID);
+            oderObject.put("address", infoLocation.getAddress());
+            oderObject.put("lat", infoLocation.getLocation().getLatitude());
+            oderObject.put("lng", infoLocation.getLocation().getLongitude());
+            mViewModel.getFinalPrice().observe(getViewLifecycleOwner(), new Observer<Double>() {
+                @Override
+                public void onChanged(Double aDouble) {
+                    try {
+                        oderObject.put("totalMoney", aDouble);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            oderObject.put("detailOrder", jsonArray);
+        } catch (Exception e){
+            Log.d("TAG", "onChanged: "+e);
+        }
+        placeOrderButton.setEnabled(cartItem.size() > 0);
+        placeOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (oderService.insertOder(oderObject.toString())){
+                    Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
+                    mViewModel.setIsOrder(true);
+                    MainActivity.navigationView.setVisibility(View.GONE);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    bottomSheetDialog.dismiss();
+                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                    Fragment myFragment = new InforOderFragment();
+                    activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
+                }
             }
         });
         vcoupon.setOnClickListener( new View.OnClickListener() {
@@ -556,78 +586,6 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 dialog.show();
             }
         } );
-
-
-        productViewModel.getCart().observe(getViewLifecycleOwner(), new Observer<List<CartItem>>() {
-            @Override
-            public void onChanged(List<CartItem> cartItems) {
-                if (cartItems.size()==0){
-                    bottomSheetDialog.dismiss();
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-                JSONArray jsonArray = new JSONArray();
-                CartItemAdapter cartItemAdapter= new CartItemAdapter(mViewModel.getCart().getValue(), getContext(), mViewModel, ProductFragment.this::EditItemClick);
-                recyclerView.setAdapter(cartItemAdapter);
-                for (CartItem item: cartItems) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put("productID", item.product.ProductID);
-                        jsonObject.put("quantity", item.getQuantity());
-                        jsonObject.put("sizeID", item.size.SizeID);
-                        jsonObject.put("amount", item.amount);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                        jsonArray.put(jsonObject);
-                }
-                JSONObject oderObject = new JSONObject();
-                final String oderID = UUID.randomUUID().toString().replace("-", "");
-                try {
-                    ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
-                    oderObject.put("userID", modelUser.getUserID());
-                    oderObject.put("orderID", oderID);
-                    oderObject.put("storeID", store.StoreID);
-                    oderObject.put("address", infoLocation.getAddress());
-                    oderObject.put("lat", infoLocation.getLocation().getLatitude());
-                    oderObject.put("lng", infoLocation.getLocation().getLongitude());
-                    if(finalPrice!=0){
-                        oderObject.put("totalMoney",finalPrice );
-                    }else {
-                        oderObject.put("totalMoney",productViewModel.getTotalPrice().getValue() );
-
-                    }
-
-
-
-
-                    oderObject.put("detailOrder", jsonArray);
-                } catch (Exception e){
-                    Log.d("TAG", "onChanged: "+e);
-                }
-                placeOrderButton.setEnabled(cartItems.size() > 0);
-                placeOrderButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (oderService.insertOder(oderObject.toString())){
-                            Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
-                            bottomSheetDialog.dismiss();
-                            MainActivity.navigationView.setVisibility(View.GONE);
-                            AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                            Fragment myFragment = new InforOderFragment();
-                            activity.getSupportFragmentManager().beginTransaction().replace( R.id.frame_container, myFragment ).addToBackStack( null ).commit();
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            mViewModel.setIsOrder(true);
-                        }
-                    }
-                });
-            }
-        });
-
-
-
-
-
 
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();

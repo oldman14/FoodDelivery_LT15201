@@ -12,9 +12,7 @@ import com.example.fooddelivery_lt152011.productScreen.ListTypeProduct;
 import com.example.fooddelivery_lt152011.productScreen.Product;
 import com.example.fooddelivery_lt152011.productScreen.Size;
 import com.example.fooddelivery_lt152011.productScreen.TypeProduct;
-import com.example.fooddelivery_lt152011.productScreen.entities.Favorite;
 import com.example.fooddelivery_lt152011.productScreen.repositories.CartRepo;
-import com.example.fooddelivery_lt152011.productScreen.repositories.FavoriteRepo;
 import com.example.fooddelivery_lt152011.productScreen.repositories.ProductRepository;
 
 import java.util.List;
@@ -33,9 +31,20 @@ public class ProductViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> isOrder = new MutableLiveData<>();
     private MutableLiveData<CartItem> cartItemMutable = new MutableLiveData<>();
     private MutableLiveData<Boolean> isEditing = new MutableLiveData<>();
+    public MutableLiveData<Double> discount = new MutableLiveData<>();
     CartRepo cartItemRepo = new CartRepo();
     ProductRepository productRepository = new ProductRepository();
-
+    public MutableLiveData<Double> finalPrice = new MutableLiveData<>();
+    public void setDiscount(double aDouble){
+        discount.setValue(aDouble);
+    }
+    public LiveData<Double> getDiscount(){
+        if (discount == null){
+            setDiscount(0);
+            return discount;
+        }
+        return discount;
+    }
 
     public MutableLiveData<CartItem> getCartItemMutable() {
         return cartItemMutable;
@@ -167,6 +176,16 @@ public class ProductViewModel extends AndroidViewModel {
     }
     public LiveData<Double> getTotalPrice() {
         return cartItemRepo.getTotalPrice();
+    }
+    public void setFinalPrice(double totalPrice) {
+        finalPrice.setValue(totalPrice);
+    }
+    public LiveData<Double> getFinalPrice(){
+        if (finalPrice == null){
+            finalPrice.setValue(getTotalPrice().getValue());
+            return finalPrice;
+        }
+        return finalPrice;
     }
     public LiveData<Integer> getCartQuantity(){
         return cartItemRepo.getCartQuantity();
