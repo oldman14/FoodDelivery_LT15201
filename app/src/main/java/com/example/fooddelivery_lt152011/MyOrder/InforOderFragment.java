@@ -15,13 +15,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +27,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,7 +37,6 @@ import com.example.fooddelivery_lt152011.LoginScreen.UserDAO;
 import com.example.fooddelivery_lt152011.MainActivity;
 import com.example.fooddelivery_lt152011.R;
 import com.example.fooddelivery_lt152011.productScreen.ProductFragment;
-import com.example.fooddelivery_lt152011.productScreen.viewmodel.ProductViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -57,6 +52,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.example.fooddelivery_lt152011.productScreen.RecProductAdapter.ViewHolder.mViewModel;
+
 public class InforOderFragment extends Fragment {
     private static final int REQUEST_LOCATION = 1;
     LocationManager locationManager;
@@ -67,8 +64,6 @@ public class InforOderFragment extends Fragment {
     Marker marker;
     ShipperDAO shipperDAO;
     UserDAO dao;
-    Button huydon;
-    LinearLayout layouttong;
     ProductOrderIF_Adapter adapter;
     StoreDAO storeDAO;
     DetailOrderDAO detailOrderDAO;
@@ -78,7 +73,6 @@ public class InforOderFragment extends Fragment {
     ImageView tick_1, tick_2, tick_3, sportAdmin, callShip;
     TextView status_1, status_2, status_3, nameShip, locationGiao, nameStore, addressstore, phoneStore, totalmoney;
     DbHelper dbHelper;
-    ProductViewModel mViewModel;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -86,10 +80,9 @@ public class InforOderFragment extends Fragment {
         MainActivity.toolbar_address.setVisibility(View.GONE);
         MainActivity.toolbar_logo.setVisibility(View.GONE);
         View view = inflater.inflate(R.layout.fragment_infor_oder, container, false);
-        mViewModel = new ViewModelProvider( requireActivity() ).get( ProductViewModel.class );
+
         dbHelper = new DbHelper(getActivity());
-        huydon=view.findViewById( R.id.huydon );
-        layouttong=view.findViewById( R.id.tong );
+
         tick_1 = view.findViewById(R.id.tick_1);
         tick_2 = view.findViewById(R.id.tick_2);
         status_2 = view.findViewById(R.id.status_2);
@@ -112,7 +105,7 @@ public class InforOderFragment extends Fragment {
         list = new ArrayList<>();
         ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-        ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
+        ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
         ModelShipper getship = shipperDAO.getShips(itemorder.getShipID());
 
@@ -186,7 +179,7 @@ public class InforOderFragment extends Fragment {
                 shipperDAO = new ShipperDAO();
                 ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
                 Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-                ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
+                ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
                 Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
 
                 if (itemorder.getStatus().equals("ĐANG GIAO")) {
@@ -257,7 +250,7 @@ public class InforOderFragment extends Fragment {
         storeDAO = new StoreDAO();
         ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-        ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
+        ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
         ModelShipper getship = shipperDAO.getShips(itemorder.getShipID());
         tick_1.setImageResource(R.drawable.done_24);
@@ -308,50 +301,49 @@ public class InforOderFragment extends Fragment {
                 alertDialog.show();
             }
         });
+        if (itemorder.getStatus().equals("Cửa hàng đang chuẩn bị")) {
+            status_1.setText("Cửa hàng đang chuẩn bị");
+            return;
+        }
+        if (itemorder.getStatus().equals("Đang Giao")) {
+            tick_2.setImageResource(R.drawable.done_24);
+            status_2.setText("Đang Giao");
+            status_2.setTypeface(null, Typeface.BOLD);
+            // sportAdmin.setImageBitmap( "" );
+            nameShip.setText(getship.getShipName());
+            callShip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+                    }
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                    builder.setTitle("Food Delivery.VN");
+                    builder.setMessage("0" + getship.getShipPhone());
+                    builder.setCancelable(false);
 
-
-        //check huỷ order
-        Timer time= new  Timer();
-        time.schedule( new TimerTask() {
-            @Override
-            public void run() {
-                ModelOrder itemOrder = orderDAO.getItemOrder(ProductFragment.oderID);
-                if(itemOrder.getStatus() !=null){
-                    huydon.setVisibility( View.GONE );
-                    layouttong.setGravity( Gravity.CENTER );
-                }else {
-                    huydon.setVisibility( View.VISIBLE );
-//
-                    huydon.setOnClickListener( new View.OnClickListener() {
+                    builder.setPositiveButton("GỌI", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setMessage("Bạn Muốn Huỷ Đơn Hàng").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ModelOrder update=orderDAO.updateStatus( ProductFragment.oderID,"Thất Bại" );
-                                    mViewModel.setIsOrder( false );
-                                    FragmentManager fm = getFragmentManager();
-                                    FragmentTransaction ft = fm.beginTransaction();
-                                    ProductFragment productFragment = new ProductFragment();
-                                    ft.replace( R.id.frame_container, productFragment );
-                                    ft.addToBackStack( null );
-                                    ft.commit();
-                                }
-                            });
-                            final AlertDialog alertDialog = builder.create();
-                            alertDialog.show();
-                            ;
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String dial = "tel:" + "0" + getship.getShipPhone();
+                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
                         }
-                    } );
+                    });
+                    builder.setNegativeButton("HỦY", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+                    alertDialog.getWindow().setLayout(200, 100);
+                    alertDialog.show();
                 }
-
-            }
-        },1000 );
-
-
-
-
+            });
+            return;
+        }
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -359,12 +351,12 @@ public class InforOderFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable(){
                     @Override
                     public void run() {
-                        ModelOrder itemorder1 = orderDAO.getItemOrder(ProductFragment.oderID);
-                        if (itemorder1.getStatus().equals(null)) {
+                        ModelOrder itemorder1 = orderDAO.getItemOrder(nameimg.getUserID());
+                        if (itemorder1.getStatus().equals("Đã Đặt")) {
                             status_1.setText("Đã Đặt");
                             return;
                         }
-                        if (itemorder1.getStatus().equals("ĐANG GIAO")) {
+                        if (itemorder1.getStatus().equals("Đang Giao")) {
                             tick_2.setImageResource(R.drawable.done_24);
                             status_2.setText("Đang Giao");
                             status_2.setTypeface(null, Typeface.BOLD);
@@ -403,7 +395,7 @@ public class InforOderFragment extends Fragment {
                             });
                             return;
                         }
-                        if (itemorder1.getStatus().equals("Thành Công")) {
+                        if (itemorder1.getStatus().equals("Giao hàng thành công")) {
                             tick_3.setImageResource(R.drawable.done_24);
                             status_3.setText("Thành Công");
                             final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -426,9 +418,32 @@ public class InforOderFragment extends Fragment {
                             return;
                         }
 
-                        if (itemorder1.getStatus().equals("Thất Bại")) {
+                        if (itemorder1.getStatus().equals("Giao hàng thất bại")) {
                             tick_3.setImageResource(R.drawable.done_24);
-                            status_3.setText("Thành Công");
+                            status_3.setText("Thất bại");
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Xin Lỗi Đơn Hàng của Bạn đã thất bại").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mViewModel.setIsOrder( false );
+                                    FragmentManager fm = getFragmentManager();
+                                    FragmentTransaction ft = fm.beginTransaction();
+                                    ProductFragment productFragment = new ProductFragment();
+                                    ft.replace( R.id.frame_container, productFragment );
+                                    ft.addToBackStack( null );
+                                    ft.commit();
+
+                                }
+                            });
+                            final AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                            ;
+                            return;
+                        }
+
+                        if (itemorder1.getStatus().equals("Đã hủy đơn hàng")) {
+                            tick_3.setImageResource(R.drawable.done_24);
+                            status_3.setText("Thất bại");
                             final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             builder.setMessage("Xin Lỗi Đơn Hàng của Bạn đã thất bại").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
@@ -451,7 +466,7 @@ public class InforOderFragment extends Fragment {
                     }
                 });
             }
-        }, 1000);
+        }, 5000);
     }
 
 

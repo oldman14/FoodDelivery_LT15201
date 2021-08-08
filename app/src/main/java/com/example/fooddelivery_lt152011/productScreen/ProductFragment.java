@@ -93,7 +93,7 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
     public RelativeLayout bottomsheetLayoutItem;
     public RelativeLayout bottomsheetLayout, bottomsheetOder;
     private LinearLayout linearLayoutBottom;
-     double totalcoupon;
+    double totalcoupon;
     private OneItemClick oneItemClick;
     public TextView tv_price, tv_quantityCart, tv_quantityItem;
     public FragmentProductBinding fragmentProductBinding;
@@ -521,7 +521,7 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
             });
             oderObject.put("detailOrder", jsonArray);
         } catch (Exception e){
-            Log.d("TAG", "onChanged: "+e);
+            Log.d("TAG", "onChanged: + 1 "+e);
         }
         placeOrderButton.setEnabled(cartItem.size() > 0);
         placeOrderButton.setOnClickListener(new View.OnClickListener() {
