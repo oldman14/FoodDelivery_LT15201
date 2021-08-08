@@ -27,7 +27,7 @@ public interface SystemService {
     ModelStatusUser updateUser(@Form(name = "UserPhone") int UserPhone, @Form( name="UserName" )String UserName, @Form(name = "UserMail") String UserMail, @Form(name = "UserBirthday") String UserBirthday, @Form(name = "UserImage") String UserImage);
 
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/getShipperViewUsers.php/")
-    ModelOrder getItemOrder(@Form( name="UserID" ) int UserID);
+    ModelOrder getItemOrder(@Form( name="OrderID" ) String OrderID);
 
     @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/getShip.php/")
     ModelShipper getShip(@Form( name="ShipID" ) int ShipID);
@@ -45,5 +45,8 @@ public interface SystemService {
     int getNewID();
     @HttpMethod(method = MethodType.GET, url = "FOODDELIVERY/api/GetCountProduct.php/")
     ModelCountProduct countProduct();
+
+    @HttpMethod(method = MethodType.POST, url = "FOODDELIVERY/api/updateStatusOrder.php/")
+    ModelOrder updateStatus(@Form( name="OrderID" ) String OrderID,@Form( name="Status" ) String Status);
 
 }

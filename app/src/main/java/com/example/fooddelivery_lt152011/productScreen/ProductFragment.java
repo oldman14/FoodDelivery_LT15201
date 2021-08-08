@@ -78,6 +78,7 @@ import java.util.UUID;
 
 public class ProductFragment extends Fragment  implements TypeBottomSheetApdapter.TypeBotSheetInterface, CartItemAdapter.CartItemInterface {
     public TypeProAdapter typeProAdapter;
+    public  static   String oderID;
     public RecTypeAdapter recTypeAdapter;
     public  static TextView money;
     public static ProductViewModel productViewModel;
@@ -498,7 +499,7 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
             jsonArray.put(jsonObject);
         }
         JSONObject oderObject = new JSONObject();
-        final String oderID = UUID.randomUUID().toString().replace("-", "");
+       oderID = UUID.randomUUID().toString().replace("-", "");
         Log.d("TAG", "FinalPrice: "+discount);
         try {
             ModelUser modelUser = userDAO.getUserNames(dbHelper.getUser().getUserPhone());
@@ -527,6 +528,7 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
             @Override
             public void onClick(View v) {
                 if (oderService.insertOder(oderObject.toString())){
+                    Log.d( "TAG", "onClick: "+oderObject.toString() );
                     Toast.makeText(getContext(), "Thanh cong", Toast.LENGTH_SHORT).show();
                     mViewModel.setIsOrder(true);
                     MainActivity.navigationView.setVisibility(View.GONE);

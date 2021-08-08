@@ -323,20 +323,19 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvSP"
                 android:layout_below="@id/dsmua"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </ScrollView>
     <LinearLayout
-        android:layout_marginBottom="5dp"
         android:id="@+id/tong"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
         android:orientation="horizontal"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textStyle="bold"
             android:textColor="#000000"
             android:gravity="center"
@@ -345,12 +344,19 @@
             android:layout_height="match_parent"/>
         <TextView
             android:id="@+id/totalmoney"
-            android:textSize="23dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#FF0000"
             android:gravity="center"
             android:text="200.000 VNĐ "
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
+        <Button
+            android:id="@+id/huydon"
+            android:visibility="gone"
+            android:background="@color/orange_primary"
+            android:text="HUỶ ĐƠn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </RelativeLayout>

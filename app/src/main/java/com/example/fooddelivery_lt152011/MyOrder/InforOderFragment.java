@@ -15,10 +15,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,6 +67,8 @@ public class InforOderFragment extends Fragment {
     Marker marker;
     ShipperDAO shipperDAO;
     UserDAO dao;
+    Button huydon;
+    LinearLayout layouttong;
     ProductOrderIF_Adapter adapter;
     StoreDAO storeDAO;
     DetailOrderDAO detailOrderDAO;
@@ -83,7 +88,8 @@ public class InforOderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_infor_oder, container, false);
         mViewModel = new ViewModelProvider( requireActivity() ).get( ProductViewModel.class );
         dbHelper = new DbHelper(getActivity());
-
+        huydon=view.findViewById( R.id.huydon );
+        layouttong=view.findViewById( R.id.tong );
         tick_1 = view.findViewById(R.id.tick_1);
         tick_2 = view.findViewById(R.id.tick_2);
         status_2 = view.findViewById(R.id.status_2);
@@ -106,7 +112,7 @@ public class InforOderFragment extends Fragment {
         list = new ArrayList<>();
         ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-        ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
+        ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
         ModelShipper getship = shipperDAO.getShips(itemorder.getShipID());
 
@@ -180,7 +186,7 @@ public class InforOderFragment extends Fragment {
                 shipperDAO = new ShipperDAO();
                 ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
                 Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-                ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
+                ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
                 Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
 
                 if (itemorder.getStatus().equals("ĐANG GIAO")) {
@@ -251,7 +257,7 @@ public class InforOderFragment extends Fragment {
         storeDAO = new StoreDAO();
         ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-        ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
+        ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
         ModelShipper getship = shipperDAO.getShips(itemorder.getShipID());
         tick_1.setImageResource(R.drawable.done_24);
@@ -304,6 +310,48 @@ public class InforOderFragment extends Fragment {
         });
 
 
+        //check huỷ order
+        Timer time= new  Timer();
+        time.schedule( new TimerTask() {
+            @Override
+            public void run() {
+                ModelOrder itemOrder = orderDAO.getItemOrder(ProductFragment.oderID);
+                if(itemOrder.getStatus() !=null){
+                    huydon.setVisibility( View.GONE );
+                    layouttong.setGravity( Gravity.CENTER );
+                }else {
+                    huydon.setVisibility( View.VISIBLE );
+//
+                    huydon.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Bạn Muốn Huỷ Đơn Hàng").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ModelOrder update=orderDAO.updateStatus( ProductFragment.oderID,"Thất Bại" );
+                                    mViewModel.setIsOrder( false );
+                                    FragmentManager fm = getFragmentManager();
+                                    FragmentTransaction ft = fm.beginTransaction();
+                                    ProductFragment productFragment = new ProductFragment();
+                                    ft.replace( R.id.frame_container, productFragment );
+                                    ft.addToBackStack( null );
+                                    ft.commit();
+                                }
+                            });
+                            final AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                            ;
+                        }
+                    } );
+                }
+
+            }
+        },1000 );
+
+
+
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -311,8 +359,8 @@ public class InforOderFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable(){
                     @Override
                     public void run() {
-                        ModelOrder itemorder1 = orderDAO.getItemOrder(nameimg.getUserID());
-                        if (itemorder1.getStatus().equals("Đã Đặt")) {
+                        ModelOrder itemorder1 = orderDAO.getItemOrder(ProductFragment.oderID);
+                        if (itemorder1.getStatus().equals(null)) {
                             status_1.setText("Đã Đặt");
                             return;
                         }
@@ -403,7 +451,7 @@ public class InforOderFragment extends Fragment {
                     }
                 });
             }
-        }, 5000);
+        }, 1000);
     }
 
 

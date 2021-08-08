@@ -15,9 +15,14 @@ public class OrderDAO {
         systemService = adapter.create(SystemService.class);
     }
 
-    public ModelOrder getItemOrder(int userID){
-        ModelOrder itemorder=systemService.getItemOrder( userID );
+    public ModelOrder getItemOrder(String orderID){
+        ModelOrder itemorder=systemService.getItemOrder( orderID );
         return itemorder;
+    }
+
+    public ModelOrder updateStatus(String orderID,String status){
+        ModelOrder updateStatus=systemService.updateStatus( orderID ,status);
+        return updateStatus;
     }
 
     public int getNewID(){
