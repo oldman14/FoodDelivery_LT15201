@@ -52,6 +52,9 @@ public class  CartRepo {
         return true;
     }
 
+    public void deleteCartOrder(){
+        mutableCart.setValue(null);
+    }
     public void removeItemFromCart(CartItem cartItem) {
         if (mutableCart.getValue() == null) {
             return;

@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (km/1000< distance[0]){
                                     distance[0] = km/1000;
                                     storeViewModel.setStore(stores.get(i));
+                                    Log.d("TAG", "onChanged: "+stores.get(i).getStoreName());
                                 }
                             }
                         }

@@ -363,13 +363,13 @@ public class InforOderFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     mViewModel.setIsOrder( false );
+                                    mViewModel.deleteCart();
                                     FragmentManager fm = getFragmentManager();
                                     FragmentTransaction ft = fm.beginTransaction();
                                     ProductFragment productFragment = new ProductFragment();
                                     ft.replace( R.id.frame_container, productFragment );
                                     ft.addToBackStack( null );
                                     ft.commit();
-
                                 }
                             });
                             final AlertDialog alertDialog = builder.create();

@@ -122,9 +122,10 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
             mViewModel.setIsEditing(false);
             mViewModel.setProduct(product);
             bottomSheetBinding.setProduct(mViewModel);
-            ProductHandleClick productHandleClick = new ProductHandleClick(context);
-            bottomSheetBinding.setHandleClick(productHandleClick);
             View view = bottomSheetBinding.getRoot();
+            bottomSheetDialog = new BottomSheetDialog(context);
+            ProductHandleClick productHandleClick = new ProductHandleClick(bottomSheetDialog);
+            bottomSheetBinding.setHandleClick(productHandleClick);
             ImageButton imageButton_favorute = view.findViewById(R.id.imgBtn_favourite);
             mViewModel.setSize(product.getSizes().get(0));
             mViewModel.setFavourite(false);
@@ -196,7 +197,6 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
                     mViewModel.plusQuantity();
                 }
             });
-            bottomSheetDialog = new BottomSheetDialog(context);
             if (view.getParent()!=null){
                 ((ViewGroup)view.getParent()).removeView(view);
             }
@@ -207,9 +207,9 @@ public class RecProductAdapter extends RecyclerView.Adapter<RecProductAdapter.Vi
         }
 
         public static class ProductHandleClick {
-            Context context;
-            public ProductHandleClick(Context context) {
-                this.context = context;
+            BottomSheetDialog bottomSheetDialog;
+            public ProductHandleClick(BottomSheetDialog bottomSheetDialog) {
+                this.bottomSheetDialog = bottomSheetDialog;
             }
             public void addItemProduct(Product product,  int quantity, Size size, int amount ){
                 if(mViewModel.getIsEditing().getValue()!=true){

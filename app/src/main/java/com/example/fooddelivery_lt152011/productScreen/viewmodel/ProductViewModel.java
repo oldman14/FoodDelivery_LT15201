@@ -162,8 +162,14 @@ public class ProductViewModel extends AndroidViewModel {
     public LiveData<List<CartItem>> getCart() {
         return cartItemRepo.getCart();
     }
+    public void deleteCart(){
+        cartItemRepo.deleteCartOrder();
+    }
+    public void setCartItemMutable(MutableLiveData<CartItem> cartItemMutable) {
+        this.cartItemMutable = cartItemMutable;
+    }
 
-    public boolean addItemToCart(Product product, int quantity ,Size size, int amount) {
+    public boolean addItemToCart(Product product, int quantity , Size size, int amount) {
         return cartItemRepo.addItemToCart(product, quantity, size, amount);
     }
 

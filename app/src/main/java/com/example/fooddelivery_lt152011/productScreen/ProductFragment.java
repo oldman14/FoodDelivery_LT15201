@@ -331,9 +331,14 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
         mViewModel.setQuantityItem(cartItem.quantity);
         mViewModel.setSize(cartItem.size);
         bottomSheetBinding.setProduct(mViewModel);
-        RecProductAdapter.ViewHolder.ProductHandleClick productHandleClick = new RecProductAdapter.ViewHolder.ProductHandleClick(getContext());
-        bottomSheetBinding.setHandleClick(productHandleClick);
         View view = bottomSheetBinding.getRoot();
+        bottomSheetDialog = new BottomSheetDialog(getContext());
+        if (view.getParent()!=null){
+            ((ViewGroup)view.getParent()).removeView(view);
+        }
+        bottomSheetDialog.setContentView(view);
+        RecProductAdapter.ViewHolder.ProductHandleClick productHandleClick = new RecProductAdapter.ViewHolder.ProductHandleClick(bottomSheetDialog);
+        bottomSheetBinding.setHandleClick(productHandleClick);
         mViewModel.getSize().observe(getViewLifecycleOwner(), new Observer<Size>() {
             @Override
             public void onChanged(Size size) {
@@ -400,17 +405,13 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                 mViewModel.plusQuantity();
             }
         });
-        bottomSheetDialog = new BottomSheetDialog(getContext());
-        if (view.getParent()!=null){
-            ((ViewGroup)view.getParent()).removeView(view);
-        }
-        bottomSheetDialog.setContentView(view);
+
         bottomSheetDialog.show();
         bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-    //bottomsheet hiển thị chi tiết món
+    //bottomsheet hiển thị chi tiết order
     public void oderSheet(){
         View view = fragmentCartBinding.getRoot();
         //phần coupon
@@ -471,19 +472,19 @@ public class ProductFragment extends Fragment  implements TypeBottomSheetApdapte
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
                 cartItem = cartItems;
+                CartItemAdapter cartItemAdapters = new CartItemAdapter(cartItem, getContext(), mViewModel, ProductFragment.this::EditItemClick);
+                recyclerView.setAdapter(cartItemAdapters);
             }
         });
         mViewModel.getDiscount().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double aDouble) {
-                Log.d("TAG", "discount: "+aDouble);
                 discount = aDouble;
                 mViewModel.setFinalPrice(mViewModel.getTotalPrice().getValue()-discount);
             }
         });
         JSONArray jsonArray = new JSONArray();
-        CartItemAdapter cartItemAdapters = new CartItemAdapter(cartItem, getContext(), mViewModel, ProductFragment.this::EditItemClick);
-        recyclerView.setAdapter(cartItemAdapters);
+
 
         for (CartItem item: cartItem) {
             JSONObject jsonObject = new JSONObject();
