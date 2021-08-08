@@ -25,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +36,7 @@ import com.example.fooddelivery_lt152011.LoginScreen.SendOTPActivity;
 import com.example.fooddelivery_lt152011.LoginScreen.UserDAO;
 import com.example.fooddelivery_lt152011.MainActivity;
 import com.example.fooddelivery_lt152011.R;
+import com.example.fooddelivery_lt152011.productScreen.ProductFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,6 +51,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.example.fooddelivery_lt152011.productScreen.RecProductAdapter.ViewHolder.mViewModel;
 
 public class InforOderFragment extends Fragment {
     private static final int REQUEST_LOCATION = 1;
@@ -296,11 +301,11 @@ public class InforOderFragment extends Fragment {
                 alertDialog.show();
             }
         });
-        if (itemorder.getStatus().equals("Đã Đặt")) {
-            status_1.setText("Đã Đặt");
+        if (itemorder.getStatus().equals("Cửa hàng đang chuẩn bị")) {
+            status_1.setText("Cửa hàng đang chuẩn bị");
             return;
         }
-        if (itemorder.getStatus().equals("ĐANG GIAO")) {
+        if (itemorder.getStatus().equals("Đang Giao")) {
             tick_2.setImageResource(R.drawable.done_24);
             status_2.setText("Đang Giao");
             status_2.setTypeface(null, Typeface.BOLD);
@@ -339,11 +344,129 @@ public class InforOderFragment extends Fragment {
             });
             return;
         }
-        if (itemorder.getStatus().equals("Thành Công")) {
-            tick_3.setImageResource(R.drawable.done_24);
-            status_3.setText("Thành Công");
-            return;
-        }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable(){
+                    @Override
+                    public void run() {
+                        ModelOrder itemorder1 = orderDAO.getItemOrder(nameimg.getUserID());
+                        if (itemorder1.getStatus().equals("Đã Đặt")) {
+                            status_1.setText("Đã Đặt");
+                            return;
+                        }
+                        if (itemorder1.getStatus().equals("Đang Giao")) {
+                            tick_2.setImageResource(R.drawable.done_24);
+                            status_2.setText("Đang Giao");
+                            status_2.setTypeface(null, Typeface.BOLD);
+                            // sportAdmin.setImageBitmap( "" );
+                            nameShip.setText(getship.getShipName());
+                            callShip.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (ContextCompat.checkSelfPermission(getActivity(),
+                                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                        ActivityCompat.requestPermissions(getActivity(),
+                                                new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+                                    }
+                                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+                                    builder.setTitle("Food Delivery.VN");
+                                    builder.setMessage("0" + getship.getShipPhone());
+                                    builder.setCancelable(false);
+
+                                    builder.setPositiveButton("GỌI", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            String dial = "tel:" + "0" + getship.getShipPhone();
+                                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                                        }
+                                    });
+                                    builder.setNegativeButton("HỦY", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    });
+                                    androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+                                    alertDialog.getWindow().setLayout(200, 100);
+                                    alertDialog.show();
+                                }
+                            });
+                            return;
+                        }
+                        if (itemorder1.getStatus().equals("Giao hàng thành công")) {
+                            tick_3.setImageResource(R.drawable.done_24);
+                            status_3.setText("Thành Công");
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Hoàn Tất Đơn Hàng").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mViewModel.setIsOrder( false );
+                                    FragmentManager fm = getFragmentManager();
+                                    FragmentTransaction ft = fm.beginTransaction();
+                                    ProductFragment productFragment = new ProductFragment();
+                                    ft.replace( R.id.frame_container, productFragment );
+                                    ft.addToBackStack( null );
+                                    ft.commit();
+
+                                }
+                            });
+                            final AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                            ;
+                            return;
+                        }
+
+                        if (itemorder1.getStatus().equals("Giao hàng thất bại")) {
+                            tick_3.setImageResource(R.drawable.done_24);
+                            status_3.setText("Thất bại");
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Xin Lỗi Đơn Hàng của Bạn đã thất bại").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mViewModel.setIsOrder( false );
+                                    FragmentManager fm = getFragmentManager();
+                                    FragmentTransaction ft = fm.beginTransaction();
+                                    ProductFragment productFragment = new ProductFragment();
+                                    ft.replace( R.id.frame_container, productFragment );
+                                    ft.addToBackStack( null );
+                                    ft.commit();
+
+                                }
+                            });
+                            final AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                            ;
+                            return;
+                        }
+
+                        if (itemorder1.getStatus().equals("Đã hủy đơn hàng")) {
+                            tick_3.setImageResource(R.drawable.done_24);
+                            status_3.setText("Thất bại");
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage("Xin Lỗi Đơn Hàng của Bạn đã thất bại").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mViewModel.setIsOrder( false );
+                                    FragmentManager fm = getFragmentManager();
+                                    FragmentTransaction ft = fm.beginTransaction();
+                                    ProductFragment productFragment = new ProductFragment();
+                                    ft.replace( R.id.frame_container, productFragment );
+                                    ft.addToBackStack( null );
+                                    ft.commit();
+
+                                }
+                            });
+                            final AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                            ;
+                            return;
+                        }
+                    }
+                });
+            }
+        }, 5000);
     }
 
 

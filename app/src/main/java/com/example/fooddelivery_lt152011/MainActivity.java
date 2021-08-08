@@ -204,29 +204,37 @@ public class MainActivity extends AppCompatActivity {
                 myLocation = task.getResult();
 //                lat = myLocation.getLatitude();
 //                lng = myLocation.getLongitude();
-                final double[] distance = {10000};
+                Log.d("Location", myLocation.getLatitude()+"" + myLocation.getLongitude() );
+
+                final double[] distance = {100000};
                 storeViewModel.getListStore().observe(MainActivity.this, new Observer<List<Store>>() {
                     @Override
                     public void onChanged(List<Store> stores) {
                         for (int i = 0; i < stores.size(); i++) {
                             double storeLat = stores.get(i).StoreLat;
                             double storeLng = stores.get(i).StoreLng;
+                            Log.d("ac123",String.valueOf(i));
                             float[] results=new float[1];
                             Location locationStore = new Location("");
                             locationStore.setLatitude(storeLat);
                             locationStore.setLongitude(storeLng);
                             if (myLocation!=null){
+
                                 double km = myLocation.distanceTo(locationStore);
+                                Log.d("TAG", "Log loation: "+km);
                                 if (km/1000< distance[0]){
                                     distance[0] = km/1000;
                                     storeViewModel.setStore(stores.get(i));
+                                    Log.d("TAG", "getStore123: "+stores.get(i));
                                 }
                             }
                         }
                     }
                 });
+                Log.d("TAG", "onComplete: "+storeViewModel.getStore().getValue());
                 if (task.isSuccessful()) {
                     if (myLocation != null) {
+                        Log.d("Location", myLocation.getLatitude()+"" + myLocation.getLongitude() );
                         LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                         try {
                             addresses = geocoder.getFromLocation(myLocation.getLatitude(), myLocation.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
