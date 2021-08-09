@@ -360,7 +360,7 @@ public class InforOderFragment extends Fragment {
 
 
 
-/// cập nhậật trạng thái
+/// cập nhậật trạng thái data và thay đổi layout
         Timer time1=new Timer();
         time1.scheduleAtFixedRate( new TimerTask() {
             @Override
