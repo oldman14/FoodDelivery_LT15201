@@ -15,10 +15,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,6 +67,8 @@ public class InforOderFragment extends Fragment {
     Marker marker;
     ShipperDAO shipperDAO;
     UserDAO dao;
+    Button huy;
+    LinearLayout layoutTong;
     ProductOrderIF_Adapter adapter;
     StoreDAO storeDAO;
     DetailOrderDAO detailOrderDAO;
@@ -82,7 +87,8 @@ public class InforOderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_infor_oder, container, false);
 
         dbHelper = new DbHelper(getActivity());
-
+        huy=view.findViewById( R.id.huydon );
+        layoutTong=view.findViewById( R.id.tong );
         tick_1 = view.findViewById(R.id.tick_1);
         tick_2 = view.findViewById(R.id.tick_2);
         status_2 = view.findViewById(R.id.status_2);
@@ -105,7 +111,7 @@ public class InforOderFragment extends Fragment {
         list = new ArrayList<>();
         ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-        ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
+        ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
         ModelShipper getship = shipperDAO.getShips(itemorder.getShipID());
 
@@ -179,10 +185,10 @@ public class InforOderFragment extends Fragment {
                 shipperDAO = new ShipperDAO();
                 ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
                 Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-                ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
+                ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
                 Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
 
-                if (itemorder.getStatus().equals("ĐANG GIAO")) {
+                if (itemorder.getStatus().equals("2")) {
                     new Timer().scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
@@ -250,7 +256,7 @@ public class InforOderFragment extends Fragment {
         storeDAO = new StoreDAO();
         ModelUser nameimg = dao.getUserNames(dbHelper.getUser().getUserPhone());
         Log.d("LogOrrder", "onCreateView: " + nameimg.getUserID());
-        ModelOrder itemorder = orderDAO.getItemOrder(nameimg.getUserID());
+        ModelOrder itemorder = orderDAO.getItemOrder(ProductFragment.oderID);
         Log.d("LogOrrder", "onCreateView: " + itemorder.getShipID());
         ModelShipper getship = shipperDAO.getShips(itemorder.getShipID());
         tick_1.setImageResource(R.drawable.done_24);
@@ -301,62 +307,79 @@ public class InforOderFragment extends Fragment {
                 alertDialog.show();
             }
         });
-        if (itemorder.getStatus().equals("Cửa hàng đang chuẩn bị")) {
-            status_1.setText("Cửa hàng đang chuẩn bị");
-            return;
-        }
-        if (itemorder.getStatus().equals("Đang Giao")) {
-            tick_2.setImageResource(R.drawable.done_24);
-            status_2.setText("Đang Giao");
-            status_2.setTypeface(null, Typeface.BOLD);
-            // sportAdmin.setImageBitmap( "" );
-            nameShip.setText(getship.getShipName());
-            callShip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(getActivity(),
-                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(getActivity(),
-                                new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-                    }
-                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
-                    builder.setTitle("Food Delivery.VN");
-                    builder.setMessage("0" + getship.getShipPhone());
-                    builder.setCancelable(false);
-
-                    builder.setPositiveButton("GỌI", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            String dial = "tel:" + "0" + getship.getShipPhone();
-                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
-                        }
-                    });
-                    builder.setNegativeButton("HỦY", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-                    androidx.appcompat.app.AlertDialog alertDialog = builder.create();
-                    alertDialog.getWindow().setLayout(200, 100);
-                    alertDialog.show();
-                }
-            });
-            return;
-        }
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        //check huy order
+        Timer time=new Timer();
+        time.scheduleAtFixedRate( new TimerTask() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable(){
+                AppCompatActivity activity= (AppCompatActivity) getContext();
+                if(activity==null)
+                    return;
+                activity.runOnUiThread( new Runnable() {
                     @Override
                     public void run() {
-                        ModelOrder itemorder1 = orderDAO.getItemOrder(nameimg.getUserID());
-                        if (itemorder1.getStatus().equals("Đã Đặt")) {
+                        if (!itemorder.getStatus().isEmpty()){
+                            huy.setVisibility( View.GONE );
+                        }
+                        if(itemorder.getStatus().isEmpty()){
+                            huy.setVisibility( View.VISIBLE );
+                            huy.setOnClickListener( new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setMessage("Bạn Muốn Huỷ Đơn Hàng").setCancelable(false).setPositiveButton("Xác Nhận", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            ModelOrder update=orderDAO.updateStatus( ProductFragment.oderID,"5" );
+                                            mViewModel.setIsOrder( false );
+                                            FragmentManager fm = getFragmentManager();
+                                            FragmentTransaction ft = fm.beginTransaction();
+                                            ProductFragment productFragment = new ProductFragment();
+                                            ft.replace( R.id.frame_container, productFragment );
+                                            ft.addToBackStack( null );
+                                            ft.commit();
+
+                                        }
+                                    });
+                                    builder.setNegativeButton( "Huỷ", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    } );
+                                    final AlertDialog alertDialog = builder.create();
+                                    alertDialog.show();
+                                }
+                            } );
+                        }
+                    }
+                } );
+
+            }
+        },0,2000 );
+
+
+
+/// cập nhậật trạng thái
+        Timer time1=new Timer();
+        time1.scheduleAtFixedRate( new TimerTask() {
+            @Override
+            public void run() {
+                AppCompatActivity activity= (AppCompatActivity) getContext();
+                if(activity==null)
+                    return;
+
+                activity.runOnUiThread( new Runnable() {
+                    @Override
+                    public void run() {
+
+                        ModelOrder itemorder1 = orderDAO.getItemOrder(ProductFragment.oderID);
+                        Log.d( "logruntom", "run: " +itemorder1.getStatus());
+                        if (itemorder1.getStatus().equals("1")) {
                             status_1.setText("Đã Đặt");
                             return;
                         }
-                        if (itemorder1.getStatus().equals("Đang Giao")) {
+                        if (itemorder1.getStatus().equals("2")) {
                             tick_2.setImageResource(R.drawable.done_24);
                             status_2.setText("Đang Giao");
                             status_2.setTypeface(null, Typeface.BOLD);
@@ -395,7 +418,7 @@ public class InforOderFragment extends Fragment {
                             });
                             return;
                         }
-                        if (itemorder1.getStatus().equals("Giao hàng thành công")) {
+                        if (itemorder1.getStatus().equals("3")) {
                             tick_3.setImageResource(R.drawable.done_24);
                             status_3.setText("Thành Công");
                             final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -417,31 +440,7 @@ public class InforOderFragment extends Fragment {
                             ;
                             return;
                         }
-
-                        if (itemorder1.getStatus().equals("Giao hàng thất bại")) {
-                            tick_3.setImageResource(R.drawable.done_24);
-                            status_3.setText("Thất bại");
-                            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setMessage("Xin Lỗi Đơn Hàng của Bạn đã thất bại").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mViewModel.setIsOrder( false );
-                                    FragmentManager fm = getFragmentManager();
-                                    FragmentTransaction ft = fm.beginTransaction();
-                                    ProductFragment productFragment = new ProductFragment();
-                                    ft.replace( R.id.frame_container, productFragment );
-                                    ft.addToBackStack( null );
-                                    ft.commit();
-
-                                }
-                            });
-                            final AlertDialog alertDialog = builder.create();
-                            alertDialog.show();
-                            ;
-                            return;
-                        }
-
-                        if (itemorder1.getStatus().equals("Đã hủy đơn hàng")) {
+                        if (itemorder1.getStatus().equals("4")) {
                             tick_3.setImageResource(R.drawable.done_24);
                             status_3.setText("Thất bại");
                             final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -464,10 +463,9 @@ public class InforOderFragment extends Fragment {
                             return;
                         }
                     }
-                });
+                } );
             }
-        }, 5000);
+        },0,2000 );
+
     }
-
-
 }
